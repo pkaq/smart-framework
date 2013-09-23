@@ -47,10 +47,7 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 放入 Session
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            sessionContainer.set(session);
-        }
+        sessionContainer.set(request.getSession());
 
         // 获取当前请求相关数据
         String currentRequestMethod = request.getMethod();
