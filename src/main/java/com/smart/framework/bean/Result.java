@@ -4,7 +4,7 @@ import com.smart.framework.base.BaseBean;
 
 public class Result extends BaseBean {
 
-    private boolean success = false;
+    private boolean success = true;
     private int error = 0;
     private Object data = null;
 
