@@ -52,7 +52,7 @@ public class DataContext {
     // 封装 Request 相关操作
     public static class Request {
 
-        // 将数据放入 Request Attribute 中
+        // 将数据放入 Request 中
         public static void put(String key, Object value) {
             getRequest().setAttribute(key, value);
         }
@@ -83,18 +83,18 @@ public class DataContext {
     // 封装 Response 相关操作
     public static class Response {
 
-        // 将数据放入 Response Header 中
+        // 将数据放入 Response 中
         public static void put(String key, Object value) {
             getResponse().setHeader(key, CastUtil.castString(value));
         }
 
-        // 从 Response Header 中获取数据
+        // 从 Response 中获取数据
         @SuppressWarnings("unchecked")
         public static <T> T get(String key) {
             return (T) getResponse().getHeader(key);
         }
 
-        // 从 Response Header 中获取所有数据
+        // 从 Response 中获取所有数据
         public static Map<String, Object> getAll() {
             Map<String, Object> map = new HashMap<String, Object>();
             for (String name : getResponse().getHeaderNames()) {
@@ -107,23 +107,23 @@ public class DataContext {
     // 封装 Session 相关操作
     public static class Session {
 
-        // 将数据放入 Session Attribute 中
+        // 将数据放入 Session 中
         public static void put(String key, Object value) {
             getSession().setAttribute(key, value);
         }
 
-        // 从 Session Attribute 中获取数据
+        // 从 Session 中获取数据
         @SuppressWarnings("unchecked")
         public static <T> T get(String key) {
             return (T) getSession().getAttribute(key);
         }
 
-        // 移除 Session Attribute 中的数据
+        // 移除 Session 中的数据
         public static void remove(String key) {
             getSession().removeAttribute(key);
         }
 
-        // 从 Session Attribute 中获取所有数据
+        // 从 Session 中获取所有数据
         public static Map<String, Object> getAll() {
             Map<String, Object> map = new HashMap<String, Object>();
             Enumeration<String> names = getSession().getAttributeNames();
@@ -134,32 +134,32 @@ public class DataContext {
             return map;
         }
 
-        // 移除 Session Attribute 中所有的数据
+        // 移除 Session 中所有的数据
         public static void removeAll() {
             getSession().invalidate();
         }
     }
 
-    // 封装 Servlet Context 相关操作
+    // 封装 ServletContext 相关操作
     public static class Context {
 
-        // 将数据放入 Servlet Context 中
+        // 将数据放入 ServletContext 中
         public static void put(String key, Object value) {
             getServletContext().setAttribute(key, value);
         }
 
-        // 从 Servlet Context 中获取数据
+        // 从 ServletContext 中获取数据
         @SuppressWarnings("unchecked")
         public static <T> T get(String key) {
             return (T) getServletContext().getAttribute(key);
         }
 
-        // 移除 Servlet Context 中的数据
+        // 移除 ServletContext 中的数据
         public static void remove(String key) {
             getServletContext().removeAttribute(key);
         }
 
-        // 从 Servlet Context 中获取所有数据
+        // 从 ServletContext 中获取所有数据
         public static Map<String, Object> getAll() {
             Map<String, Object> map = new HashMap<String, Object>();
             Enumeration<String> names = getServletContext().getAttributeNames();
