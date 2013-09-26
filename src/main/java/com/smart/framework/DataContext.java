@@ -1,10 +1,11 @@
 package com.smart.framework;
 
+import com.smart.framework.util.ArrayUtil;
 import com.smart.framework.util.CastUtil;
+import com.smart.framework.util.CodecUtil;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -45,7 +46,7 @@ public class DataContext {
     }
 
     // 获取 Servlet Context
-    private static ServletContext getServletContext() {
+    private static javax.servlet.ServletContext getServletContext() {
         return getRequest().getServletContext();
     }
 
@@ -140,8 +141,47 @@ public class DataContext {
         }
     }
 
+    // 封装 Cookie 相关操作
+    public static class Cookie {
+
+        // 将数据放入 Cookie 中
+        public static void put(String key, Object value) {
+            String strValue = CodecUtil.encodeForUTF8(CastUtil.castString(value));
+            javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie(key, strValue);
+            getResponse().addCookie(cookie);
+        }
+
+        // 从 Cookie 中获取数据
+        @SuppressWarnings("unchecked")
+        public static <T> T get(String key) {
+            T value = null;
+            javax.servlet.http.Cookie[] cookieArray = getRequest().getCookies();
+            if (ArrayUtil.isNotEmpty(cookieArray)) {
+                for (javax.servlet.http.Cookie cookie : cookieArray) {
+                    if (key.equals(cookie.getName())) {
+                        value = (T) CodecUtil.decodeForUTF8(cookie.getValue());
+                        break;
+                    }
+                }
+            }
+            return value;
+        }
+
+        // 从 Cookie 中获取所有数据
+        public static Map<String, Object> getAll() {
+            Map<String, Object> map = new HashMap<String, Object>();
+            javax.servlet.http.Cookie[] cookieArray = getRequest().getCookies();
+            if (ArrayUtil.isNotEmpty(cookieArray)) {
+                for (javax.servlet.http.Cookie cookie : cookieArray) {
+                    map.put(cookie.getName(), cookie.getValue());
+                }
+            }
+            return map;
+        }
+    }
+
     // 封装 ServletContext 相关操作
-    public static class Context {
+    public static class ServletContext {
 
         // 将数据放入 ServletContext 中
         public static void put(String key, Object value) {
