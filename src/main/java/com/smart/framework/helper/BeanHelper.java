@@ -10,8 +10,7 @@ public class BeanHelper {
 
     private static final Logger logger = Logger.getLogger(BeanHelper.class);
 
-    // Bean 类 => Bean 实例
-    private static final Map<Class<?>, Object> beanMap = new HashMap<Class<?>, Object>();
+    private static final Map<Class<?>, Object> beanMap = new HashMap<Class<?>, Object>(); // Bean 类 => Bean 实例
 
     static {
         if (logger.isInfoEnabled()) {
@@ -39,6 +38,9 @@ public class BeanHelper {
 
     @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<T> cls) {
+        if (!beanMap.containsKey(cls)) {
+            throw new RuntimeException("Can not get bean by class!");
+        }
         return (T) beanMap.get(cls);
     }
 }

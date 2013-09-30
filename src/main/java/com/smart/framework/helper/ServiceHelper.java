@@ -23,14 +23,12 @@ public class ServiceHelper {
                 // 获取目标实例
                 Map<Class<?>, Object> beanMap = BeanHelper.getBeanMap();
                 Object targetInstance = BeanHelper.getBean(serviceClass);
-                if (targetInstance != null) {
-                    // 创建代理实例
-                    Object proxyInstance = TransactionProxy.getInstance().getProxy(serviceClass);
-                    // 复制目标实例中的字段到代理实例中
-                    ObjectUtil.copyFields(targetInstance, proxyInstance);
-                    // 用代理实例覆盖目标实例
-                    BeanHelper.getBeanMap().put(serviceClass, proxyInstance);
-                }
+                // 创建代理实例
+                Object proxyInstance = TransactionProxy.getInstance().getProxy(serviceClass);
+                // 复制目标实例中的字段到代理实例中
+                ObjectUtil.copyFields(targetInstance, proxyInstance);
+                // 用代理实例覆盖目标实例
+                BeanHelper.getBeanMap().put(serviceClass, proxyInstance);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
