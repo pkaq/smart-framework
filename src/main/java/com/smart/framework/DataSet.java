@@ -32,9 +32,8 @@ public class DataSet {
         return rows > 0;
     }
 
-
     public static boolean delete(Class<?> cls, String condition, Object... params) {
-        String sql = SQLHelper.generateDeleteSQL(cls, "id = ?", params);
+        String sql = SQLHelper.generateDeleteSQL(cls, condition, params);
         int rows = DBHelper.update(sql);
         return rows > 0;
     }
