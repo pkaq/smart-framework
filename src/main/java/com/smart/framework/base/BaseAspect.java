@@ -16,7 +16,7 @@ public abstract class BaseAspect implements MethodInterceptor {
     }
 
     @Override
-    public Object intercept(Object proxy, Method methodTarget, Object[] args, MethodProxy methodProxy) throws Throwable {
+    public final Object intercept(Object proxy, Method methodTarget, Object[] args, MethodProxy methodProxy) throws Throwable {
         begin(methodTarget, args);
         Object result = null;
         try {
@@ -37,22 +37,22 @@ public abstract class BaseAspect implements MethodInterceptor {
         return result;
     }
 
-    protected void begin(Method method, Object[] args) {
+    public void begin(Method method, Object[] args) {
     }
 
-    protected boolean filter(Method method, Object[] args) {
+    public boolean filter(Method method, Object[] args) {
         return true;
     }
 
-    protected void before(Method method, Object[] args) {
+    public void before(Method method, Object[] args) {
     }
 
-    protected void after(Method method, Object[] args) {
+    public void after(Method method, Object[] args) {
     }
 
-    protected void error(Method method, Object[] args, Exception e) {
+    public void error(Method method, Object[] args, Exception e) {
     }
 
-    protected void end(Method method, Object[] args) {
+    public void end(Method method, Object[] args) {
     }
 }
