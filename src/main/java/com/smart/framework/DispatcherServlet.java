@@ -65,31 +65,16 @@ public class DispatcherServlet extends HttpServlet {
                 Matcher matcher = Pattern.compile(requestURL).matcher(currentRequestURL);
                 // 判断请求方法与请求 URL 是否同时匹配
                 if (requestMethod.equalsIgnoreCase(currentRequestMethod) && matcher.matches()) {
-                    // 初始化 Action 对象
+                    // 获取 Action 对象
                     ActionBean actionBean = actionEntry.getValue();
-                    // 初始化 Action 方法参数列表
+                    // 创建 Action 方法参数列表
                     List<Object> paramList = createParamList(requestParamMap, matcher);
-                    // 从 ActionBean 中获取 Action 相关属性
-                    Class<?> actionClass = actionBean.getActionClass();
-                    Method actionMethod = actionBean.getActionMethod();
-                    // 创建 Action 实例
-                    Object actionInstance = BeanHelper.getBean(actionClass);
-                    // 调用 Action 方法（传入请求参数）
-                    actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
-                    Object actionMethodResult = actionMethod.invoke(actionInstance, paramList.toArray());
-                    if (actionMethodResult instanceof Result) {
-                        // 获取 Action 方法返回值
-                        Result result = (Result) actionMethodResult;
-                        // 将返回值转为 JSON 格式并写入 Response 中
-                        WebUtil.writeJSON(response, result);
-                    }
+                    // 调用 Action 方法
+                    invokeActionMethod(actionBean, paramList, response);
                     // 若成功匹配，则终止循环
                     break;
                 }
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
         } finally {
             // 销毁 DataContext
             DataContext.destroy();
@@ -131,5 +116,30 @@ public class DispatcherServlet extends HttpServlet {
         }
 
         return paramList;
+    }
+
+    private void invokeActionMethod(ActionBean actionBean, List<Object> paramList, HttpServletResponse response) {
+        // 从 ActionBean 中获取 Action 相关属性
+        Class<?> actionClass = actionBean.getActionClass();
+        Method actionMethod = actionBean.getActionMethod();
+        // 从 BeanHelper 中创建 Action 实例
+        Object actionInstance = BeanHelper.getBean(actionClass);
+        // 调用 Action 方法
+        actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
+        Object actionMethodResult;
+        try {
+            actionMethodResult = actionMethod.invoke(actionInstance, paramList.toArray());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
+        }
+        // 判断返回值类型
+        if (actionMethodResult != null) {
+            if (actionMethodResult instanceof Result) {
+                // 若为 Result 类型，则转换为 JSON 格式并写入 Response 中
+                Result result = (Result) actionMethodResult;
+                WebUtil.writeJSON(response, result);
+            }
+        }
     }
 }

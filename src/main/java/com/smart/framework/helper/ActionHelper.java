@@ -16,7 +16,6 @@ public class ActionHelper {
 
     private static final Logger logger = Logger.getLogger(ActionHelper.class);
 
-    // RequestBean => ActionBean
     private static final Map<RequestBean, ActionBean> actionMap = new HashMap<RequestBean, ActionBean>();
 
     static {
