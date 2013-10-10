@@ -1,7 +1,7 @@
 Smart Framework
 
 参考手册：
-http://note.youdao.com/share/?id=e6f17d81fc9a31370a0de8044d73be08&type=note
+http://dwz.cn/aQwJo
 
 系列博文：
 http://my.oschina.net/huangyong/blog/158380
