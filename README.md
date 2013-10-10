@@ -1,7 +1,7 @@
 Smart Framework
 
 参考手册：
-http://dwz.cn/aQwJo
+http://dwz.cn/aQwj7
 
 系列博文：
 http://my.oschina.net/huangyong/blog/158380
