@@ -102,7 +102,11 @@ public class WebUtil {
                         for (String qs : qsArray) {
                             String[] array = StringUtil.splitString(qs, "=");
                             if (ArrayUtil.isNotEmpty(array) && array.length == 2) {
-                                paramMap.put(array[0], array[1]);
+                                String paramName = array[0];
+                                String paramValue = array[1];
+                                if (checkParamName(paramName)) {
+                                    paramMap.put(paramName, paramValue);
+                                }
                             }
                         }
                     }
@@ -112,7 +116,9 @@ public class WebUtil {
                 while (paramNames.hasMoreElements()) {
                     String paramName = paramNames.nextElement();
                     String paramValue = request.getParameter(paramName);
-                    paramMap.put(paramName, paramValue);
+                    if (checkParamName(paramName)) {
+                        paramMap.put(paramName, paramValue);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -120,6 +126,10 @@ public class WebUtil {
             throw new RuntimeException(e.getMessage(), e);
         }
         return paramMap;
+    }
+
+    private static boolean checkParamName(String paramName) {
+        return !paramName.equals("_"); // 忽略 jQuery 缓存参数
     }
 
     // 创建查询映射（查询字符串格式：a:1;b:2）
