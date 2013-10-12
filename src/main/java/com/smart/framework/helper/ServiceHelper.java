@@ -4,7 +4,6 @@ import com.smart.framework.TransactionProxy;
 import com.smart.framework.base.BaseService;
 import com.smart.framework.util.ObjectUtil;
 import java.util.List;
-import java.util.Map;
 import org.apache.log4j.Logger;
 
 public class ServiceHelper {
@@ -21,7 +20,6 @@ public class ServiceHelper {
             List<Class<?>> serviceClassList = ClassHelper.getClassListBySuper(BaseService.class);
             for (Class<?> serviceClass : serviceClassList) {
                 // 获取目标实例
-                Map<Class<?>, Object> beanMap = BeanHelper.getBeanMap();
                 Object targetInstance = BeanHelper.getBean(serviceClass);
                 // 创建代理实例
                 Object proxyInstance = TransactionProxy.getInstance().getProxy(serviceClass);

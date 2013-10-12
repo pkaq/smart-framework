@@ -58,9 +58,9 @@ public class DispatcherServlet extends HttpServlet {
             Map<RequestBean, ActionBean> actionMap = ActionHelper.getActionMap();
             for (Map.Entry<RequestBean, ActionBean> actionEntry : actionMap.entrySet()) {
                 // 从 RequestBean 中获取 Request 相关属性
-                RequestBean reqestBean = actionEntry.getKey();
-                String requestURL = reqestBean.getRequestURL(); // 正则表达式
-                String requestMethod = reqestBean.getRequestMethod();
+                RequestBean requestBean = actionEntry.getKey();
+                String requestURL = requestBean.getRequestURL(); // 正则表达式
+                String requestMethod = requestBean.getRequestMethod();
                 // 获取正则表达式匹配器（用于匹配请求 URL 并从中获取相应的请求参数）
                 Matcher matcher = Pattern.compile(requestURL).matcher(currentRequestURL);
                 // 判断请求方法与请求 URL 是否同时匹配
