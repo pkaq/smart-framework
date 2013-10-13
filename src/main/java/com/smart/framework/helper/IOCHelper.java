@@ -15,7 +15,7 @@ public class IOCHelper {
 
     static {
         if (logger.isInfoEnabled()) {
-            logger.info("Init IOCHelper...");
+            logger.info("初始化 IOCHelper");
         }
 
         try {
@@ -62,8 +62,8 @@ public class IOCHelper {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("初始化 IOCHelper 出错！", e);
+            throw new RuntimeException(e);
         }
     }
 }

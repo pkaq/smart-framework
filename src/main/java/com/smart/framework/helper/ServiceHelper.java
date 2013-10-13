@@ -12,7 +12,7 @@ public class ServiceHelper {
 
     static {
         if (logger.isInfoEnabled()) {
-            logger.info("Init ServiceHelper...");
+            logger.info("初始化 ServiceHelper");
         }
 
         try {
@@ -29,8 +29,8 @@ public class ServiceHelper {
                 BeanHelper.getBeanMap().put(serviceClass, proxyInstance);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("初始化 ServiceHelper 出错！", e);
+            throw new RuntimeException(e);
         }
     }
 }

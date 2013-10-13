@@ -21,8 +21,8 @@ public class InitHelper {
                 Class.forName(cls.getName());
             }
         } catch (ClassNotFoundException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("加载 Helper 出错！", e);
+            throw new RuntimeException(e);
         }
     }
 }

@@ -46,8 +46,8 @@ public class ClassUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("获取类出错！", e);
+            throw new RuntimeException(e);
         }
         return classList;
     }
@@ -83,8 +83,8 @@ public class ClassUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("获取类出错！", e);
+            throw new RuntimeException(e);
         }
         return classList;
     }
@@ -120,8 +120,8 @@ public class ClassUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("获取类出错！", e);
+            throw new RuntimeException(e);
         }
         return classList;
     }
@@ -157,8 +157,8 @@ public class ClassUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("获取类出错！", e);
+            throw new RuntimeException(e);
         }
         return classList;
     }
@@ -182,8 +182,8 @@ public class ClassUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("添加类出错！", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -240,8 +240,8 @@ public class ClassUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("添加类出错！", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -265,8 +265,8 @@ public class ClassUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("添加类出错！", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -290,8 +290,8 @@ public class ClassUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("添加类出错！", e);
+            throw new RuntimeException(e);
         }
     }
 

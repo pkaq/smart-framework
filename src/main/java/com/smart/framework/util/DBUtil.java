@@ -44,8 +44,8 @@ public class DBUtil {
             Class.forName(driver);
             conn = DriverManager.getConnection(url, username, password);
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("打开数据库连接出错！", e);
+            throw new RuntimeException(e);
         }
         return conn;
     }
@@ -57,8 +57,8 @@ public class DBUtil {
                 conn.close();
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("关闭数据库连接出错！", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -68,8 +68,8 @@ public class DBUtil {
         try {
             result = runner.query(sql, new ArrayHandler(), params);
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("查询出错！", e);
+            throw new RuntimeException(e);
         }
         printSQL(sql);
         return result;
@@ -81,8 +81,8 @@ public class DBUtil {
         try {
             result = runner.query(sql, new ArrayListHandler(), params);
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("查询出错！", e);
+            throw new RuntimeException(e);
         }
         printSQL(sql);
         return result;
@@ -94,8 +94,8 @@ public class DBUtil {
         try {
             result = runner.query(sql, new MapHandler(), params);
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("查询出错！", e);
+            throw new RuntimeException(e);
         }
         printSQL(sql);
         return result;
@@ -107,8 +107,8 @@ public class DBUtil {
         try {
             result = runner.query(sql, new MapListHandler(), params);
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("查询出错！", e);
+            throw new RuntimeException(e);
         }
         printSQL(sql);
         return result;
@@ -125,8 +125,8 @@ public class DBUtil {
             }
             printSQL(sql);
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("查询出错！", e);
+            throw new RuntimeException(e);
         }
         return result;
     }
@@ -142,8 +142,8 @@ public class DBUtil {
             }
             printSQL(sql);
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("查询出错！", e);
+            throw new RuntimeException(e);
         }
         return result;
     }
@@ -154,8 +154,8 @@ public class DBUtil {
         try {
             result = runner.query(sql, new ScalarHandler<Object>(column), params);
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("查询出错！", e);
+            throw new RuntimeException(e);
         }
         printSQL(sql);
         return result;
@@ -167,8 +167,8 @@ public class DBUtil {
         try {
             result = runner.query(sql, new ColumnListHandler<T>(column), params);
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("查询出错！", e);
+            throw new RuntimeException(e);
         }
         printSQL(sql);
         return result;
@@ -180,8 +180,8 @@ public class DBUtil {
         try {
             result = runner.query(sql, new KeyedHandler<T>(column), params);
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("查询出错！", e);
+            throw new RuntimeException(e);
         }
         printSQL(sql);
         return result;
@@ -198,8 +198,8 @@ public class DBUtil {
             }
             printSQL(sql);
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("更新出错！", e);
+            throw new RuntimeException(e);
         }
         return result;
     }

@@ -20,7 +20,7 @@ public class ActionHelper {
 
     static {
         if (logger.isInfoEnabled()) {
-            logger.info("Init ActionHelper...");
+            logger.info("初始化 ActionHelper");
         }
 
         // 获取并遍历所有 Action 类

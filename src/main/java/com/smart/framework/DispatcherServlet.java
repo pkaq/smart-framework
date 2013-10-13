@@ -130,8 +130,8 @@ public class DispatcherServlet extends HttpServlet {
         try {
             actionMethodResult = actionMethod.invoke(actionInstance, paramList.toArray());
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("调用 Action 方法出错！", e);
+            throw new RuntimeException(e);
         }
         // 判断返回值类型
         if (actionMethodResult != null) {

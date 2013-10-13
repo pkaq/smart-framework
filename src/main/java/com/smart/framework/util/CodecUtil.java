@@ -18,8 +18,8 @@ public class CodecUtil {
         try {
             target = URLEncoder.encode(str, "UTF-8");
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("编码出错！", e);
+            throw new RuntimeException( e);
         }
         return target;
     }
@@ -30,8 +30,8 @@ public class CodecUtil {
         try {
             target = URLDecoder.decode(str, "UTF-8");
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("解码出错！", e);
+            throw new RuntimeException(e);
         }
         return target;
     }

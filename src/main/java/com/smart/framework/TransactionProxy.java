@@ -54,8 +54,8 @@ public class TransactionProxy implements MethodInterceptor {
                 // 回滚事务
                 DBHelper.rollbackTransaction();
 
-                logger.error(e.getMessage(), e);
-                throw new RuntimeException(e.getMessage(), e);
+                logger.error("事务控制出错！", e);
+                throw new RuntimeException(e);
             }
         } else {
             result = methodProxy.invokeSuper(proxy, args);

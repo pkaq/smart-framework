@@ -29,8 +29,8 @@ public abstract class BaseAspect implements MethodInterceptor {
             }
         } catch (Exception e) {
             error(methodTarget, args, e);
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("执行方法出错！", e);
+            throw new RuntimeException(e);
         } finally {
             end(methodTarget, args);
         }

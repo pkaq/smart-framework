@@ -15,8 +15,8 @@ public class ObjectUtil {
                 PropertyUtils.setProperty(obj, fieldName, fieldValue);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("设置字段出错！", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -28,13 +28,13 @@ public class ObjectUtil {
                 propertyValue = PropertyUtils.getProperty(obj, fieldName);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("获取字段出错！", e);
+            throw new RuntimeException(e);
         }
         return propertyValue;
     }
 
-    // 复制所有成员变量
+    // 复制所有字段
     public static void copyFields(Object target, Object source) {
         try {
             for (Field field : target.getClass().getDeclaredFields()) {
@@ -42,8 +42,8 @@ public class ObjectUtil {
                 field.set(source, field.get(target));
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("复制字段出错！", e);
+            throw new RuntimeException(e);
         }
     }
 }

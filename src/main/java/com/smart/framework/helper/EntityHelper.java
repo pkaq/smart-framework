@@ -19,7 +19,7 @@ public class EntityHelper {
 
     static {
         if (logger.isInfoEnabled()) {
-            logger.info("Init EntityHelper...");
+            logger.info("初始化 EntityHelper");
         }
 
         // 获取并遍历所有 Entity 类

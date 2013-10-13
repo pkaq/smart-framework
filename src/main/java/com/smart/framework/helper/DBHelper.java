@@ -24,7 +24,7 @@ public class DBHelper {
 
     static {
         if (logger.isInfoEnabled()) {
-            logger.info("Init DBHelper...");
+            logger.info("初始化 DBHelper");
         }
 
         // 初始化数据源
@@ -39,8 +39,8 @@ public class DBHelper {
         try {
             databaseType = ds.getConnection().getMetaData().getDatabaseProductName();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("初始化 DBHelper 出错！", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -55,8 +55,8 @@ public class DBHelper {
         try {
             conn = ds.getConnection();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("从数据源中获取数据库连接出错！", e);
+            throw new RuntimeException(e);
         }
         return conn;
     }
@@ -74,8 +74,8 @@ public class DBHelper {
                 conn = getConnectionFromDataSource();
                 conn.setAutoCommit(false);
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                throw new RuntimeException(e.getMessage(), e);
+                logger.error("开启事务出错！", e);
+                throw new RuntimeException(e);
             } finally {
                 connContainer.set(conn);
             }
@@ -90,8 +90,8 @@ public class DBHelper {
                 conn.commit();
                 conn.close();
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                throw new RuntimeException(e.getMessage(), e);
+                logger.error("提交事务出错！", e);
+                throw new RuntimeException(e);
             } finally {
                 connContainer.remove();
             }
@@ -106,8 +106,8 @@ public class DBHelper {
                 conn.rollback();
                 conn.close();
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                throw new RuntimeException(e.getMessage(), e);
+                logger.error("回滚事务出错！", e);
+                throw new RuntimeException(e);
             } finally {
                 connContainer.remove();
             }
@@ -120,8 +120,8 @@ public class DBHelper {
         try {
             level = getConnectionFromThreadLocal().getMetaData().getDefaultTransactionIsolation();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("获取数据库默认事务隔离级别出错！", e);
+            throw new RuntimeException(e);
         }
         return level;
     }
