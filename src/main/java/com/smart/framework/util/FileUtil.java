@@ -92,9 +92,9 @@ public class FileUtil {
         try {
             File dir = new File(dirPath);
 
-            checkDir(dir);
-
-            FileUtils.deleteDirectory(dir);
+            if (dir.exists() && dir.isDirectory()) {
+                FileUtils.deleteDirectory(dir);
+            }
         } catch (Exception e) {
             logger.error("删除目录出错！", e);
             throw new RuntimeException(e);
@@ -105,10 +105,8 @@ public class FileUtil {
     public static void deleteFile(String filePath) {
         try {
             File file = new File(filePath);
-            if (file.exists()) {
-                if (file.isFile()) {
-                    FileUtils.forceDelete(file);
-                }
+            if (file.exists() && file.isFile()) {
+                FileUtils.forceDelete(file);
             }
         } catch (Exception e) {
             logger.error("删除文件出错！", e);

@@ -298,7 +298,7 @@ public class ClassUtil {
     // 获取类路径
     public static String getClassPath() {
         String classpath = "";
-        URL resource = ClassUtil.class.getClassLoader().getResource("");
+        URL resource = Thread.currentThread().getContextClassLoader().getResource("");
         if (resource != null) {
             classpath = resource.getPath();
         }

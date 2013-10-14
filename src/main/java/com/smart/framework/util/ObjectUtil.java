@@ -46,4 +46,18 @@ public class ObjectUtil {
             throw new RuntimeException(e);
         }
     }
+
+    // 通过反射创建实例
+    @SuppressWarnings("unchecked")
+    public static <T> T newInstance(String className) {
+        T instance;
+        try {
+            Class<?> commandClass = Class.forName(className);
+            instance = (T) commandClass.newInstance();
+        } catch (Exception e) {
+            logger.error("创建实例出错！", e);
+            throw new RuntimeException(e);
+        }
+        return instance;
+    }
 }
