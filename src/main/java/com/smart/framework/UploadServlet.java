@@ -25,11 +25,11 @@ public class UploadServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 获取文件路径
         String relativePath = request.getParameter(UPLOAD_RELATIVE_PATH);
-        String filePath = WebUtil.getFilePath(request, UPLOAD_BASE_PATH + relativePath);
+        String filePath = WebUtil.getUploadFilePath(request, UPLOAD_BASE_PATH + relativePath);
 
         // 获取文件名
         Part part = request.getPart(UPLOAD_FILE_NAME);
-        String fileName = WebUtil.getFileName(request, part);
+        String fileName = WebUtil.getUploadFileName(request, part);
 
         // 写入文件
         part.write(filePath + "/" + fileName);

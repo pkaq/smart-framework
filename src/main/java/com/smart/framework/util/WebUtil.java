@@ -61,19 +61,19 @@ public class WebUtil {
         }
     }
 
-    // 获取文件路径
-    public static String getFilePath(HttpServletRequest request, String relativePath) {
+    // 获取上传文件路径
+    public static String getUploadFilePath(HttpServletRequest request, String relativePath) {
         // 获取绝对路径
         String filePath = request.getServletContext().getRealPath("/") + relativePath;
 
-        // 若该路径对应的目录不存在，则创建此目录
-        FileUtil.createPath(filePath);
+        // 创建文件
+        FileUtil.createFile(filePath);
 
         return filePath;
     }
 
-    // 获取文件名
-    public static String getFileName(HttpServletRequest request, Part part) {
+    // 获取上传文件名
+    public static String getUploadFileName(HttpServletRequest request, Part part) {
         // 防止中文乱码（可放在 EncodingFilter 中处理）
 //        request.setCharacterEncoding("UTF-8");
 
