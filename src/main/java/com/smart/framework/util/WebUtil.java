@@ -67,7 +67,7 @@ public class WebUtil {
         String filePath = request.getServletContext().getRealPath("/") + relativePath;
 
         // 若该路径对应的目录不存在，则创建此目录
-        FileUtil.createDir(filePath);
+        FileUtil.createPath(filePath);
 
         return filePath;
     }

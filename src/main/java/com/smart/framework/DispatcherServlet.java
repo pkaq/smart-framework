@@ -84,7 +84,7 @@ public class DispatcherServlet extends HttpServlet {
     private void addServletMapping(ServletContext context) {
         // 用 DefaultServlet 映射所有静态资源
         ServletRegistration defaultServletRegistration = context.getServletRegistration("default");
-        defaultServletRegistration.addMapping("/favicon.ico", "/www/*");
+        defaultServletRegistration.addMapping("/favicon.ico", "/www/*", "/index.html");
 
         // 用 UploadServlet 映射 /upload.do 请求
         ServletRegistration uploadServletRegistration = context.getServletRegistration("upload");

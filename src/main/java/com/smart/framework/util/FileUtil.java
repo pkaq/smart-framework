@@ -38,21 +38,28 @@ public class FileUtil {
         return prop;
     }
 
-    // 创建目录
-    public static File createDir(String dirPath) {
-        File dir = null;
+    // 创建路径
+    public static File createPath(String dirPath) {
+        File path = null;
         try {
             if (StringUtil.isNotEmpty(dirPath)) {
-                dir = new File(dirPath);
-                if (!dir.exists()) {
-                    FileUtils.forceMkdir(dir);
+                path = new File(dirPath);
+                if (path.isDirectory()) {
+                    if (!path.exists()) {
+                        FileUtils.forceMkdir(path);
+                    }
+                } else {
+                    File parentPath = path.getParentFile();
+                    if (!parentPath.exists()) {
+                        FileUtils.forceMkdir(parentPath);
+                    }
                 }
             }
         } catch (Exception e) {
-            logger.error("创建目录出错！", e);
+            logger.error("创建路径出错！", e);
             throw new RuntimeException(e);
         }
-        return dir;
+        return path;
     }
 
     // 复制目录（不会复制空目录）
