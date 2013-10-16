@@ -45,7 +45,7 @@ public class StringUtil {
     }
 
     // 将驼峰风格替换为下划线风格
-    public static String toUnderline(String str) {
+    public static String camelhumpToUnderline(String str) {
         Matcher matcher = Pattern.compile("[A-Z]").matcher(str);
         StringBuilder builder = new StringBuilder(str);
         for (int i = 0; matcher.find(); i++) {
@@ -58,7 +58,7 @@ public class StringUtil {
     }
 
     // 将下划线风格替换为驼峰风格
-    public static String toCamelhump(String str) {
+    public static String underlineToCamelhump(String str) {
         Matcher matcher = Pattern.compile("_[a-z]").matcher(str);
         StringBuilder builder = new StringBuilder(str);
         for (int i = 0; matcher.find(); i++) {
@@ -83,5 +83,35 @@ public class StringUtil {
     // 将字符串首字母小写
     public static String firstToLower(String str) {
         return Character.toLowerCase(str.charAt(0)) + str.substring(1);
+    }
+
+    // 转为驼峰命令方式
+    public static String toCamelhumpStyle(String str) {
+        return StringUtil.firstToUpper(StringUtil.underlineToCamelhump(toUnderlineStyle(str)));
+    }
+
+    // 转为下划线命名方式
+    public static String toUnderlineStyle(String str) {
+        str = str.trim().toLowerCase();
+        if (str.contains("-")) {
+            str = str.replace("-", "_");
+        }
+        return str;
+    }
+
+    // 转为显示命名方式
+    public static String toDisplayStyle(String str) {
+        String displayName = "";
+        str = str.trim().toLowerCase();
+        if (str.contains("-")) {
+            String[] words = StringUtil.splitString(str, "-");
+            for (String word : words) {
+                displayName += StringUtil.firstToUpper(word) + " ";
+            }
+            displayName = displayName.trim();
+        } else {
+            displayName = StringUtil.firstToUpper(str);
+        }
+        return displayName;
     }
 }

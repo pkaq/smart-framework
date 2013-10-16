@@ -52,6 +52,19 @@
             <version>2.2.2</version>
         </dependency>
 
+        <!-- Velocity -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-lang</groupId>
+                    <artifactId>commons-lang</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- Apache Commons -->
         <dependency>
             <groupId>commons-lang</groupId>

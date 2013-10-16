@@ -37,7 +37,7 @@ public class EntityHelper {
                     if (field.isAnnotationPresent(Column.class)) {
                         columnName = field.getAnnotation(Column.class).value();
                     } else {
-                        columnName = StringUtil.toUnderline(fieldName); // 将驼峰风格替换为下划线风格
+                        columnName = StringUtil.camelhumpToUnderline(fieldName); // 将驼峰风格替换为下划线风格
                     }
                     // 若字段名与列名不同，则需要进行映射
                     if (!fieldName.equals(columnName)) {
