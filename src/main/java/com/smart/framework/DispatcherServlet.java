@@ -43,13 +43,19 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 获取当前请求相关数据
+        String currentRequestMethod = request.getMethod();
+        String currentRequestURL = request.getPathInfo();
+
+        // 将“/”请求重定向到首页
+        if (currentRequestURL.equals("/")) {
+            response.sendRedirect("/www/page/index.html");
+            return;
+        }
+
         try {
             // 初始化 DataContext
             DataContext.init(request, response);
-
-            // 获取当前请求相关数据
-            String currentRequestMethod = request.getMethod();
-            String currentRequestURL = request.getPathInfo();
 
             // 获取请求参数映射（包括：Query String 与 Form Data）
             Map<String, String> requestParamMap = WebUtil.getRequestParamMap(request);
