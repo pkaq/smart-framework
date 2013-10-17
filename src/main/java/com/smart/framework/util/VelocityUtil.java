@@ -8,18 +8,22 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.log.NullLogChute;
 
 public class VelocityUtil {
 
     private static final Logger logger = Logger.getLogger(VelocityUtil.class);
 
     private static final VelocityEngine engine = new VelocityEngine();
+    private static final String UTF_8 = "UTF-8";
 
     static {
         engine.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, ClassUtil.getClassPath());
-        engine.setProperty(Velocity.ENCODING_DEFAULT, "UTF-8");
-        engine.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
-        engine.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
+        engine.setProperty(Velocity.ENCODING_DEFAULT, UTF_8);
+        engine.setProperty(Velocity.INPUT_ENCODING, UTF_8);
+        engine.setProperty(Velocity.OUTPUT_ENCODING, UTF_8);
+        engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, NullLogChute.class.getName());
     }
 
     // 设置 VM 文件加载路径（默认为 classpath）
