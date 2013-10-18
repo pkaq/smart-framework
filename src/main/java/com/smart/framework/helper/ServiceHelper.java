@@ -11,8 +11,8 @@ public class ServiceHelper {
     private static final Logger logger = Logger.getLogger(ServiceHelper.class);
 
     static {
-        if (logger.isInfoEnabled()) {
-            logger.info("初始化 ServiceHelper");
+        if (logger.isDebugEnabled()) {
+            logger.debug("初始化 ServiceHelper");
         }
 
         try {

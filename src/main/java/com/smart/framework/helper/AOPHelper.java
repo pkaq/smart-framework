@@ -14,8 +14,8 @@ public class AOPHelper {
     private static final Logger logger = Logger.getLogger(AOPHelper.class);
 
     static {
-        if (logger.isInfoEnabled()) {
-            logger.info("初始化 AOPHelper");
+        if (logger.isDebugEnabled()) {
+            logger.debug("初始化 AOPHelper");
         }
 
         try {

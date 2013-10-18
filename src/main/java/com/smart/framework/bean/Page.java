@@ -14,15 +14,6 @@ public class Page extends BaseBean {
         data = new HashMap<String, Object>();
     }
 
-    public Page(String path, Map<String, Object> data) {
-        this.path = path;
-        this.data = data;
-    }
-
-    public Page(String path, Object... data) {
-        this.path = path;
-    }
-
     public Page data(String key, Object value) {
         data.put(key, value);
         return this;

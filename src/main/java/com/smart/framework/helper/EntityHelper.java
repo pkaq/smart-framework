@@ -18,8 +18,8 @@ public class EntityHelper {
     private static final Map<Class<?>, Map<String, String>> entityMap = new HashMap<Class<?>, Map<String, String>>(); // Entity 类 => (列名 => 字段名)
 
     static {
-        if (logger.isInfoEnabled()) {
-            logger.info("初始化 EntityHelper");
+        if (logger.isDebugEnabled()) {
+            logger.debug("初始化 EntityHelper");
         }
 
         // 获取并遍历所有 Entity 类

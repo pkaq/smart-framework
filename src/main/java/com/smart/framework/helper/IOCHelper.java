@@ -14,8 +14,8 @@ public class IOCHelper {
     private static final Logger logger = Logger.getLogger(IOCHelper.class);
 
     static {
-        if (logger.isInfoEnabled()) {
-            logger.info("初始化 IOCHelper");
+        if (logger.isDebugEnabled()) {
+            logger.debug("初始化 IOCHelper");
         }
 
         try {

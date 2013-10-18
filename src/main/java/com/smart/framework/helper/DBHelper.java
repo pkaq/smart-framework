@@ -23,8 +23,8 @@ public class DBHelper {
     private static ThreadLocal<Connection> connContainer = new ThreadLocal<Connection>();
 
     static {
-        if (logger.isInfoEnabled()) {
-            logger.info("初始化 DBHelper");
+        if (logger.isDebugEnabled()) {
+            logger.debug("初始化 DBHelper");
         }
 
         // 初始化数据源
