@@ -45,7 +45,7 @@ public class StringUtil {
     }
 
     // 将驼峰风格替换为下划线风格
-    public static String toUnderline(String str) {
+    public static String camelhumpToUnderline(String str) {
         Matcher matcher = Pattern.compile("[A-Z]").matcher(str);
         StringBuilder builder = new StringBuilder(str);
         for (int i = 0; matcher.find(); i++) {
@@ -58,7 +58,7 @@ public class StringUtil {
     }
 
     // 将下划线风格替换为驼峰风格
-    public static String toCamelhump(String str) {
+    public static String underlineToCamelhump(String str) {
         Matcher matcher = Pattern.compile("_[a-z]").matcher(str);
         StringBuilder builder = new StringBuilder(str);
         for (int i = 0; matcher.find(); i++) {
@@ -83,5 +83,40 @@ public class StringUtil {
     // 将字符串首字母小写
     public static String firstToLower(String str) {
         return Character.toLowerCase(str.charAt(0)) + str.substring(1);
+    }
+
+    // 转为帕斯卡命名方式（如：FooBar）
+    public static String toPascalStyle(String str, String seperator) {
+        return StringUtil.firstToUpper(toCamelhumpStyle(str, seperator));
+    }
+
+    // 转为驼峰命令方式（如：fooBar）
+    public static String toCamelhumpStyle(String str, String seperator) {
+        return StringUtil.underlineToCamelhump(toUnderlineStyle(str, seperator));
+    }
+
+    // 转为下划线命名方式（如：foo_bar）
+    public static String toUnderlineStyle(String str, String seperator) {
+        str = str.trim().toLowerCase();
+        if (str.contains(seperator)) {
+            str = str.replace(seperator, "_");
+        }
+        return str;
+    }
+
+    // 转为显示命名方式（如：Foo Bar）
+    public static String toDisplayStyle(String str, String seperator) {
+        String displayName = "";
+        str = str.trim().toLowerCase();
+        if (str.contains(seperator)) {
+            String[] words = StringUtil.splitString(str, seperator);
+            for (String word : words) {
+                displayName += StringUtil.firstToUpper(word) + " ";
+            }
+            displayName = displayName.trim();
+        } else {
+            displayName = StringUtil.firstToUpper(str);
+        }
+        return displayName;
     }
 }

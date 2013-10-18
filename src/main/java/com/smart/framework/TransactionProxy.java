@@ -38,8 +38,8 @@ public class TransactionProxy implements MethodInterceptor {
                 // 设置事务隔离级别
                 Transaction transaction = method.getAnnotation(Transaction.class);
                 int currentIsolation = transaction.isolation();
-                int defalutIsolation = DBHelper.getDefaultIsolationLevel();
-                if (currentIsolation != defalutIsolation) {
+                int defaultIsolation = DBHelper.getDefaultIsolationLevel();
+                if (currentIsolation != defaultIsolation) {
                     Connection conn = DBHelper.getConnectionFromThreadLocal();
                     conn.setTransactionIsolation(currentIsolation);
                 }
@@ -54,8 +54,8 @@ public class TransactionProxy implements MethodInterceptor {
                 // 回滚事务
                 DBHelper.rollbackTransaction();
 
-                logger.error(e.getMessage(), e);
-                throw new RuntimeException(e.getMessage(), e);
+                logger.error("事务控制出错！", e);
+                throw new RuntimeException(e);
             }
         } else {
             result = methodProxy.invokeSuper(proxy, args);

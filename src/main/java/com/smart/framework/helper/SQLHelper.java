@@ -37,7 +37,7 @@ public class SQLHelper {
             StringBuilder columns = new StringBuilder(" ");
             StringBuilder values = new StringBuilder(" values ");
             for (Map.Entry<String, ?> fieldEntry : fieldMap.entrySet()) {
-                String columnName = StringUtil.toUnderline(fieldEntry.getKey());
+                String columnName = StringUtil.camelhumpToUnderline(fieldEntry.getKey());
                 Object columnValue = fieldEntry.getValue();
                 if (i == 0) {
                     columns.append("(").append(columnName);
@@ -68,7 +68,7 @@ public class SQLHelper {
             sql.append(" set ");
             int i = 0;
             for (Map.Entry<String, ?> fieldEntry : fieldMap.entrySet()) {
-                String columnName = StringUtil.toUnderline(fieldEntry.getKey());
+                String columnName = StringUtil.camelhumpToUnderline(fieldEntry.getKey());
                 Object columnValue = fieldEntry.getValue();
                 if (i == 0) {
                     sql.append(columnName).append(" = '").append(columnValue).append("'");
@@ -127,7 +127,7 @@ public class SQLHelper {
         if (cls.isAnnotationPresent(Table.class)) {
             tableName = cls.getAnnotation(Table.class).value();
         } else {
-            tableName = StringUtil.toUnderline(cls.getSimpleName());
+            tableName = StringUtil.camelhumpToUnderline(cls.getSimpleName());
         }
         return tableName;
     }

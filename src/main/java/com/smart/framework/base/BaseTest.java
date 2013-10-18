@@ -27,8 +27,8 @@ public abstract class BaseTest {
                 DBHelper.update(sql);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("执行数据初始化脚本出错！", e);
+            throw new RuntimeException(e);
         }
     }
 }

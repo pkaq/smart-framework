@@ -1,6 +1,5 @@
 package com.smart.framework.util;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -25,56 +24,56 @@ public class WebUtil {
             PrintWriter writer = response.getWriter();
             writer.write(data + ""); // 转为字符串
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("在 Response 中写数据出错！", e);
+            throw new RuntimeException(e);
         }
     }
 
     // 将数据以 JSON 格式写入 Response 中
     public static void writeJSON(HttpServletResponse response, Object data) {
         try {
-            // 设置Response头
+            // 设置 Response 头
             response.setContentType("application/json"); // 指定内容类型为 JSON 格式
             response.setCharacterEncoding("UTF-8"); // 防止中文乱码
 
-            // 向Response中写入数据
+            // 向 Response 中写入数据
             PrintWriter writer = response.getWriter();
             writer.write(JSONUtil.toJSON(data)); // 转为 JSON 字符串
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("在 Response 中写数据出错！", e);
+            throw new RuntimeException(e);
         }
     }
 
-    // 将数据以 HTML 格式写入Response中（在 JS 中获取的是 JSON 字符串，而不是 JSON 对象）
+    // 将数据以 HTML 格式写入 Response 中（在 JS 中获取的是 JSON 字符串，而不是 JSON 对象）
     public static void writeHTML(HttpServletResponse response, Object data) {
         try {
-            // 设置Response头
+            // 设置 Response 头
             response.setContentType("text/html"); // 指定内容类型为 HTML 格式
             response.setCharacterEncoding("UTF-8"); // 防止中文乱码
 
-            // 向Response中写入数据
+            // 向 Response 中写入数据
             PrintWriter writer = response.getWriter();
             writer.write(JSONUtil.toJSON(data)); // 转为 JSON 字符串
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("在 Response 中写数据出错！", e);
+            throw new RuntimeException(e);
         }
     }
 
-    // 获取文件路径
-    public static String getFilePath(HttpServletRequest request, String relativePath) {
+    // 获取上传文件路径
+    public static String getUploadFilePath(HttpServletRequest request, String relativePath) {
         // 获取绝对路径
         String filePath = request.getServletContext().getRealPath("/") + relativePath;
 
-        // 若该路径对应的目录不存在，则创建此目录
-        File fileDir = FileUtil.createPath(filePath);
+        // 创建文件
+        FileUtil.createFile(filePath);
 
         return filePath;
     }
 
-    // 获取文件名
-    public static String getFileName(HttpServletRequest request, Part part) {
+    // 获取上传文件名
+    public static String getUploadFileName(HttpServletRequest request, Part part) {
         // 防止中文乱码（可放在 EncodingFilter 中处理）
 //        request.setCharacterEncoding("UTF-8");
 
@@ -90,7 +89,7 @@ public class WebUtil {
         return fileName;
     }
 
-    // 从Request中获取所有参数（当参数名重复时，用后者覆盖前者）
+    // 从 Request 中获取所有参数（当参数名重复时，用后者覆盖前者）
     public static Map<String, String> getRequestParamMap(HttpServletRequest request) {
         Map<String, String> paramMap = new HashMap<String, String>();
         try {
@@ -122,8 +121,8 @@ public class WebUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("获取 Request 参数出错！", e);
+            throw new RuntimeException(e);
         }
         return paramMap;
     }

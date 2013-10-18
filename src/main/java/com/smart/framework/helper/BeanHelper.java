@@ -13,8 +13,8 @@ public class BeanHelper {
     private static final Map<Class<?>, Object> beanMap = new HashMap<Class<?>, Object>(); // Bean 类 => Bean 实例
 
     static {
-        if (logger.isInfoEnabled()) {
-            logger.info("Init BeanHelper...");
+        if (logger.isDebugEnabled()) {
+            logger.debug("初始化 BeanHelper");
         }
 
         try {
@@ -27,8 +27,8 @@ public class BeanHelper {
                 beanMap.put(beanClass, beanInstance);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("初始化 BeanHelper 出错！", e);
+            throw new RuntimeException(e);
         }
     }
 

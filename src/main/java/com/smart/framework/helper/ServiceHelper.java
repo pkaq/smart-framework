@@ -4,7 +4,6 @@ import com.smart.framework.TransactionProxy;
 import com.smart.framework.base.BaseService;
 import com.smart.framework.util.ObjectUtil;
 import java.util.List;
-import java.util.Map;
 import org.apache.log4j.Logger;
 
 public class ServiceHelper {
@@ -12,8 +11,8 @@ public class ServiceHelper {
     private static final Logger logger = Logger.getLogger(ServiceHelper.class);
 
     static {
-        if (logger.isInfoEnabled()) {
-            logger.info("Init ServiceHelper...");
+        if (logger.isDebugEnabled()) {
+            logger.debug("初始化 ServiceHelper");
         }
 
         try {
@@ -21,7 +20,6 @@ public class ServiceHelper {
             List<Class<?>> serviceClassList = ClassHelper.getClassListBySuper(BaseService.class);
             for (Class<?> serviceClass : serviceClassList) {
                 // 获取目标实例
-                Map<Class<?>, Object> beanMap = BeanHelper.getBeanMap();
                 Object targetInstance = BeanHelper.getBean(serviceClass);
                 // 创建代理实例
                 Object proxyInstance = TransactionProxy.getInstance().getProxy(serviceClass);
@@ -31,8 +29,8 @@ public class ServiceHelper {
                 BeanHelper.getBeanMap().put(serviceClass, proxyInstance);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("初始化 ServiceHelper 出错！", e);
+            throw new RuntimeException(e);
         }
     }
 }

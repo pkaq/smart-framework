@@ -14,8 +14,8 @@ public class AOPHelper {
     private static final Logger logger = Logger.getLogger(AOPHelper.class);
 
     static {
-        if (logger.isInfoEnabled()) {
-            logger.info("Init AOPHelper...");
+        if (logger.isDebugEnabled()) {
+            logger.debug("初始化 AOPHelper");
         }
 
         try {
@@ -55,8 +55,8 @@ public class AOPHelper {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("初始化 AOPHelper 出错！", e);
+            throw new RuntimeException(e);
         }
     }
 }

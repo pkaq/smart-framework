@@ -18,8 +18,8 @@ public class EntityHelper {
     private static final Map<Class<?>, Map<String, String>> entityMap = new HashMap<Class<?>, Map<String, String>>(); // Entity 类 => (列名 => 字段名)
 
     static {
-        if (logger.isInfoEnabled()) {
-            logger.info("Init EntityHelper...");
+        if (logger.isDebugEnabled()) {
+            logger.debug("初始化 EntityHelper");
         }
 
         // 获取并遍历所有 Entity 类
@@ -37,7 +37,7 @@ public class EntityHelper {
                     if (field.isAnnotationPresent(Column.class)) {
                         columnName = field.getAnnotation(Column.class).value();
                     } else {
-                        columnName = StringUtil.toUnderline(fieldName); // 将驼峰风格替换为下划线风格
+                        columnName = StringUtil.camelhumpToUnderline(fieldName); // 将驼峰风格替换为下划线风格
                     }
                     // 若字段名与列名不同，则需要进行映射
                     if (!fieldName.equals(columnName)) {

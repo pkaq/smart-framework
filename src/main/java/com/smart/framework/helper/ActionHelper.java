@@ -19,8 +19,8 @@ public class ActionHelper {
     private static final Map<RequestBean, ActionBean> actionMap = new HashMap<RequestBean, ActionBean>();
 
     static {
-        if (logger.isInfoEnabled()) {
-            logger.info("Init ActionHelper...");
+        if (logger.isDebugEnabled()) {
+            logger.debug("初始化 ActionHelper");
         }
 
         // 获取并遍历所有 Action 类

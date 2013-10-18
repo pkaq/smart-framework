@@ -10,7 +10,7 @@ public class StreamUtil {
 
     private static final Logger logger = Logger.getLogger(StreamUtil.class);
 
-    // 从输入流拷贝到输出流
+    // 从输入流复制到输出流
     public static void copyStream(InputStream input, OutputStream output) {
         try {
             int length;
@@ -20,8 +20,8 @@ public class StreamUtil {
             }
             output.flush();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("复制流出错！", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -35,8 +35,8 @@ public class StreamUtil {
                 sb.append(line);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            logger.error("Stream 转 String 出错！", e);
+            throw new RuntimeException(e);
         }
         return sb.toString();
     }

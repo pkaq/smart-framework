@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ClassHelper {
 
-    private static final String packageName = ConfigHelper.getStringProperty("package.name");
+    private static final String packageName = ConfigHelper.getStringProperty("package");
 
     public static List<Class<?>> getClassListByPackage(String pkg) {
         return ClassUtil.getClassList(pkg, true);
