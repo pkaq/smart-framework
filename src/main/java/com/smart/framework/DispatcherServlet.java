@@ -57,6 +57,11 @@ public class DispatcherServlet extends HttpServlet {
             return;
         }
 
+        // 去掉请求最后的“/”
+        if (currentRequestURL.endsWith("/")) {
+            currentRequestURL = currentRequestURL.substring(0, currentRequestURL.length() - 1);
+        }
+
         // 定义一个映射标志（默认为映射失败）
         boolean mapped = false;
 
