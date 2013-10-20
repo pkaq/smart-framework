@@ -10,8 +10,11 @@ public abstract class BaseAspect implements MethodInterceptor {
 
     private static final Logger logger = Logger.getLogger(BaseAspect.class);
 
+    private Class<?> cls;
+
     @SuppressWarnings("unchecked")
     public <T> T getProxy(Class<T> cls) {
+        this.cls = cls;
         return (T) Enhancer.create(cls, this);
     }
 
@@ -20,7 +23,7 @@ public abstract class BaseAspect implements MethodInterceptor {
         begin(methodTarget, args);
         Object result = null;
         try {
-            if (filter(methodTarget, args)) {
+            if (filter(cls, methodTarget, args)) {
                 before(methodTarget, args);
                 result = methodProxy.invokeSuper(proxy, args);
                 after(methodTarget, args);
@@ -29,8 +32,7 @@ public abstract class BaseAspect implements MethodInterceptor {
             }
         } catch (Exception e) {
             error(methodTarget, args, e);
-            logger.error("执行方法出错！", e);
-            throw new RuntimeException(e);
+            throw e;
         } finally {
             end(methodTarget, args);
         }
@@ -40,7 +42,7 @@ public abstract class BaseAspect implements MethodInterceptor {
     public void begin(Method method, Object[] args) {
     }
 
-    public boolean filter(Method method, Object[] args) {
+    public boolean filter(Class<?> cls, Method method, Object[] args) {
         return true;
     }
 

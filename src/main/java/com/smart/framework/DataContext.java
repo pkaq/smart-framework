@@ -30,14 +30,19 @@ public class DataContext {
         dataContextContainer.remove();
     }
 
+    // 获取 DataContext
+    public static DataContext getInstance() {
+        return dataContextContainer.get();
+    }
+
     // 获取 Request
     private static HttpServletRequest getRequest() {
-        return dataContextContainer.get().request;
+        return getInstance().request;
     }
 
     // 获取 Response
     private static HttpServletResponse getResponse() {
-        return dataContextContainer.get().response;
+        return getInstance().response;
     }
 
     // 获取 Session

@@ -37,7 +37,6 @@ public class DispatcherServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         // 初始化 Helper 类
         InitHelper.init();
-
         // 添加 Servlet 映射
         addServletMapping(config.getServletContext());
     }
@@ -50,28 +49,22 @@ public class DispatcherServlet extends HttpServlet {
         if (logger.isDebugEnabled()) {
             logger.debug(currentRequestMethod + ":" + currentRequestURL);
         }
-
         // 将“/”请求重定向到首页
         if (currentRequestURL.equals("/")) {
             response.sendRedirect("/static/page/index.html");
             return;
         }
-
         // 去掉请求最后的“/”
         if (currentRequestURL.endsWith("/")) {
             currentRequestURL = currentRequestURL.substring(0, currentRequestURL.length() - 1);
         }
-
         // 定义一个映射标志（默认为映射失败）
         boolean mapped = false;
-
         try {
             // 初始化 DataContext
             DataContext.init(request, response);
-
             // 获取请求参数映射（包括：Query String 与 Form Data）
             Map<String, String> requestParamMap = WebUtil.getRequestParamMap(request);
-
             // 获取并遍历 Action 映射
             Map<RequestBean, ActionBean> actionMap = ActionHelper.getActionMap();
             for (Map.Entry<RequestBean, ActionBean> actionEntry : actionMap.entrySet()) {
@@ -99,10 +92,12 @@ public class DispatcherServlet extends HttpServlet {
             // 销毁 DataContext
             DataContext.destroy();
         }
-
-        // 若映射失败，则路由请求
+        // 若映射失败，则根据默认路由规则转发请求
         if (!mapped) {
-            routeRequest(currentRequestURL, request, response);
+            // 获取路径（默认路由规则：/{1}/{2} => /dynamic/jsp/{1}_{2}.jsp）
+            String path = "/dynamic/jsp/" + currentRequestURL.substring(1).replace("/", "_") + ".jsp";
+            // 转发请求
+            WebUtil.forwordRequest(path, request, response);
         }
     }
 
@@ -110,11 +105,9 @@ public class DispatcherServlet extends HttpServlet {
         // 用 DefaultServlet 映射所有静态资源
         ServletRegistration defaultServletRegistration = context.getServletRegistration("default");
         defaultServletRegistration.addMapping("/favicon.ico", "/static/*", "/index.html");
-
         // 用 JspServlet 映射所有 JSP 请求
         ServletRegistration jspServletRegistration = context.getServletRegistration("jsp");
         jspServletRegistration.addMapping("/dynamic/jsp/*");
-
         // 用 UploadServlet 映射 /upload.do 请求
         ServletRegistration uploadServletRegistration = context.getServletRegistration("upload");
         uploadServletRegistration.addMapping("/upload.do");
@@ -122,7 +115,6 @@ public class DispatcherServlet extends HttpServlet {
 
     private List<Object> createParamList(Map<String, String> requestParamMap, Matcher matcher) {
         List<Object> paramList = new ArrayList<Object>();
-
         // 遍历正则表达式中所匹配的组
         for (int i = 1; i <= matcher.groupCount(); i++) {
             String param = matcher.group(i);
@@ -138,12 +130,10 @@ public class DispatcherServlet extends HttpServlet {
                 paramList.add(param);
             }
         }
-
         // 向参数列表中添加请求参数映射
         if (MapUtil.isNotEmpty(requestParamMap)) {
             paramList.add(requestParamMap);
         }
-
         return paramList;
     }
 
@@ -154,79 +144,47 @@ public class DispatcherServlet extends HttpServlet {
         // 从 BeanHelper 中创建 Action 实例
         Object actionInstance = BeanHelper.getBean(actionClass);
         // 调用 Action 方法
-        Object actionMethodResult = invokeActionMethod(actionInstance, actionMethod, paramList);
+        Object actionMethodResult = null;
+        try {
+            actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
+            actionMethodResult = actionMethod.invoke(actionInstance, paramList.toArray());
+        } catch (Exception e) {
+            if (e.getCause() instanceof AuthException) {
+                // 若未认证，则重定向到首页
+                WebUtil.redirectRequest("/", response);
+                return;
+            } else {
+                logger.error("调用 Action 方法出错！", e);
+            }
+        }
         // 判断返回值类型
         if (actionMethodResult != null) {
             if (actionMethodResult instanceof Result) {
-                // 若为 Result 类型，则转换为 JSON 格式并写入 Response 中
+                // 若为 Result 类型，则转换为 JSON 格式并写入响应中
                 Result result = (Result) actionMethodResult;
                 WebUtil.writeJSON(response, result);
             } else if (actionMethodResult instanceof Page) {
                 // 若为 Page 类型，则 转发 或 重定向 到相应的页面中
                 Page page = (Page) actionMethodResult;
                 if (page.isRedirect()) {
+                    // 获取路径
+                    String path = page.getPath();
                     // 重定向请求
-                    redirectRequest(page, response);
+                    WebUtil.redirectRequest(path, response);
                 } else {
+                    // 获取路径
+                    String path = "/dynamic/jsp/" + page.getPath();
+                    // 初始化请求属性
+                    Map<String, Object> data = page.getData();
+                    if (MapUtil.isNotEmpty(data)) {
+                        for (Map.Entry<String, Object> entry : data.entrySet()) {
+                            request.setAttribute(entry.getKey(), entry.getValue());
+                        }
+                    }
                     // 转发请求
-                    forwordRequest(page, request, response);
+                    WebUtil.forwordRequest(path, request, response);
                 }
             }
-        }
-    }
-
-    private Object invokeActionMethod(Object actionInstance, Method actionMethod, List<Object> paramList) {
-        Object actionMethodResult;
-        try {
-            actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
-            actionMethodResult = actionMethod.invoke(actionInstance, paramList.toArray());
-        } catch (Exception e) {
-            logger.error("调用 Action 方法出错！", e);
-            throw new RuntimeException(e);
-        }
-        return actionMethodResult;
-    }
-
-    private void redirectRequest(Page page, HttpServletResponse response) {
-        try {
-            // 获取路径
-            String path = page.getPath();
-            // 重定向请求
-            response.sendRedirect(path);
-        } catch (Exception e) {
-            logger.error("页面重定向出错！", e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void forwordRequest(Page page, HttpServletRequest request, HttpServletResponse response) {
-        try {
-            // 获取路径
-            String path = "/dynamic/jsp/" + page.getPath();
-            // 初始化 Request 属性
-            Map<String, Object> data = page.getData();
-            if (MapUtil.isNotEmpty(data)) {
-                for (Map.Entry<String, Object> entry : data.entrySet()) {
-                    request.setAttribute(entry.getKey(), entry.getValue());
-                }
-            }
-            // 转发请求
-            request.getRequestDispatcher(path).forward(request, response);
-        } catch (Exception e) {
-            logger.error("页面转发出错！", e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void routeRequest(String url, HttpServletRequest request, HttpServletResponse response) {
-        try {
-            // 获取路径
-            String path = "/dynamic/jsp/" + url.substring(1).replace("/", "_") + ".jsp";
-            // 转发请求
-            request.getRequestDispatcher(path).forward(request, response);
-        } catch (Exception e) {
-            logger.error("页面转发出错！", e);
-            throw new RuntimeException(e);
         }
     }
 }

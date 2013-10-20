@@ -5,8 +5,10 @@ import com.smart.framework.base.BaseAspect;
 import com.smart.framework.util.CollectionUtil;
 import com.smart.framework.util.ObjectUtil;
 import com.smart.framework.util.StringUtil;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
+import net.sf.cglib.proxy.Enhancer;
 import org.apache.log4j.Logger;
 
 public class AOPHelper {
@@ -44,12 +46,15 @@ public class AOPHelper {
                         for (Class<?> targetClass : targetClassList) {
                             // 获取目标实例
                             Object targetInstance = BeanHelper.getBean(targetClass);
-                            // 创建代理实例
-                            Object proxyInstance = baseAspect.getProxy(targetClass);
-                            // 复制目标实例中的成员变量到代理实例中
-                            ObjectUtil.copyFields(targetInstance, proxyInstance);
-                            // 用代理实体覆盖目标实例
-                            BeanHelper.getBeanMap().put(targetClass, proxyInstance);
+                            // 若目标实例不是代理实例，则创建代理实例
+                            if (! Enhancer.isEnhanced(targetInstance.getClass())) {
+                                // 创建代理实例
+                                Object proxyInstance = baseAspect.getProxy(targetClass);
+                                // 复制目标实例中的成员变量到代理实例中
+                                ObjectUtil.copyFields(targetInstance, proxyInstance);
+                                // 用代理实体覆盖目标实例
+                                BeanHelper.getBeanMap().put(targetClass, proxyInstance);
+                            }
                         }
                     }
                 }

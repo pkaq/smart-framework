@@ -13,50 +13,50 @@ public class WebUtil {
 
     private static final Logger logger = Logger.getLogger(WebUtil.class);
 
-    // 将数据以纯文本格式写入 Response 中
+    // 将数据以纯文本格式写入响应中
     public static void writeText(HttpServletResponse response, Object data) {
         try {
-            // 设置 Response 头
+            // 设置响应头
             response.setContentType("text/plain"); // 指定内容类型为纯文本格式
             response.setCharacterEncoding("UTF-8"); // 防止中文乱码
 
-            // 向 Response 中写入数据
+            // 向响应中写入数据
             PrintWriter writer = response.getWriter();
             writer.write(data + ""); // 转为字符串
         } catch (Exception e) {
-            logger.error("在 Response 中写数据出错！", e);
+            logger.error("在响应中写数据出错！", e);
             throw new RuntimeException(e);
         }
     }
 
-    // 将数据以 JSON 格式写入 Response 中
+    // 将数据以 JSON 格式写入响应中
     public static void writeJSON(HttpServletResponse response, Object data) {
         try {
-            // 设置 Response 头
+            // 设置响应头
             response.setContentType("application/json"); // 指定内容类型为 JSON 格式
             response.setCharacterEncoding("UTF-8"); // 防止中文乱码
 
-            // 向 Response 中写入数据
+            // 向响应中写入数据
             PrintWriter writer = response.getWriter();
             writer.write(JSONUtil.toJSON(data)); // 转为 JSON 字符串
         } catch (Exception e) {
-            logger.error("在 Response 中写数据出错！", e);
+            logger.error("在响应中写数据出错！", e);
             throw new RuntimeException(e);
         }
     }
 
-    // 将数据以 HTML 格式写入 Response 中（在 JS 中获取的是 JSON 字符串，而不是 JSON 对象）
+    // 将数据以 HTML 格式写入响应中（在 JS 中获取的是 JSON 字符串，而不是 JSON 对象）
     public static void writeHTML(HttpServletResponse response, Object data) {
         try {
-            // 设置 Response 头
+            // 设置响应头
             response.setContentType("text/html"); // 指定内容类型为 HTML 格式
             response.setCharacterEncoding("UTF-8"); // 防止中文乱码
 
-            // 向 Response 中写入数据
+            // 向响应中写入数据
             PrintWriter writer = response.getWriter();
             writer.write(JSONUtil.toJSON(data)); // 转为 JSON 字符串
         } catch (Exception e) {
-            logger.error("在 Response 中写数据出错！", e);
+            logger.error("在响应中写数据出错！", e);
             throw new RuntimeException(e);
         }
     }
@@ -77,7 +77,7 @@ public class WebUtil {
         // 防止中文乱码（可放在 EncodingFilter 中处理）
 //        request.setCharacterEncoding("UTF-8");
 
-        // 从 Request 头中获取文件名
+        // 从请求头中获取文件名
         String cd = part.getHeader("Content-Disposition");
         String fileName = cd.substring(cd.lastIndexOf("=") + 2, cd.length() - 1);
 
@@ -89,7 +89,7 @@ public class WebUtil {
         return fileName;
     }
 
-    // 从 Request 中获取所有参数（当参数名重复时，用后者覆盖前者）
+    // 从请求中获取所有参数（当参数名重复时，用后者覆盖前者）
     public static Map<String, String> getRequestParamMap(HttpServletRequest request) {
         Map<String, String> paramMap = new HashMap<String, String>();
         try {
@@ -121,7 +121,7 @@ public class WebUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error("获取 Request 参数出错！", e);
+            logger.error("获取请求参数出错！", e);
             throw new RuntimeException(e);
         }
         return paramMap;
@@ -146,5 +146,25 @@ public class WebUtil {
             }
         }
         return queryMap;
+    }
+
+    // 转发请求
+    public static void forwordRequest(String path, HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.getRequestDispatcher(path).forward(request, response);
+        } catch (Exception e) {
+            logger.error("转发请求出错！", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    // 重定向请求
+    public static void redirectRequest(String path, HttpServletResponse response) {
+        try {
+            response.sendRedirect(path);
+        } catch (Exception e) {
+            logger.error("重定向请求出错！", e);
+            throw new RuntimeException(e);
+        }
     }
 }
