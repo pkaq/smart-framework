@@ -53,7 +53,7 @@ public class DispatcherServlet extends HttpServlet {
 
         // 将“/”请求重定向到首页
         if (currentRequestURL.equals("/")) {
-            response.sendRedirect("/www/page/index.html");
+            response.sendRedirect("/static/page/index.html");
             return;
         }
 
@@ -104,11 +104,11 @@ public class DispatcherServlet extends HttpServlet {
     private void addServletMapping(ServletContext context) {
         // 用 DefaultServlet 映射所有静态资源
         ServletRegistration defaultServletRegistration = context.getServletRegistration("default");
-        defaultServletRegistration.addMapping("/favicon.ico", "/www/*", "/index.html");
+        defaultServletRegistration.addMapping("/favicon.ico", "/static/*", "/index.html");
 
         // 用 JspServlet 映射所有 JSP 请求
         ServletRegistration jspServletRegistration = context.getServletRegistration("jsp");
-        jspServletRegistration.addMapping("/jsp/*");
+        jspServletRegistration.addMapping("/dynamic/jsp/*");
 
         // 用 UploadServlet 映射 /upload.do 请求
         ServletRegistration uploadServletRegistration = context.getServletRegistration("upload");
@@ -197,7 +197,7 @@ public class DispatcherServlet extends HttpServlet {
     private void forwordRequest(Page page, HttpServletRequest request, HttpServletResponse response) {
         try {
             // 获取路径
-            String path = "/jsp/" + page.getPath();
+            String path = "/dynamic/jsp/" + page.getPath();
             // 初始化 Request 属性
             Map<String, Object> data = page.getData();
             if (MapUtil.isNotEmpty(data)) {
@@ -216,7 +216,7 @@ public class DispatcherServlet extends HttpServlet {
     private void routeRequest(String url, HttpServletRequest request, HttpServletResponse response) {
         try {
             // 获取路径
-            String path = "/jsp/" + url.substring(1).replace("/", "_") + ".jsp";
+            String path = "/dynamic/jsp/" + url.substring(1).replace("/", "_") + ".jsp";
             // 转发请求
             request.getRequestDispatcher(path).forward(request, response);
         } catch (Exception e) {
