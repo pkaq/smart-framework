@@ -19,6 +19,10 @@ public class Page extends BaseBean {
         return this;
     }
 
+    public boolean isRedirect() {
+        return path.startsWith("/");
+    }
+
     public String getPath() {
         return path;
     }

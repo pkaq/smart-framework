@@ -57,6 +57,9 @@ public class DispatcherServlet extends HttpServlet {
             return;
         }
 
+        // 定义一个映射标志（默认为映射失败）
+        boolean mapped = false;
+
         try {
             // 初始化 DataContext
             DataContext.init(request, response);
@@ -81,6 +84,8 @@ public class DispatcherServlet extends HttpServlet {
                     List<Object> paramList = createParamList(requestParamMap, matcher);
                     // 处理 Action 方法
                     handleActionMethod(actionBean, paramList, request, response);
+                    // 设置为映射成功
+                    mapped = true;
                     // 若成功匹配，则终止循环
                     break;
                 }
@@ -88,6 +93,11 @@ public class DispatcherServlet extends HttpServlet {
         } finally {
             // 销毁 DataContext
             DataContext.destroy();
+        }
+
+        // 若映射失败，则路由请求
+        if (!mapped) {
+            routeRequest(currentRequestURL, request, response);
         }
     }
 
@@ -149,13 +159,12 @@ public class DispatcherServlet extends HttpServlet {
             } else if (actionMethodResult instanceof Page) {
                 // 若为 Page 类型，则 转发 或 重定向 到相应的页面中
                 Page page = (Page) actionMethodResult;
-                String path = page.getPath();
-                if (path.startsWith("/")) {
+                if (page.isRedirect()) {
                     // 重定向请求
-                    redirectRequest(path, response);
+                    redirectRequest(page, response);
                 } else {
                     // 转发请求
-                    forwordRequest(path, page, request, response);
+                    forwordRequest(page, request, response);
                 }
             }
         }
@@ -173,8 +182,10 @@ public class DispatcherServlet extends HttpServlet {
         return actionMethodResult;
     }
 
-    private void redirectRequest(String path, HttpServletResponse response) {
+    private void redirectRequest(Page page, HttpServletResponse response) {
         try {
+            // 获取路径
+            String path = page.getPath();
             // 重定向请求
             response.sendRedirect(path);
         } catch (Exception e) {
@@ -183,10 +194,10 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
-    private void forwordRequest(String path, Page page, HttpServletRequest request, HttpServletResponse response) {
+    private void forwordRequest(Page page, HttpServletRequest request, HttpServletResponse response) {
         try {
-            // 定位绝对路径
-            path = "/jsp/" + path;
+            // 获取路径
+            String path = "/jsp/" + page.getPath();
             // 初始化 Request 属性
             Map<String, Object> data = page.getData();
             if (MapUtil.isNotEmpty(data)) {
@@ -194,6 +205,18 @@ public class DispatcherServlet extends HttpServlet {
                     request.setAttribute(entry.getKey(), entry.getValue());
                 }
             }
+            // 转发请求
+            request.getRequestDispatcher(path).forward(request, response);
+        } catch (Exception e) {
+            logger.error("页面转发出错！", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void routeRequest(String url, HttpServletRequest request, HttpServletResponse response) {
+        try {
+            // 获取路径
+            String path = "/jsp/" + url.substring(1).replace("/", "_") + ".jsp";
             // 转发请求
             request.getRequestDispatcher(path).forward(request, response);
         } catch (Exception e) {
