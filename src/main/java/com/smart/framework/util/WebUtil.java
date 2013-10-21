@@ -167,4 +167,19 @@ public class WebUtil {
             throw new RuntimeException(e);
         }
     }
+
+    // 发送错误代码
+    public static void sendError(int code, HttpServletResponse response) {
+        try {
+            response.sendError(code);
+        } catch (Exception e) {
+            logger.error("发送错误代码出错！", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    // 判断是否为 AJAX 请求
+    public static boolean isAJAX(HttpServletRequest request) {
+        return request.getHeader("X-Requested-With") != null;
+    }
 }

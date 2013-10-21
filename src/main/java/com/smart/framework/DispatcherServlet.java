@@ -81,7 +81,7 @@ public class DispatcherServlet extends HttpServlet {
                     // 创建 Action 方法参数列表
                     List<Object> paramList = createParamList(requestParamMap, matcher);
                     // 处理 Action 方法
-                    handleActionMethod(actionBean, paramList, request, response);
+                    handleActionMethod(request, response, actionBean, paramList);
                     // 设置为映射成功
                     mapped = true;
                     // 若成功匹配，则终止循环
@@ -137,26 +137,44 @@ public class DispatcherServlet extends HttpServlet {
         return paramList;
     }
 
-    private void handleActionMethod(ActionBean actionBean, List<Object> paramList, HttpServletRequest request, HttpServletResponse response) {
+    private void handleActionMethod(HttpServletRequest request, HttpServletResponse response, ActionBean actionBean, List<Object> paramList) {
         // 从 ActionBean 中获取 Action 相关属性
         Class<?> actionClass = actionBean.getActionClass();
         Method actionMethod = actionBean.getActionMethod();
         // 从 BeanHelper 中创建 Action 实例
         Object actionInstance = BeanHelper.getBean(actionClass);
         // 调用 Action 方法
-        Object actionMethodResult = null;
+        Object actionMethodResult;
         try {
             actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
             actionMethodResult = actionMethod.invoke(actionInstance, paramList.toArray());
         } catch (Exception e) {
-            if (e.getCause() instanceof AuthException) {
-                // 若未认证，则重定向到首页
-                WebUtil.redirectRequest("/", response);
-                return;
-            } else {
-                logger.error("调用 Action 方法出错！", e);
-            }
+            // 处理 Action 方法异常
+            handleActionMethodException(request, response, e);
+            // 直接返回
+            return;
         }
+        // 处理 Action 方法返回值
+        handleActionMethodReturn(request, response, actionMethodResult);
+    }
+
+    private void handleActionMethodException(HttpServletRequest request, HttpServletResponse response, Exception e) {
+        if (e.getCause() instanceof AuthException) {
+            // 若为认证异常，则分两种情况进行处理
+            if (WebUtil.isAJAX(request)) {
+                // 若为 AJAX 请求，则发送 403 错误
+                WebUtil.sendError(403, response);
+            } else {
+                // 否则重定向到首页
+                WebUtil.redirectRequest("/", response);
+            }
+        } else {
+            // 若为其他异常，则记录错误日志
+            logger.error("调用 Action 方法出错！", e);
+        }
+    }
+
+    private void handleActionMethodReturn(HttpServletRequest request, HttpServletResponse response, Object actionMethodResult) {
         // 判断返回值类型
         if (actionMethodResult != null) {
             if (actionMethodResult instanceof Result) {
