@@ -22,7 +22,6 @@ public class ActionHelper {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 ActionHelper");
         }
-
         // 获取并遍历所有 Action 类
         List<Class<?>> actionClassList = ClassHelper.getClassListBySuper(BaseAction.class);
         for (Class<?> actionClass : actionClassList) {

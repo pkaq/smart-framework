@@ -35,11 +35,11 @@ public class ObjectUtil {
     }
 
     // 复制所有字段
-    public static void copyFields(Object target, Object source) {
+    public static void copyFields(Object source, Object target) {
         try {
-            for (Field field : target.getClass().getDeclaredFields()) {
+            for (Field field : source.getClass().getDeclaredFields()) {
                 field.setAccessible(true); // 可操作私有字段
-                field.set(source, field.get(target));
+                field.set(target, field.get(source));
             }
         } catch (Exception e) {
             logger.error("复制字段出错！", e);

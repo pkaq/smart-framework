@@ -21,7 +21,6 @@ public class EntityHelper {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 EntityHelper");
         }
-
         // 获取并遍历所有 Entity 类
         List<Class<?>> entityClassList = ClassHelper.getClassListBySuper(BaseEntity.class);
         for (Class<?> entityClass : entityClassList) {
