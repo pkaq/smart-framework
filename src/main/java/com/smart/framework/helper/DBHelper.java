@@ -38,7 +38,6 @@ public class DBHelper {
             databaseType = ds.getConnection().getMetaData().getDatabaseProductName();
         } catch (Exception e) {
             logger.error("初始化 DBHelper 出错！", e);
-            throw new RuntimeException(e);
         }
     }
 

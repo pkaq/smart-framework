@@ -2,50 +2,49 @@ package com.smart.framework.base;
 
 import com.smart.framework.proxy.Proxy;
 import com.smart.framework.proxy.ProxyChain;
-import org.apache.log4j.Logger;
+import java.lang.reflect.Method;
 
 public abstract class BaseAspect implements Proxy {
 
-    private static final Logger logger = Logger.getLogger(BaseAspect.class);
-
     @Override
-    public final void doProxy(ProxyChain proxyChain) {
-        String className = proxyChain.getTargetClass().getName();
-        String methodName = proxyChain.getTargetMethod().getName();
+    public final void doProxy(ProxyChain proxyChain) throws Exception {
+        Class<?> cls = proxyChain.getTargetClass();
+        Method method = proxyChain.getTargetMethod();
+        Object[] params = proxyChain.getMethodParams();
 
-        begin(className, methodName);
+        begin();
         try {
-            if (filter(className, methodName)) {
-                before(className, methodName);
+            if (filter(cls, method, params)) {
+                before(cls, method, params);
                 proxyChain.doProxyChain();
-                after(className, methodName);
+                after(cls, method, params);
             } else {
                 proxyChain.doProxyChain();
             }
         } catch (Exception e) {
-            error(className, methodName, e);
-            throw new RuntimeException(e);
+            error(cls, method, params, e);
+            throw e;
         } finally {
-            end(className, methodName);
+            end();
         }
     }
 
-    public void begin(String className, String methodName) {
+    public void begin() {
     }
 
-    public boolean filter(String className, String methodName) {
+    public boolean filter(Class<?> cls, Method method, Object[] params) {
         return true;
     }
 
-    public void before(String className, String methodName) {
+    public void before(Class<?> cls, Method method, Object[] params) {
     }
 
-    public void after(String className, String methodName) {
+    public void after(Class<?> cls, Method method, Object[] params) {
     }
 
-    public void error(String className, String methodName, Exception e) {
+    public void error(Class<?> cls, Method method, Object[] params, Exception e) {
     }
 
-    public void end(String className, String methodName) {
+    public void end() {
     }
 }

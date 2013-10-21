@@ -30,15 +30,27 @@ public class ProxyChain {
         return targetClass;
     }
 
+    public Object getTargetObject() {
+        return targetObject;
+    }
+
     public Method getTargetMethod() {
         return targetMethod;
+    }
+
+    public Object[] getMethodParams() {
+        return methodParams;
+    }
+
+    public MethodProxy getMethodProxy() {
+        return methodProxy;
     }
 
     public Object getMethodResult() {
         return methodResult;
     }
 
-    public void doProxyChain() {
+    public void doProxyChain() throws Exception {
         if (CollectionUtil.isNotEmpty(proxyList) && currentProxyIndex < proxyList.size()) {
             proxyList.get(currentProxyIndex++).doProxy(this);
         } else {
