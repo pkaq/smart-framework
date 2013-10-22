@@ -1,6 +1,5 @@
 package com.smart.framework.proxy;
 
-import com.smart.framework.util.CollectionUtil;
 import java.lang.reflect.Method;
 import java.util.List;
 import net.sf.cglib.proxy.MethodProxy;
@@ -51,7 +50,7 @@ public class ProxyChain {
     }
 
     public void doProxyChain() throws Exception {
-        if (CollectionUtil.isNotEmpty(proxyList) && currentProxyIndex < proxyList.size()) {
+        if (currentProxyIndex < proxyList.size()) {
             proxyList.get(currentProxyIndex++).doProxy(this);
         } else {
             try {
