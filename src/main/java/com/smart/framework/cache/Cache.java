@@ -6,11 +6,15 @@ public interface Cache {
 
     void put(String key, Object value);
 
-    Object get(String key);
+    <T> void putAll(String key, List<T> list);
 
-    List<Object> getAll();
+    <T> T get(String key);
+
+    <T> List<T> getAll();
 
     void remove(String key);
 
     void removeAll();
+
+    int getSize();
 }

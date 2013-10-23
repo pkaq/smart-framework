@@ -1,14 +1,16 @@
 package com.smart.framework.cache.impl;
 
 import com.smart.framework.cache.Cache;
+import com.smart.framework.util.CastUtil;
+import com.smart.framework.util.ObjectUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 public class DefaultCache implements Cache {
 
-    private static final Map<String, Object> dataMap = new ConcurrentHashMap<String, Object>();
+    private static final Map<String, Object> dataMap = new ConcurrentSkipListMap<String, Object>();
 
     @Override
     public void put(String key, Object value) {
@@ -16,12 +18,21 @@ public class DefaultCache implements Cache {
     }
 
     @Override
+    public <T> void putAll(String key, List<T> list) {
+        for (T data : list) {
+            long id = CastUtil.castLong(ObjectUtil.getFieldValue(data, "id"));
+            dataMap.put(key + "-" + id, data);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public Object get(String key) {
-        checkKey(key);
         return dataMap.get(key);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Object> getAll() {
         List<Object> valueList = new ArrayList<Object>();
         valueList.addAll(dataMap.values());
@@ -30,8 +41,9 @@ public class DefaultCache implements Cache {
 
     @Override
     public void remove(String key) {
-        checkKey(key);
-        dataMap.remove(key);
+        if (dataMap.containsKey(key)) {
+            dataMap.remove(key);
+        }
     }
 
     @Override
@@ -39,9 +51,8 @@ public class DefaultCache implements Cache {
         dataMap.clear();
     }
 
-    private void checkKey(String key) {
-        if (!dataMap.containsKey(key)) {
-            throw new RuntimeException("无法指定的获取数据！" + key);
-        }
+    @Override
+    public int getSize() {
+        return dataMap.size();
     }
 }
