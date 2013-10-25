@@ -17,7 +17,6 @@ public class IOCHelper {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 IOCHelper");
         }
-
         try {
             // 获取并遍历所有的 Bean 类
             Map<Class<?>, Object> beanMap = BeanHelper.getBeanMap();
@@ -63,7 +62,6 @@ public class IOCHelper {
             }
         } catch (Exception e) {
             logger.error("初始化 IOCHelper 出错！", e);
-            throw new RuntimeException(e);
         }
     }
 }

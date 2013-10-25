@@ -16,7 +16,6 @@ public class BeanHelper {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 BeanHelper");
         }
-
         try {
             // 获取并遍历所有的 Bean（带有 @Bean 注解的类）
             List<Class<?>> beanClassList = ClassHelper.getClassListByAnnotation(Bean.class);
@@ -28,7 +27,6 @@ public class BeanHelper {
             }
         } catch (Exception e) {
             logger.error("初始化 BeanHelper 出错！", e);
-            throw new RuntimeException(e);
         }
     }
 
@@ -39,7 +37,7 @@ public class BeanHelper {
     @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<T> cls) {
         if (!beanMap.containsKey(cls)) {
-            throw new RuntimeException("Can not get bean by class!");
+            throw new RuntimeException("无法根据类名获取实例！" + cls);
         }
         return (T) beanMap.get(cls);
     }

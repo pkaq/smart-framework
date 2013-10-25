@@ -20,9 +20,8 @@ public class InitHelper {
             for (Class<?> cls : classList) {
                 Class.forName(cls.getName());
             }
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             logger.error("加载 Helper 出错！", e);
-            throw new RuntimeException(e);
         }
     }
 }

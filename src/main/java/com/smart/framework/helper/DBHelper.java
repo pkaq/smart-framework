@@ -26,7 +26,6 @@ public class DBHelper {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 DBHelper");
         }
-
         // 初始化数据源
         ds.setDriverClassName(ConfigHelper.getStringProperty("jdbc.driver"));
         ds.setUrl(ConfigHelper.getStringProperty("jdbc.url"));
@@ -34,13 +33,11 @@ public class DBHelper {
         ds.setPassword(ConfigHelper.getStringProperty("jdbc.password"));
         ds.setMaxActive(ConfigHelper.getNumberProperty("jdbc.max.active"));
         ds.setMaxIdle(ConfigHelper.getNumberProperty("jdbc.max.idle"));
-
         // 获取数据库类型
         try {
             databaseType = ds.getConnection().getMetaData().getDatabaseProductName();
         } catch (Exception e) {
             logger.error("初始化 DBHelper 出错！", e);
-            throw new RuntimeException(e);
         }
     }
 

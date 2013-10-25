@@ -1,58 +1,50 @@
 package com.smart.framework.base;
 
+import com.smart.framework.proxy.Proxy;
+import com.smart.framework.proxy.ProxyChain;
 import java.lang.reflect.Method;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-import org.apache.log4j.Logger;
 
-public abstract class BaseAspect implements MethodInterceptor {
-
-    private static final Logger logger = Logger.getLogger(BaseAspect.class);
-
-    @SuppressWarnings("unchecked")
-    public <T> T getProxy(Class<T> cls) {
-        return (T) Enhancer.create(cls, this);
-    }
+public abstract class BaseAspect implements Proxy {
 
     @Override
-    public final Object intercept(Object proxy, Method methodTarget, Object[] args, MethodProxy methodProxy) throws Throwable {
-        begin(methodTarget, args);
-        Object result = null;
+    public final void doProxy(ProxyChain proxyChain) throws Exception {
+        Class<?> cls = proxyChain.getTargetClass();
+        Method method = proxyChain.getTargetMethod();
+        Object[] params = proxyChain.getMethodParams();
+
+        begin();
         try {
-            if (filter(methodTarget, args)) {
-                before(methodTarget, args);
-                result = methodProxy.invokeSuper(proxy, args);
-                after(methodTarget, args);
+            if (filter(cls, method, params)) {
+                before(cls, method, params);
+                proxyChain.doProxyChain();
+                after(cls, method, params);
             } else {
-                result = methodProxy.invokeSuper(proxy, args);
+                proxyChain.doProxyChain();
             }
         } catch (Exception e) {
-            error(methodTarget, args, e);
-            logger.error("执行方法出错！", e);
-            throw new RuntimeException(e);
+            error(cls, method, params, e);
+            throw e;
         } finally {
-            end(methodTarget, args);
+            end();
         }
-        return result;
     }
 
-    public void begin(Method method, Object[] args) {
+    public void begin() {
     }
 
-    public boolean filter(Method method, Object[] args) {
+    public boolean filter(Class<?> cls, Method method, Object[] params) {
         return true;
     }
 
-    public void before(Method method, Object[] args) {
+    public void before(Class<?> cls, Method method, Object[] params) {
     }
 
-    public void after(Method method, Object[] args) {
+    public void after(Class<?> cls, Method method, Object[] params) {
     }
 
-    public void error(Method method, Object[] args, Exception e) {
+    public void error(Class<?> cls, Method method, Object[] params, Exception e) {
     }
 
-    public void end(Method method, Object[] args) {
+    public void end() {
     }
 }

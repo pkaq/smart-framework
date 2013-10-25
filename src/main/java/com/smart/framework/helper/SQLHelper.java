@@ -9,8 +9,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.log4j.Logger;
 
 public class SQLHelper {
+
+    private static final Logger logger = Logger.getLogger(SQLHelper.class);
 
     private static final Properties sqlProperties = FileUtil.loadPropFile("sql.properties");
 
@@ -19,7 +22,7 @@ public class SQLHelper {
         if (sqlProperties.containsKey(key)) {
             value = sqlProperties.getProperty(key);
         } else {
-            System.err.println("Can not get property [" + key + "] in sql.properties file.");
+            logger.error("无法在 sql.properties 文件中获取属性：" + key);
         }
         return value;
     }
@@ -36,18 +39,19 @@ public class SQLHelper {
             int i = 0;
             StringBuilder columns = new StringBuilder(" ");
             StringBuilder values = new StringBuilder(" values ");
-            for (Map.Entry<String, ?> fieldEntry : fieldMap.entrySet()) {
+            for (Map.Entry<String, Object> fieldEntry : fieldMap.entrySet()) {
                 String columnName = StringUtil.camelhumpToUnderline(fieldEntry.getKey());
                 Object columnValue = fieldEntry.getValue();
                 if (i == 0) {
                     columns.append("(").append(columnName);
                     values.append("('").append(columnValue).append("'");
-                } else if (i == fieldMap.size() - 1) {
-                    columns.append(", ").append(columnName).append(")");
-                    values.append(", '").append(columnValue).append("')");
                 } else {
                     columns.append(", ").append(columnName);
                     values.append(", '").append(columnValue).append("'");
+                }
+                if (i == fieldMap.size() - 1) {
+                    columns.append(")");
+                    values.append(")");
                 }
                 i++;
             }
