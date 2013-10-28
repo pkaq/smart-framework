@@ -7,7 +7,7 @@ import net.sf.cglib.proxy.MethodProxy;
 public class ProxyChain {
 
     private List<Proxy> proxyList;
-    private int currentProxyIndex;
+    private int currentProxyIndex = 0;
 
     private Class<?> targetClass;
     private Object targetObject;
