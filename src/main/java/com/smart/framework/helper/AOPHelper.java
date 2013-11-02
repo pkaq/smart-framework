@@ -1,12 +1,15 @@
 package com.smart.framework.helper;
 
 import com.smart.framework.annotation.Aspect;
+import com.smart.framework.annotation.Order;
 import com.smart.framework.base.BaseAspect;
 import com.smart.framework.proxy.Proxy;
 import com.smart.framework.proxy.ProxyFactory;
 import com.smart.framework.util.ObjectUtil;
 import com.smart.framework.util.StringUtil;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,7 +62,18 @@ public class AOPHelper {
         Map<Class<?>, List<Class<?>>> aspectMap = new LinkedHashMap<Class<?>, List<Class<?>>>();
         // 获取所有切面类
         List<Class<?>> aspectClassList = ClassHelper.getInstance().getClassListBySuper(BaseAspect.class);
-        // 遍历所有切面类
+        // 排序切面类
+        Collections.sort(aspectClassList, new Comparator<Class<?>>() {
+            @Override
+            public int compare(Class<?> aspect1, Class<?> aspect2) {
+                if (aspect1.isAnnotationPresent(Order.class)) {
+                    return aspect1.getAnnotation(Order.class).value() - aspect2.getAnnotation(Order.class).value();
+                } else {
+                    return aspect1.hashCode() - aspect2.hashCode();
+                }
+            }
+        });
+        // 遍历切面类
         for (Class<?> aspectClass : aspectClassList) {
             // 判断 @Aspect 注解是否存在
             if (aspectClass.isAnnotationPresent(Aspect.class)) {
