@@ -12,13 +12,22 @@ public class BeanHelper {
 
     private static final Map<Class<?>, Object> beanMap = new HashMap<Class<?>, Object>(); // Bean 类 => Bean 实例
 
-    static {
+    private static final BeanHelper instance = new BeanHelper();
+
+    private BeanHelper() {
+    }
+
+    public static BeanHelper getInstance() {
+        return instance;
+    }
+
+    public void init() {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 BeanHelper");
         }
         try {
             // 获取并遍历所有的 Bean（带有 @Bean 注解的类）
-            List<Class<?>> beanClassList = ClassHelper.getClassListByAnnotation(Bean.class);
+            List<Class<?>> beanClassList = ClassHelper.getInstance().getClassListByAnnotation(Bean.class);
             for (Class<?> beanClass : beanClassList) {
                 // 创建 Bean 实例
                 Object beanInstance = beanClass.newInstance();
@@ -30,12 +39,12 @@ public class BeanHelper {
         }
     }
 
-    public static Map<Class<?>, Object> getBeanMap() {
+    public Map<Class<?>, Object> getBeanMap() {
         return beanMap;
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T getBean(Class<T> cls) {
+    public <T> T getBean(Class<T> cls) {
         if (!beanMap.containsKey(cls)) {
             throw new RuntimeException("无法根据类名获取实例！" + cls);
         }

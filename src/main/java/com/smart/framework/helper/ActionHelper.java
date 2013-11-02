@@ -18,12 +18,21 @@ public class ActionHelper {
 
     private static final Map<RequestBean, ActionBean> actionMap = new HashMap<RequestBean, ActionBean>();
 
-    static {
+    private static ActionHelper instance = new ActionHelper();
+
+    private ActionHelper() {
+    }
+
+    public static ActionHelper getInstance() {
+        return instance;
+    }
+
+    public void init() {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 ActionHelper");
         }
         // 获取并遍历所有 Action 类
-        List<Class<?>> actionClassList = ClassHelper.getClassListBySuper(BaseAction.class);
+        List<Class<?>> actionClassList = ClassHelper.getInstance().getClassListBySuper(BaseAction.class);
         for (Class<?> actionClass : actionClassList) {
             // 获取并遍历该 Action 类中所有的方法（不包括父类中的方法）
             Method[] actionMethods = actionClass.getDeclaredMethods();
@@ -48,7 +57,7 @@ public class ActionHelper {
         }
     }
 
-    public static Map<RequestBean, ActionBean> getActionMap() {
+    public Map<RequestBean, ActionBean> getActionMap() {
         return actionMap;
     }
 }

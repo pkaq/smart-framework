@@ -13,13 +13,22 @@ public class IOCHelper {
 
     private static final Logger logger = Logger.getLogger(IOCHelper.class);
 
-    static {
+    private static final IOCHelper instance = new IOCHelper();
+
+    private IOCHelper() {
+    }
+
+    public static IOCHelper getInstance() {
+        return instance;
+    }
+
+    public void init() {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 IOCHelper");
         }
         try {
             // 获取并遍历所有的 Bean 类
-            Map<Class<?>, Object> beanMap = BeanHelper.getBeanMap();
+            Map<Class<?>, Object> beanMap = BeanHelper.getInstance().getBeanMap();
             for (Map.Entry<Class<?>, Object> beanEntry : beanMap.entrySet()) {
                 // 获取 Bean 类与 Bean 实例
                 Class<?> beanClass = beanEntry.getKey();
@@ -52,7 +61,7 @@ public class IOCHelper {
         }
     }
 
-    private static Class<?> getImplementClass(Field beanField) {
+    private Class<?> getImplementClass(Field beanField) {
         // 定义实现类对象
         Class<?> implementClass = null;
         // 获取 Bean 字段对应的接口
@@ -63,7 +72,7 @@ public class IOCHelper {
             implementClass = interfaceClass.getAnnotation(Impl.class).value();
         } else {
             // 获取该接口所有的实现类
-            List<Class<?>> implementClassList = ClassHelper.getClassListByInterface(interfaceClass);
+            List<Class<?>> implementClassList = ClassHelper.getInstance().getClassListByInterface(interfaceClass);
             if (CollectionUtil.isNotEmpty(implementClassList)) {
                 // 获取第一个实现类
                 implementClass = implementClassList.get(0);
