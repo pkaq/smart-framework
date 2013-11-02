@@ -2,7 +2,9 @@ package com.smart.framework.helper;
 
 import com.smart.framework.annotation.Aspect;
 import com.smart.framework.annotation.Order;
+import com.smart.framework.aspect.TransactionAspect;
 import com.smart.framework.base.BaseAspect;
+import com.smart.framework.base.BaseService;
 import com.smart.framework.proxy.Proxy;
 import com.smart.framework.proxy.ProxyFactory;
 import com.smart.framework.util.ObjectUtil;
@@ -60,19 +62,10 @@ public class AOPHelper {
     private Map<Class<?>, List<Class<?>>> createAspectMap() throws Exception {
         // 定义 Aspect Map
         Map<Class<?>, List<Class<?>>> aspectMap = new LinkedHashMap<Class<?>, List<Class<?>>>();
-        // 获取所有切面类
+        // 获取切面类
         List<Class<?>> aspectClassList = ClassHelper.getInstance().getClassListBySuper(BaseAspect.class);
         // 排序切面类
-        Collections.sort(aspectClassList, new Comparator<Class<?>>() {
-            @Override
-            public int compare(Class<?> aspect1, Class<?> aspect2) {
-                if (aspect1.isAnnotationPresent(Order.class)) {
-                    return aspect1.getAnnotation(Order.class).value() - aspect2.getAnnotation(Order.class).value();
-                } else {
-                    return aspect1.hashCode() - aspect2.hashCode();
-                }
-            }
-        });
+        sortAspectClassList(aspectClassList);
         // 遍历切面类
         for (Class<?> aspectClass : aspectClassList) {
             // 判断 @Aspect 注解是否存在
@@ -85,25 +78,10 @@ public class AOPHelper {
                 aspectMap.put(aspectClass, targetClassList);
             }
         }
+        // 添加事务控制切面（最后一个切面）
+        addTransactionAspect(aspectMap);
         // 返回 Aspect Map
         return aspectMap;
-    }
-
-    private List<Class<?>> createTargetClassList(Aspect aspect) throws Exception {
-        // 初始化目标类列表
-        List<Class<?>> targetClassList = new ArrayList<Class<?>>();
-        // 获取 @Aspect 注解相关属性
-        String pkg = aspect.pkg(); // 包名
-        String cls = aspect.cls(); // 类名
-        if (StringUtil.isNotEmpty(pkg) && StringUtil.isNotEmpty(cls)) {
-            // 如果包名与类名均不为空，则添加指定类
-            targetClassList.add(Class.forName(pkg + "." + cls));
-        } else {
-            // 否则（包名不为空）添加该包名下所有类
-            targetClassList.addAll(ClassHelper.getInstance().getClassListByPackage(pkg));
-        }
-        // 返回目标类列表
-        return targetClassList;
     }
 
     private Map<Class<?>, List<Proxy>> createTargetMap(Map<Class<?>, List<Class<?>>> aspectMap) throws Exception {
@@ -130,5 +108,52 @@ public class AOPHelper {
         }
         // 返回 Target Map
         return targetMap;
+    }
+
+    private void sortAspectClassList(List<Class<?>> aspectClassList) {
+        // 排序切面类列表
+        Collections.sort(aspectClassList, new Comparator<Class<?>>() {
+            @Override
+            public int compare(Class<?> aspect1, Class<?> aspect2) {
+                if (aspect1.isAnnotationPresent(Order.class) || aspect2.isAnnotationPresent(Order.class)) {
+                    // 若有 @Order 注解，则优先比较（序号的值越小越靠前）
+                    if (aspect1.isAnnotationPresent(Order.class)) {
+                        return getOrderValue(aspect1) - getOrderValue(aspect2);
+                    } else {
+                        return getOrderValue(aspect2) - getOrderValue(aspect1);
+                    }
+                } else {
+                    // 若无 @Order 注解，则比较类名（按字母顺序升序排列）
+                    return aspect1.hashCode() - aspect2.hashCode();
+                }
+            }
+
+            private int getOrderValue(Class<?> aspect) {
+                return aspect.getAnnotation(Order.class) != null ? aspect.getAnnotation(Order.class).value() : 0;
+            }
+        });
+    }
+
+    private List<Class<?>> createTargetClassList(Aspect aspect) throws Exception {
+        // 初始化目标类列表
+        List<Class<?>> targetClassList = new ArrayList<Class<?>>();
+        // 获取 @Aspect 注解相关属性
+        String pkg = aspect.pkg(); // 包名
+        String cls = aspect.cls(); // 类名
+        if (StringUtil.isNotEmpty(pkg) && StringUtil.isNotEmpty(cls)) {
+            // 如果包名与类名均不为空，则添加指定类
+            targetClassList.add(Class.forName(pkg + "." + cls));
+        } else {
+            // 否则（包名不为空）添加该包名下所有类
+            targetClassList.addAll(ClassHelper.getInstance().getClassListByPackage(pkg));
+        }
+        // 返回目标类列表
+        return targetClassList;
+    }
+
+    private void addTransactionAspect(Map<Class<?>, List<Class<?>>> aspectMap) {
+        // 使用 TransactionAspect 横切所有 Service 类
+        List<Class<?>> serviceClassList = ClassHelper.getInstance().getClassListBySuper(BaseService.class);
+        aspectMap.put(TransactionAspect.class, serviceClassList);
     }
 }

@@ -36,10 +36,10 @@ public abstract class BaseAspect implements Proxy {
         return true;
     }
 
-    public void before(Class<?> cls, Method method, Object[] params) {
+    public void before(Class<?> cls, Method method, Object[] params) throws Exception {
     }
 
-    public void after(Class<?> cls, Method method, Object[] params, Object result) {
+    public void after(Class<?> cls, Method method, Object[] params, Object result) throws Exception {
     }
 
     public void error(Class<?> cls, Method method, Object[] params, Exception e) {

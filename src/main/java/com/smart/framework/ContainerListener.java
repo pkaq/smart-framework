@@ -6,7 +6,6 @@ import com.smart.framework.helper.BeanHelper;
 import com.smart.framework.helper.DBHelper;
 import com.smart.framework.helper.EntityHelper;
 import com.smart.framework.helper.IOCHelper;
-import com.smart.framework.helper.ServiceHelper;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -29,9 +28,8 @@ public class ContainerListener implements ServletContextListener {
         EntityHelper.getInstance().init();
         ActionHelper.getInstance().init();
         BeanHelper.getInstance().init();
-        ServiceHelper.getInstance().init();
-        IOCHelper.getInstance().init();
         AOPHelper.getInstance().init();
+        IOCHelper.getInstance().init();
     }
 
     @Override
