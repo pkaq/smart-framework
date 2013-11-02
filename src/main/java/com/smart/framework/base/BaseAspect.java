@@ -23,7 +23,7 @@ public abstract class BaseAspect implements Proxy {
             }
         } catch (Exception e) {
             error(cls, method, params, e);
-            throw e;
+            throw e; // 将异常继续往上抛，抛给它的调用者
         } finally {
             end();
         }
@@ -32,7 +32,7 @@ public abstract class BaseAspect implements Proxy {
     public void begin() {
     }
 
-    public boolean filter(Class<?> cls, Method method, Object[] params) {
+    public boolean filter(Class<?> cls, Method method, Object[] params) throws Exception {
         return true;
     }
 
