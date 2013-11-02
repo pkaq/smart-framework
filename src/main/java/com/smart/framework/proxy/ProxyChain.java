@@ -49,7 +49,7 @@ public class ProxyChain {
         return methodResult;
     }
 
-    public void doProxyChain() throws Exception {
+    public Object doProxyChain() throws Exception {
         if (currentProxyIndex < proxyList.size()) {
             proxyList.get(currentProxyIndex++).doProxy(this);
         } else {
@@ -59,5 +59,6 @@ public class ProxyChain {
                 throw new RuntimeException(throwable);
             }
         }
+        return methodResult;
     }
 }
