@@ -9,19 +9,11 @@ import org.apache.log4j.Logger;
 public class BeanHelper {
 
     private static final Logger logger = Logger.getLogger(BeanHelper.class);
-
-    private static final Map<Class<?>, Object> beanMap = new HashMap<Class<?>, Object>(); // Bean 类 => Bean 实例
-
     private static final BeanHelper instance = new BeanHelper();
 
+    private final Map<Class<?>, Object> beanMap = new HashMap<Class<?>, Object>(); // Bean 类 => Bean 实例
+
     private BeanHelper() {
-    }
-
-    public static BeanHelper getInstance() {
-        return instance;
-    }
-
-    public void init() {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 BeanHelper");
         }
@@ -37,6 +29,10 @@ public class BeanHelper {
         } catch (Exception e) {
             logger.error("初始化 BeanHelper 出错！", e);
         }
+    }
+
+    public static BeanHelper getInstance() {
+        return instance;
     }
 
     public Map<Class<?>, Object> getBeanMap() {

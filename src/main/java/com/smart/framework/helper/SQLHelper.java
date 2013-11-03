@@ -14,10 +14,9 @@ import org.apache.log4j.Logger;
 public class SQLHelper {
 
     private static final Logger logger = Logger.getLogger(SQLHelper.class);
-
-    private static final Properties sqlProperties = FileUtil.loadPropFile("sql.properties");
-
     private static final SQLHelper instance = new SQLHelper();
+
+    private final Properties sqlProperties = FileUtil.loadPropFile("sql.properties");
 
     private SQLHelper() {
     }

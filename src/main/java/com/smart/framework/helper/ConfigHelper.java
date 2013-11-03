@@ -8,10 +8,9 @@ import org.apache.log4j.Logger;
 public class ConfigHelper {
 
     private static final Logger logger = Logger.getLogger(ConfigHelper.class);
-
-    private static final Properties configProperties = FileUtil.loadPropFile("config.properties");
-
     private static final ConfigHelper instance = new ConfigHelper();
+
+    private final Properties configProperties = FileUtil.loadPropFile("config.properties");
 
     private ConfigHelper() {
     }

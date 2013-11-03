@@ -6,12 +6,9 @@ import java.util.List;
 
 public class ClassHelper {
 
-    private static final String packageName = ConfigHelper.getInstance().getStringProperty("package");
-
     private static final ClassHelper instance = new ClassHelper();
 
-    private ClassHelper() {
-    }
+    private final String packageName = ConfigHelper.getInstance().getStringProperty("package");
 
     public static ClassHelper getInstance() {
         return instance;

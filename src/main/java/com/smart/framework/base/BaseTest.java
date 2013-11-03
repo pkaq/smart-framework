@@ -2,6 +2,7 @@ package com.smart.framework.base;
 
 import com.smart.framework.OrderedRunner;
 import com.smart.framework.helper.DBHelper;
+import com.smart.framework.helper.InitHelper;
 import com.smart.framework.util.ClassUtil;
 import java.io.File;
 import java.util.List;
@@ -13,6 +14,10 @@ import org.junit.runner.RunWith;
 public abstract class BaseTest {
 
     private static final Logger logger = Logger.getLogger(BaseTest.class);
+
+    static {
+        InitHelper.init();
+    }
 
     protected static void initSQL(String sqlPath) {
         try {

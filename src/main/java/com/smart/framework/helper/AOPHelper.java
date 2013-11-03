@@ -21,17 +21,9 @@ import org.apache.log4j.Logger;
 public class AOPHelper {
 
     private static final Logger logger = Logger.getLogger(AOPHelper.class);
-
     private static final AOPHelper instance = new AOPHelper();
 
     private AOPHelper() {
-    }
-
-    public static AOPHelper getInstance() {
-        return instance;
-    }
-
-    public void init() {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 AOPHelper");
         }
@@ -57,6 +49,10 @@ public class AOPHelper {
         } catch (Exception e) {
             logger.error("初始化 AOPHelper 出错！", e);
         }
+    }
+
+    public static AOPHelper getInstance() {
+        return instance;
     }
 
     private Map<Class<?>, List<Class<?>>> createAspectMap() throws Exception {

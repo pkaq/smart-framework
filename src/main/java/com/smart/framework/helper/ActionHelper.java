@@ -15,19 +15,11 @@ import org.apache.log4j.Logger;
 public class ActionHelper {
 
     private static final Logger logger = Logger.getLogger(ActionHelper.class);
+    private static final ActionHelper instance = new ActionHelper();
 
-    private static final Map<RequestBean, ActionBean> actionMap = new HashMap<RequestBean, ActionBean>();
-
-    private static ActionHelper instance = new ActionHelper();
+    private final Map<RequestBean, ActionBean> actionMap = new HashMap<RequestBean, ActionBean>();
 
     private ActionHelper() {
-    }
-
-    public static ActionHelper getInstance() {
-        return instance;
-    }
-
-    public void init() {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 ActionHelper");
         }
@@ -55,6 +47,10 @@ public class ActionHelper {
                 }
             }
         }
+    }
+
+    public static ActionHelper getInstance() {
+        return instance;
     }
 
     public Map<RequestBean, ActionBean> getActionMap() {

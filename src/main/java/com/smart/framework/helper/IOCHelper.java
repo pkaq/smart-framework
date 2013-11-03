@@ -12,17 +12,9 @@ import org.apache.log4j.Logger;
 public class IOCHelper {
 
     private static final Logger logger = Logger.getLogger(IOCHelper.class);
-
     private static final IOCHelper instance = new IOCHelper();
 
     private IOCHelper() {
-    }
-
-    public static IOCHelper getInstance() {
-        return instance;
-    }
-
-    public void init() {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 IOCHelper");
         }
@@ -61,7 +53,11 @@ public class IOCHelper {
         }
     }
 
-    private Class<?> getImplementClass(Field beanField) {
+    public static IOCHelper getInstance() {
+        return instance;
+    }
+
+    private static Class<?> getImplementClass(Field beanField) {
         // 定义实现类对象
         Class<?> implementClass = null;
         // 获取 Bean 字段对应的接口

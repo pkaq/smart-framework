@@ -13,25 +13,17 @@ import org.apache.log4j.Logger;
 public class DBHelper {
 
     private static final Logger logger = Logger.getLogger(DBHelper.class);
-
-    private static final BasicDataSource ds = new BasicDataSource();
-    private static final QueryRunner runner = new QueryRunner(ds);
-
-    // 定义一个局部线程变量（使每个线程都拥有自己的连接）
-    private static ThreadLocal<Connection> connContainer = new ThreadLocal<Connection>();
-
-    private static String dbType;
-
     private static final DBHelper instance = new DBHelper();
 
+    private final BasicDataSource ds = new BasicDataSource();
+    private final QueryRunner runner = new QueryRunner(ds);
+
+    // 定义一个局部线程变量（使每个线程都拥有自己的连接）
+    private final ThreadLocal<Connection> connContainer = new ThreadLocal<Connection>();
+
+    private String dbType;
+
     private DBHelper() {
-    }
-
-    public static DBHelper getInstance() {
-        return instance;
-    }
-
-    public void init() {
         if (logger.isDebugEnabled()) {
             logger.debug("初始化 DBHelper");
         }
@@ -49,6 +41,10 @@ public class DBHelper {
         } catch (Exception e) {
             logger.error("初始化 DBHelper 出错！", e);
         }
+    }
+
+    public static DBHelper getInstance() {
+        return instance;
     }
 
     // 获取数据源
