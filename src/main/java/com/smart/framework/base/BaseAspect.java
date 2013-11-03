@@ -7,7 +7,9 @@ import java.lang.reflect.Method;
 public abstract class BaseAspect implements Proxy {
 
     @Override
-    public final void doProxy(ProxyChain proxyChain) throws Exception {
+    public final Object doProxy(ProxyChain proxyChain) throws Exception {
+        Object result = null;
+
         Class<?> cls = proxyChain.getTargetClass();
         Method method = proxyChain.getTargetMethod();
         Object[] params = proxyChain.getMethodParams();
@@ -16,10 +18,10 @@ public abstract class BaseAspect implements Proxy {
         try {
             if (filter(cls, method, params)) {
                 before(cls, method, params);
-                Object result = proxyChain.doProxyChain();
+                result = proxyChain.doProxyChain();
                 after(cls, method, params, result);
             } else {
-                proxyChain.doProxyChain();
+                result = proxyChain.doProxyChain();
             }
         } catch (Exception e) {
             error(cls, method, params, e);
@@ -27,6 +29,8 @@ public abstract class BaseAspect implements Proxy {
         } finally {
             end();
         }
+
+        return result;
     }
 
     public void begin() {

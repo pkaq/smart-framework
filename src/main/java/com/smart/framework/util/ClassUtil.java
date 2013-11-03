@@ -126,43 +126,6 @@ public class ClassUtil {
         return classList;
     }
 
-    // 获取指定包名下指定接口的所有实现类
-    public static List<Class<?>> getClassListByInterface(String packageName, Class<?> interfaceClass) {
-        List<Class<?>> classList = new ArrayList<Class<?>>();
-        try {
-            Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageName.replace(".", "/"));
-            while (urls.hasMoreElements()) {
-                URL url = urls.nextElement();
-                if (url != null) {
-                    String protocol = url.getProtocol();
-                    if (protocol.equals("file")) {
-                        String packagePath = url.getPath();
-                        addClassByInterface(classList, packagePath, packageName, interfaceClass);
-                    } else if (protocol.equals("jar")) {
-                        JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
-                        JarFile jarFile = jarURLConnection.getJarFile();
-                        Enumeration<JarEntry> jarEntries = jarFile.entries();
-                        while (jarEntries.hasMoreElements()) {
-                            JarEntry jarEntry = jarEntries.nextElement();
-                            String jarEntryName = jarEntry.getName();
-                            if (jarEntryName.endsWith(".class")) {
-                                String className = jarEntryName.substring(0, jarEntryName.lastIndexOf(".")).replaceAll("/", ".");
-                                Class<?> cls = Class.forName(className);
-                                if (interfaceClass.isAssignableFrom(cls) && !interfaceClass.equals(cls)) {
-                                    classList.add(cls);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            logger.error("获取类出错！", e);
-            throw new RuntimeException(e);
-        }
-        return classList;
-    }
-
     private static void addClass(List<Class<?>> classList, String packagePath, String packageName, boolean isRecursive) {
         try {
             File[] files = getClassFiles(packagePath);
@@ -261,31 +224,6 @@ public class ClassUtil {
                         String subPackagePath = getSubPackagePath(packagePath, fileName);
                         String subPackageName = getSubPackageName(packageName, fileName);
                         addClassBySuper(classList, subPackagePath, subPackageName, superClass);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            logger.error("添加类出错！", e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static void addClassByInterface(List<Class<?>> classList, String packagePath, String packageName, Class<?> interfaceClass) {
-        try {
-            File[] files = getClassFiles(packagePath);
-            if (files != null) {
-                for (File file : files) {
-                    String fileName = file.getName();
-                    if (file.isFile()) {
-                        String className = getClassName(packageName, fileName);
-                        Class<?> cls = Class.forName(className);
-                        if (interfaceClass.isAssignableFrom(cls) && !interfaceClass.equals(cls)) {
-                            classList.add(cls);
-                        }
-                    } else {
-                        String subPackagePath = getSubPackagePath(packagePath, fileName);
-                        String subPackageName = getSubPackageName(packageName, fileName);
-                        addClassByInterface(classList, subPackagePath, subPackageName, interfaceClass);
                     }
                 }
             }

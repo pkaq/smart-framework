@@ -25,7 +25,7 @@ public class DBHelper {
 
     private DBHelper() {
         if (logger.isDebugEnabled()) {
-            logger.debug("初始化 DBHelper");
+            logger.debug("[Init DBHelper]");
         }
         // 初始化数据源
         ConfigHelper configHelper = ConfigHelper.getInstance();

@@ -16,7 +16,7 @@ public class IOCHelper {
 
     private IOCHelper() {
         if (logger.isDebugEnabled()) {
-            logger.debug("初始化 IOCHelper");
+            logger.debug("[Init IOCHelper]");
         }
         try {
             // 获取并遍历所有的 Bean 类
@@ -68,7 +68,7 @@ public class IOCHelper {
             implementClass = interfaceClass.getAnnotation(Impl.class).value();
         } else {
             // 获取该接口所有的实现类
-            List<Class<?>> implementClassList = ClassHelper.getInstance().getClassListByInterface(interfaceClass);
+            List<Class<?>> implementClassList = ClassHelper.getInstance().getClassListBySuper(interfaceClass);
             if (CollectionUtil.isNotEmpty(implementClassList)) {
                 // 获取第一个实现类
                 implementClass = implementClassList.get(0);

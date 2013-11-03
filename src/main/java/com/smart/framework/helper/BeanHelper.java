@@ -15,7 +15,7 @@ public class BeanHelper {
 
     private BeanHelper() {
         if (logger.isDebugEnabled()) {
-            logger.debug("初始化 BeanHelper");
+            logger.debug("[Init BeanHelper]");
         }
         try {
             // 获取并遍历所有的 Bean（带有 @Bean 注解的类）

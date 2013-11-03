@@ -24,7 +24,7 @@ public class TransactionAspect extends BaseAspect {
         // 开启事务
         dbHelper.beginTransaction();
         if (logger.isDebugEnabled()) {
-            logger.debug("开启事务");
+            logger.debug("[Begin Transaction]");
         }
 
         // 设置事务隔离级别
@@ -36,7 +36,7 @@ public class TransactionAspect extends BaseAspect {
         // 提交事务
         dbHelper.commitTransaction();
         if (logger.isDebugEnabled()) {
-            logger.debug("提交事务");
+            logger.debug("[Commit Transaction]");
         }
     }
 
@@ -45,7 +45,7 @@ public class TransactionAspect extends BaseAspect {
         // 回滚事务
         dbHelper.rollbackTransaction();
         if (logger.isDebugEnabled()) {
-            logger.debug("回滚事务");
+            logger.debug("[Rollback Transaction]");
         }
     }
 
@@ -57,6 +57,9 @@ public class TransactionAspect extends BaseAspect {
         if (currentIsolation != defaultIsolation) {
             Connection conn = dbHelper.getConnectionFromThreadLocal();
             conn.setTransactionIsolation(currentIsolation);
+            if (logger.isDebugEnabled()) {
+                logger.debug("[Set Transaction Isolation] Isolation: " + currentIsolation);
+            }
         }
     }
 }

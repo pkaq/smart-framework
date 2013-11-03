@@ -20,7 +20,7 @@ public class EntityHelper {
 
     private EntityHelper() {
         if (logger.isDebugEnabled()) {
-            logger.debug("初始化 EntityHelper");
+            logger.debug("[Init EntityHelper]");
         }
         // 获取并遍历所有 Entity 类
         List<Class<?>> entityClassList = ClassHelper.getInstance().getClassListBySuper(BaseEntity.class);

@@ -2,5 +2,5 @@ package com.smart.framework.proxy;
 
 public interface Proxy {
 
-    void doProxy(ProxyChain proxyChain) throws Exception;
+    Object doProxy(ProxyChain proxyChain) throws Exception;
 }

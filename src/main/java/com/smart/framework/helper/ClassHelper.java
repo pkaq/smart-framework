@@ -22,10 +22,6 @@ public class ClassHelper {
         return ClassUtil.getClassListBySuper(packageName, superClass);
     }
 
-    public List<Class<?>> getClassListByInterface(Class<?> interfaceClass) {
-        return ClassUtil.getClassListByInterface(packageName, interfaceClass);
-    }
-
     public List<Class<?>> getClassListByAnnotation(Class<? extends Annotation> annotationClass) {
         return ClassUtil.getClassListByAnnotation(packageName, annotationClass);
     }
