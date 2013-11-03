@@ -72,12 +72,16 @@ public class AOPHelper {
     }
 
     private void addPluginAspect(Map<Class<?>, List<Class<?>>> aspectMap) throws Exception {
-        List<Class<?>> pluginClassList = ClassUtil.getClassListBySuper("com.smart.plugin", PluginAspect.class);
-        if (CollectionUtil.isNotEmpty(pluginClassList)) {
-            for (Class<?> pluginClass : pluginClassList) {
-                PluginAspect pluginAspect = (PluginAspect) pluginClass.newInstance();
+        // 获取插件包名下父类为 PluginAspect 的所有类（插件切面类）
+        List<Class<?>> pluginAspectClassList = ClassUtil.getClassListBySuper("com.smart.plugin", PluginAspect.class);
+        if (CollectionUtil.isNotEmpty(pluginAspectClassList)) {
+            // 遍历所有插件切面类
+            for (Class<?> pluginAspectClass : pluginAspectClassList) {
+                // 创建并初始化插件切面类实例
+                PluginAspect pluginAspect = (PluginAspect) pluginAspectClass.newInstance();
                 pluginAspect.initPlugin();
-                aspectMap.put(pluginClass, pluginAspect.getTargetClassList());
+                // 将插件切面类及其所对应的目标类列表放入 Aspect Map 中
+                aspectMap.put(pluginAspectClass, pluginAspect.getTargetClassList());
             }
         }
     }
