@@ -5,15 +5,5 @@ import java.util.List;
 
 public abstract class PluginAspect implements Proxy {
 
-    private List<Class<?>> targetClassList;
-
-    public final List<Class<?>> getTargetClassList() {
-        return targetClassList;
-    }
-
-    public final void setTargetClassList(List<Class<?>> targetClassList) {
-        this.targetClassList = targetClassList;
-    }
-
-    public abstract void initPlugin();
+    public abstract List<Class<?>> getTargetClassList();
 }
