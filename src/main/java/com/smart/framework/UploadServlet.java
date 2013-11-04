@@ -17,9 +17,9 @@ import javax.servlet.http.Part;
 @WebServlet(name = "upload", urlPatterns = "/upload.do")
 public class UploadServlet extends HttpServlet {
 
-    private static final String UPLOAD_BASE_PATH = "static/upload/"; // 文件上传基础路径
-    private static final String UPLOAD_RELATIVE_PATH = "path";    // 文件上传相对路径
-    private static final String UPLOAD_FILE_NAME = "file";        // 文件标签的 file 名称
+    private static final String UPLOAD_BASE_PATH = "static/upload/";    // 文件上传基础路径
+    private static final String UPLOAD_RELATIVE_PATH = "path";          // 文件上传相对路径
+    private static final String UPLOAD_FILE_NAME = "file";              // 文件标签的 file 名称
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
