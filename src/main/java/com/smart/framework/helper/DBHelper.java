@@ -24,9 +24,6 @@ public class DBHelper {
     private String dbType;
 
     private DBHelper() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("[Init DBHelper]");
-        }
         // 初始化数据源
         initDataSource();
         // 获取数据库类型

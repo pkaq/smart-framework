@@ -10,19 +10,14 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Logger;
 
 public class ActionHelper {
 
-    private static final Logger logger = Logger.getLogger(ActionHelper.class);
     private static final ActionHelper instance = new ActionHelper();
 
     private final Map<RequestBean, ActionBean> actionMap = new HashMap<RequestBean, ActionBean>();
 
     private ActionHelper() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("[Init ActionHelper]");
-        }
         // 获取并遍历所有 Action 类
         List<Class<?>> actionClassList = ClassHelper.getInstance().getClassListBySuper(BaseAction.class);
         for (Class<?> actionClass : actionClassList) {

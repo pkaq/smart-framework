@@ -31,8 +31,8 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
 
     // 获取相关配置项
-    private final String appPageHome = ConfigHelper.getInstance().getStringProperty("app.page.home");
-    private final String appPageBase = ConfigHelper.getInstance().getStringProperty("app.page.base");
+    private final String homePage = ConfigHelper.getInstance().getStringProperty("app.home_page");
+    private final String jspPath = ConfigHelper.getInstance().getStringProperty("app.jsp_path");
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,7 +44,7 @@ public class DispatcherServlet extends HttpServlet {
         }
         // 将“/”请求重定向到首页
         if (currentRequestURL.equals("/")) {
-            WebUtil.redirectRequest(appPageHome, request, response);
+            WebUtil.redirectRequest(homePage, request, response);
             return;
         }
         // 去掉请求最后的“/”
@@ -88,7 +88,7 @@ public class DispatcherServlet extends HttpServlet {
         // 若映射失败，则根据默认路由规则转发请求
         if (!mapped) {
             // 获取路径（默认路由规则：/{1}/{2} => /xxx/{1}_{2}.jsp）
-            String path = appPageBase + currentRequestURL.substring(1).replace("/", "_") + ".jsp";
+            String path = jspPath + currentRequestURL.substring(1).replace("/", "_") + ".jsp";
             // 转发请求
             request.setAttribute("path", path);
             WebUtil.forwardRequest(path, request, response);
@@ -173,7 +173,7 @@ public class DispatcherServlet extends HttpServlet {
                     WebUtil.redirectRequest(path, request, response);
                 } else {
                     // 获取路径
-                    String path = appPageBase + page.getPath();
+                    String path = jspPath + page.getPath();
                     // 初始化请求属性
                     Map<String, Object> data = page.getData();
                     if (MapUtil.isNotEmpty(data)) {

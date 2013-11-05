@@ -14,9 +14,6 @@ public class BeanHelper {
     private final Map<Class<?>, Object> beanMap = new HashMap<Class<?>, Object>(); // Bean 类 => Bean 实例
 
     private BeanHelper() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("[Init BeanHelper]");
-        }
         try {
             // 获取并遍历所有的 Bean（带有 @Bean 注解的类）
             List<Class<?>> beanClassList = ClassHelper.getInstance().getClassListByAnnotation(Bean.class);

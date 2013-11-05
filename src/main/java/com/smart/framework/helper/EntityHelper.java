@@ -9,19 +9,14 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Logger;
 
 public class EntityHelper {
 
-    private static final Logger logger = Logger.getLogger(EntityHelper.class);
     private static final EntityHelper instance = new EntityHelper();
 
     private final Map<Class<?>, Map<String, String>> entityMap = new HashMap<Class<?>, Map<String, String>>(); // Entity 类 => (列名 => 字段名)
 
     private EntityHelper() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("[Init EntityHelper]");
-        }
         // 获取并遍历所有 Entity 类
         List<Class<?>> entityClassList = ClassHelper.getInstance().getClassListBySuper(BaseEntity.class);
         for (Class<?> entityClass : entityClassList) {

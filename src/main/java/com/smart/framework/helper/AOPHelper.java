@@ -27,9 +27,6 @@ public class AOPHelper {
     private static final AOPHelper instance = new AOPHelper();
 
     private AOPHelper() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("[Init AOPHelper]");
-        }
         try {
             // 创建 Aspect Map（用于存放切面类与目标类列表的映射关系）
             Map<Class<?>, List<Class<?>>> aspectMap = createAspectMap();

@@ -15,9 +15,6 @@ public class IOCHelper {
     private static final IOCHelper instance = new IOCHelper();
 
     private IOCHelper() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("[Init IOCHelper]");
-        }
         try {
             // 获取并遍历所有的 Bean 类
             Map<Class<?>, Object> beanMap = BeanHelper.getInstance().getBeanMap();
