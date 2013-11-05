@@ -6,6 +6,7 @@ import com.smart.framework.bean.RequestBean;
 import com.smart.framework.bean.Result;
 import com.smart.framework.helper.ActionHelper;
 import com.smart.framework.helper.BeanHelper;
+import com.smart.framework.helper.ConfigHelper;
 import com.smart.framework.util.CastUtil;
 import com.smart.framework.util.MapUtil;
 import com.smart.framework.util.StringUtil;
@@ -29,6 +30,10 @@ public class DispatcherServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
 
+    // 获取相关配置项
+    private final String appPageHome = ConfigHelper.getInstance().getStringProperty("app.page.home");
+    private final String appPageBase = ConfigHelper.getInstance().getStringProperty("app.page.base");
+
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 获取当前请求相关数据
@@ -39,7 +44,7 @@ public class DispatcherServlet extends HttpServlet {
         }
         // 将“/”请求重定向到首页
         if (currentRequestURL.equals("/")) {
-            response.sendRedirect(request.getContextPath() + "/static/page/index.html");
+            WebUtil.redirectRequest(appPageHome, request, response);
             return;
         }
         // 去掉请求最后的“/”
@@ -82,10 +87,11 @@ public class DispatcherServlet extends HttpServlet {
         }
         // 若映射失败，则根据默认路由规则转发请求
         if (!mapped) {
-            // 获取路径（默认路由规则：/{1}/{2} => /dynamic/jsp/{1}_{2}.jsp）
-            String path = "/dynamic/jsp/" + currentRequestURL.substring(1).replace("/", "_") + ".jsp";
+            // 获取路径（默认路由规则：/{1}/{2} => /xxx/{1}_{2}.jsp）
+            String path = appPageBase + currentRequestURL.substring(1).replace("/", "_") + ".jsp";
             // 转发请求
-            WebUtil.forwordRequest(path, request, response);
+            request.setAttribute("path", path);
+            WebUtil.forwardRequest(path, request, response);
         }
     }
 
@@ -142,7 +148,7 @@ public class DispatcherServlet extends HttpServlet {
                 WebUtil.sendError(403, response);
             } else {
                 // 否则重定向到首页
-                WebUtil.redirectRequest(request.getContextPath() + "/", response);
+                WebUtil.redirectRequest("/", request, response);
             }
         } else {
             // 若为其他异常，则记录错误日志
@@ -164,10 +170,10 @@ public class DispatcherServlet extends HttpServlet {
                     // 获取路径
                     String path = page.getPath();
                     // 重定向请求
-                    WebUtil.redirectRequest(path, response);
+                    WebUtil.redirectRequest(path, request, response);
                 } else {
                     // 获取路径
-                    String path = "/dynamic/jsp/" + page.getPath();
+                    String path = appPageBase + page.getPath();
                     // 初始化请求属性
                     Map<String, Object> data = page.getData();
                     if (MapUtil.isNotEmpty(data)) {
@@ -176,7 +182,7 @@ public class DispatcherServlet extends HttpServlet {
                         }
                     }
                     // 转发请求
-                    WebUtil.forwordRequest(path, request, response);
+                    WebUtil.forwardRequest(path, request, response);
                 }
             }
         }

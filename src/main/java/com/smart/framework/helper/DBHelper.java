@@ -2,10 +2,10 @@ package com.smart.framework.helper;
 
 import com.smart.framework.util.CastUtil;
 import com.smart.framework.util.DBUtil;
+import com.smart.framework.util.StringUtil;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
-import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.log4j.Logger;
@@ -28,14 +28,42 @@ public class DBHelper {
             logger.debug("[Init DBHelper]");
         }
         // 初始化数据源
-        ConfigHelper configHelper = ConfigHelper.getInstance();
-        ds.setDriverClassName(configHelper.getStringProperty("jdbc.driver"));
-        ds.setUrl(configHelper.getStringProperty("jdbc.url"));
-        ds.setUsername(configHelper.getStringProperty("jdbc.username"));
-        ds.setPassword(configHelper.getStringProperty("jdbc.password"));
-        ds.setMaxActive(configHelper.getNumberProperty("jdbc.max.active"));
-        ds.setMaxIdle(configHelper.getNumberProperty("jdbc.max.idle"));
+        initDataSource();
         // 获取数据库类型
+        initDBType();
+    }
+
+    private void initDataSource() {
+        // 从配置文件中获取配置项
+        ConfigHelper configHelper = ConfigHelper.getInstance();
+        String driver = configHelper.getStringProperty("jdbc.driver");
+        String url = configHelper.getStringProperty("jdbc.url");
+        String username = configHelper.getStringProperty("jdbc.username");
+        String password = configHelper.getStringProperty("jdbc.password");
+        int maxActive = configHelper.getNumberProperty("jdbc.max.active");
+        int maxIdle = configHelper.getNumberProperty("jdbc.max.idle");
+        // 设置数据源相关字段
+        if (StringUtil.isNotEmpty(driver)) {
+            ds.setDriverClassName(driver);
+        }
+        if (StringUtil.isNotEmpty(url)) {
+            ds.setUrl(url);
+        }
+        if (StringUtil.isNotEmpty(username)) {
+            ds.setUsername(username);
+        }
+        if (StringUtil.isNotEmpty(password)) {
+            ds.setPassword(password);
+        }
+        if (maxActive != 0) {
+            ds.setMaxActive(maxActive);
+        }
+        if (maxIdle != 0) {
+            ds.setMaxIdle(maxIdle);
+        }
+    }
+
+    private void initDBType() {
         try {
             dbType = ds.getConnection().getMetaData().getDatabaseProductName();
         } catch (Exception e) {
@@ -45,11 +73,6 @@ public class DBHelper {
 
     public static DBHelper getInstance() {
         return instance;
-    }
-
-    // 获取数据源
-    public DataSource getDataSource() {
-        return ds;
     }
 
     // 从数据源中获取数据库连接

@@ -149,7 +149,7 @@ public class WebUtil {
     }
 
     // 转发请求
-    public static void forwordRequest(String path, HttpServletRequest request, HttpServletResponse response) {
+    public static void forwardRequest(String path, HttpServletRequest request, HttpServletResponse response) {
         try {
             request.getRequestDispatcher(path).forward(request, response);
         } catch (Exception e) {
@@ -159,9 +159,9 @@ public class WebUtil {
     }
 
     // 重定向请求
-    public static void redirectRequest(String path, HttpServletResponse response) {
+    public static void redirectRequest(String path, HttpServletRequest request, HttpServletResponse response) {
         try {
-            response.sendRedirect(path);
+            response.sendRedirect(request.getContextPath() + path);
         } catch (Exception e) {
             logger.error("重定向请求出错！", e);
             throw new RuntimeException(e);

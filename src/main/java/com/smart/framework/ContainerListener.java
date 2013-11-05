@@ -1,5 +1,6 @@
 package com.smart.framework;
 
+import com.smart.framework.helper.ConfigHelper;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -8,6 +9,8 @@ import javax.servlet.annotation.WebListener;
 
 @WebListener
 public class ContainerListener implements ServletContextListener {
+
+    private final String appPageBase = ConfigHelper.getInstance().getStringProperty("app.page.base");
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -27,7 +30,7 @@ public class ContainerListener implements ServletContextListener {
         defaultServletRegistration.addMapping("/favicon.ico", "/static/*", "/index.html");
         // 用 JspServlet 映射所有 JSP 请求
         ServletRegistration jspServletRegistration = context.getServletRegistration("jsp");
-        jspServletRegistration.addMapping("/dynamic/jsp/*");
+        jspServletRegistration.addMapping(appPageBase + "*");
         // 用 UploadServlet 映射 /upload.do 请求
         ServletRegistration uploadServletRegistration = context.getServletRegistration("upload");
         uploadServletRegistration.addMapping("/upload.do");

@@ -8,7 +8,7 @@ public class ClassHelper {
 
     private static final ClassHelper instance = new ClassHelper();
 
-    private final String packageName = ConfigHelper.getInstance().getStringProperty("package");
+    private final String packageName = ConfigHelper.getInstance().getStringProperty("app.package");
 
     public static ClassHelper getInstance() {
         return instance;
