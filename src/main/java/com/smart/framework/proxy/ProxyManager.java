@@ -6,12 +6,12 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-public class ProxyFactory {
+public class ProxyManager {
 
     private Class<?> targetClass;
     private List<Proxy> proxyList;
 
-    public ProxyFactory(Class<?> targetClass, List<Proxy> proxyList) {
+    public ProxyManager(Class<?> targetClass, List<Proxy> proxyList) {
         this.targetClass = targetClass;
         this.proxyList = proxyList;
     }
