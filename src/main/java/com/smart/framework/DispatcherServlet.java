@@ -153,6 +153,7 @@ public class DispatcherServlet extends HttpServlet {
         } else {
             // 若为其他异常，则记录错误日志
             logger.error("调用 Action 方法出错！", e);
+            throw new RuntimeException(e); // 这里需要向上抛出异常，否则无法定位到错误页面
         }
     }
 

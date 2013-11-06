@@ -93,7 +93,8 @@ public class WebUtil {
     public static Map<String, String> getRequestParamMap(HttpServletRequest request) {
         Map<String, String> paramMap = new HashMap<String, String>();
         try {
-            if (request.getMethod().equalsIgnoreCase("put")) {
+            String method = request.getMethod();
+            if (method.equalsIgnoreCase("put") || method.equalsIgnoreCase("delete")) {
                 String queryString = CodecUtil.decodeForUTF8(StreamUtil.toString(request.getInputStream()));
                 if (StringUtil.isNotEmpty(queryString)) {
                     String[] qsArray = StringUtil.splitString(queryString, "&");

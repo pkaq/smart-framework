@@ -12,13 +12,13 @@ public class DataSet {
 
     // 查询单条数据，并转为对象
     public static <T> T select(Class<T> cls, String condition, Object... params) {
-        String sql = SQLHelper.getInstance().generateSelectSQL(cls, condition, params);
+        String sql = SQLHelper.getInstance().generateSelectSQL(cls, condition, "", params);
         return DBHelper.getInstance().queryBean(cls, sql);
     }
 
     // 查询多条数据，并转为列表
-    public static <T> List<T> selectList(Class<T> cls, String condition, String order, Object... params) {
-        String sql = SQLHelper.getInstance().generateSelectSQL(cls, condition, order, params);
+    public static <T> List<T> selectList(Class<T> cls, String condition, String sort, Object... params) {
+        String sql = SQLHelper.getInstance().generateSelectSQL(cls, condition, sort, params);
         return DBHelper.getInstance().queryBeanList(cls, sql);
     }
 

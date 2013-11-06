@@ -35,9 +35,10 @@ public class SQLHelper {
         return value;
     }
 
-    public String generateSelectSQL(Class<?> cls, String condition, Object... params) {
+    public String generateSelectSQL(Class<?> cls, String condition, String sort, Object... params) {
         StringBuilder sql = new StringBuilder("select * from ").append(getTable(cls));
         sql.append(generateWhere(condition, params));
+        sql.append(generateOrder(sort));
         return sql.toString();
     }
 
@@ -167,10 +168,10 @@ public class SQLHelper {
         return builder.toString();
     }
 
-    private String generateOrder(String order) {
+    private String generateOrder(String sort) {
         StringBuilder builder = new StringBuilder();
-        if (StringUtil.isNotEmpty(order)) {
-            builder.append(" order by ").append(order);
+        if (StringUtil.isNotEmpty(sort)) {
+            builder.append(" order by ").append(sort);
         }
         return builder.toString();
     }
