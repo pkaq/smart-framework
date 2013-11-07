@@ -38,18 +38,18 @@ public class DispatcherServlet extends HttpServlet {
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 获取当前请求相关数据
         String currentRequestMethod = request.getMethod();
-        String currentRequestURL = request.getPathInfo();
+        String currentRequestPath = WebUtil.getRequestPath(request);
         if (logger.isDebugEnabled()) {
-            logger.debug(currentRequestMethod + ":" + currentRequestURL);
+            logger.debug(currentRequestMethod + ":" + currentRequestPath);
         }
         // 将“/”请求重定向到首页
-        if (currentRequestURL.equals("/")) {
+        if (currentRequestPath.equals("/")) {
             WebUtil.redirectRequest(homePage, request, response);
             return;
         }
-        // 去掉请求最后的“/”
-        if (currentRequestURL.endsWith("/")) {
-            currentRequestURL = currentRequestURL.substring(0, currentRequestURL.length() - 1);
+        // 去掉当前请求路径末尾的“/”
+        if (currentRequestPath.endsWith("/")) {
+            currentRequestPath = currentRequestPath.substring(0, currentRequestPath.length() - 1);
         }
         // 定义一个 JSP 映射标志（默认为映射失败）
         boolean jspMapped = false;
@@ -63,11 +63,11 @@ public class DispatcherServlet extends HttpServlet {
             for (Map.Entry<RequestBean, ActionBean> actionEntry : actionMap.entrySet()) {
                 // 从 RequestBean 中获取 Request 相关属性
                 RequestBean requestBean = actionEntry.getKey();
-                String requestURL = requestBean.getRequestURL(); // 正则表达式
                 String requestMethod = requestBean.getRequestMethod();
-                // 获取正则表达式匹配器（用于匹配请求 URL 并从中获取相应的请求参数）
-                Matcher matcher = Pattern.compile(requestURL).matcher(currentRequestURL);
-                // 判断请求方法与请求 URL 是否同时匹配
+                String requestPath = requestBean.getRequestPath(); // 正则表达式
+                // 获取正则表达式匹配器（用于匹配请求路径并从中获取相应的请求参数）
+                Matcher matcher = Pattern.compile(requestPath).matcher(currentRequestPath);
+                // 判断请求方法与请求路径是否同时匹配
                 if (requestMethod.equalsIgnoreCase(currentRequestMethod) && matcher.matches()) {
                     // 获取 Action 对象
                     ActionBean actionBean = actionEntry.getValue();
@@ -88,7 +88,7 @@ public class DispatcherServlet extends HttpServlet {
         // 若 JSP 映射失败，则根据默认路由规则转发请求
         if (!jspMapped && StringUtil.isNotEmpty(jspPath)) {
             // 获取路径（默认路由规则：/{1}/{2} => /xxx/{1}_{2}.jsp）
-            String path = jspPath + currentRequestURL.substring(1).replace("/", "_") + ".jsp";
+            String path = jspPath + currentRequestPath.substring(1).replace("/", "_") + ".jsp";
             // 转发请求
             request.setAttribute("path", path);
             WebUtil.forwardRequest(path, request, response);

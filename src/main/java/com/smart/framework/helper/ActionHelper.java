@@ -30,13 +30,13 @@ public class ActionHelper {
                         // 获取 @Requet 注解中的 URL 字符串
                         String[] urlArray = StringUtil.splitString(actionMethod.getAnnotation(Request.class).value(), ":");
                         if (ArrayUtil.isNotEmpty(urlArray)) {
-                            // 获取请求方法与请求 URL
+                            // 获取请求方法与请求路径
                             String requestMethod = urlArray[0];
-                            String requestURL = urlArray[1]; // 带有占位符
-                            // 将请求 URL 中的占位符转换为 (\d+)（正则表达式）
-                            requestURL = StringUtil.replaceAll(requestURL, "\\{\\w+\\}", "(\\\\w+)");
+                            String requestPath = urlArray[1]; // 带有占位符
+                            // 将请求路径中的占位符转换为 (\d+)（正则表达式）
+                            requestPath = StringUtil.replaceAll(requestPath, "\\{\\w+\\}", "(\\\\w+)");
                             // 将 RequestBean 与 ActionBean 放入 Action Map 中
-                            actionMap.put(new RequestBean(requestMethod, requestURL), new ActionBean(actionClass, actionMethod));
+                            actionMap.put(new RequestBean(requestMethod, requestPath), new ActionBean(actionClass, actionMethod));
                         }
                     }
                 }

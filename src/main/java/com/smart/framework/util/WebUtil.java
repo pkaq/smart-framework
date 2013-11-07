@@ -183,4 +183,11 @@ public class WebUtil {
     public static boolean isAJAX(HttpServletRequest request) {
         return request.getHeader("X-Requested-With") != null;
     }
+
+    // 获取请求路径
+    public static String getRequestPath(HttpServletRequest request) {
+        String servletPath = request.getServletPath();
+        String pathInfo = StringUtil.defaultIfEmpty(request.getPathInfo(), "");
+        return servletPath + pathInfo;
+    }
 }

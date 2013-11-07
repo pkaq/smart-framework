@@ -3,11 +3,11 @@ package com.smart.framework.bean;
 public class RequestBean {
 
     private String requestMethod;
-    private String requestURL;
+    private String requestPath;
 
-    public RequestBean(String requestMethod, String requestURL) {
+    public RequestBean(String requestMethod, String requestPath) {
         this.requestMethod = requestMethod;
-        this.requestURL = requestURL;
+        this.requestPath = requestPath;
     }
 
     public String getRequestMethod() {
@@ -18,11 +18,11 @@ public class RequestBean {
         this.requestMethod = requestMethod;
     }
 
-    public String getRequestURL() {
-        return requestURL;
+    public String getRequestPath() {
+        return requestPath;
     }
 
-    public void setRequestURL(String requestURL) {
-        this.requestURL = requestURL;
+    public void setRequestPath(String requestPath) {
+        this.requestPath = requestPath;
     }
 }
