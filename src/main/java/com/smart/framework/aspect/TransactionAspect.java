@@ -15,7 +15,7 @@ public class TransactionAspect extends BaseAspect {
     private static final DBHelper dbHelper = DBHelper.getInstance();
 
     @Override
-    public boolean filter(Class<?> cls, Method method, Object[] params) {
+    public boolean intercept(Class<?> cls, Method method, Object[] params) {
         return method.isAnnotationPresent(Transaction.class);
     }
 
