@@ -51,8 +51,8 @@ public class DispatcherServlet extends HttpServlet {
         if (currentRequestURL.endsWith("/")) {
             currentRequestURL = currentRequestURL.substring(0, currentRequestURL.length() - 1);
         }
-        // 定义一个映射标志（默认为映射失败）
-        boolean mapped = false;
+        // 定义一个 JSP 映射标志（默认为映射失败）
+        boolean jspMapped = false;
         // 初始化 DataContext
         DataContext.init(request, response);
         // 获取请求参数映射（包括：Query String 与 Form Data）
@@ -76,7 +76,7 @@ public class DispatcherServlet extends HttpServlet {
                     // 处理 Action 方法
                     handleActionMethod(request, response, actionBean, paramList);
                     // 设置为映射成功
-                    mapped = true;
+                    jspMapped = true;
                     // 若成功匹配，则终止循环
                     break;
                 }
@@ -85,8 +85,8 @@ public class DispatcherServlet extends HttpServlet {
             // 销毁 DataContext
             DataContext.destroy();
         }
-        // 若映射失败，则根据默认路由规则转发请求
-        if (!mapped) {
+        // 若 JSP 映射失败，则根据默认路由规则转发请求
+        if (!jspMapped && StringUtil.isNotEmpty(jspPath)) {
             // 获取路径（默认路由规则：/{1}/{2} => /xxx/{1}_{2}.jsp）
             String path = jspPath + currentRequestURL.substring(1).replace("/", "_") + ".jsp";
             // 转发请求
