@@ -33,7 +33,7 @@ public class ActionHelper {
                             // 获取请求方法与请求路径
                             String requestMethod = urlArray[0];
                             String requestPath = urlArray[1]; // 带有占位符
-                            // 将请求路径中的占位符转换为 (\d+)（正则表达式）
+                            // 将请求路径中的占位符 {\w+} 转换为正则表达式 (\\w+)
                             requestPath = StringUtil.replaceAll(requestPath, "\\{\\w+\\}", "(\\\\w+)");
                             // 将 RequestBean 与 ActionBean 放入 Action Map 中
                             actionMap.put(new RequestBean(requestMethod, requestPath), new ActionBean(actionClass, actionMethod));

@@ -38,7 +38,7 @@ public class AOPHelper {
                 Class<?> targetClass = targetEntry.getKey();
                 List<Proxy> baseAspectList = targetEntry.getValue();
                 // 创建代理实例
-                Object proxyInstance = new ProxyManager(targetClass, baseAspectList).createProxy();
+                Object proxyInstance = ProxyManager.getInstance().createProxy(targetClass, baseAspectList);
                 // 获取目标实例（从 IOC 容器中获取）
                 Object targetInstance = BeanHelper.getInstance().getBean(targetClass);
                 // 复制目标实例中的成员变量到代理实例中

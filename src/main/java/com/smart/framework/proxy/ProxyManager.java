@@ -8,16 +8,20 @@ import net.sf.cglib.proxy.MethodProxy;
 
 public class ProxyManager {
 
-    private Class<?> targetClass;
-    private List<Proxy> proxyList;
+    private static ProxyManager instance = null;
 
-    public ProxyManager(Class<?> targetClass, List<Proxy> proxyList) {
-        this.targetClass = targetClass;
-        this.proxyList = proxyList;
+    private ProxyManager() {
+    }
+
+    public static ProxyManager getInstance() {
+        if (instance == null) {
+            instance = new ProxyManager();
+        }
+        return instance;
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T createProxy() {
+    public <T> T createProxy(final Class<?> targetClass, final List<Proxy> proxyList) {
         return (T) Enhancer.create(targetClass, new MethodInterceptor() {
             @Override
             public Object intercept(Object target, Method method, Object[] args, MethodProxy proxy) throws Throwable {
