@@ -71,8 +71,10 @@ public class DispatcherServlet extends HttpServlet {
                 if (requestMethod.equalsIgnoreCase(currentRequestMethod) && matcher.matches()) {
                     // 获取 Action 对象
                     ActionBean actionBean = actionEntry.getValue();
+                    // 获取 Action 方法参数类型
+                    Class<?>[] requestParamTypes = actionBean.getActionMethod().getParameterTypes();
                     // 创建 Action 方法参数列表
-                    List<Object> paramList = createParamList(requestParamMap, matcher);
+                    List<Object> paramList = createParamList(matcher, requestParamMap, requestParamTypes);
                     // 处理 Action 方法
                     handleActionMethod(request, response, actionBean, paramList);
                     // 设置为映射成功
@@ -95,20 +97,21 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
-    private List<Object> createParamList(Map<String, String> requestParamMap, Matcher matcher) {
+    private List<Object> createParamList(Matcher matcher, Map<String, String> requestParamMap, Class<?>[] requestParamTypes) {
         List<Object> paramList = new ArrayList<Object>();
         // 遍历正则表达式中所匹配的组
         for (int i = 1; i <= matcher.groupCount(); i++) {
+            // 获取请求参数
             String param = matcher.group(i);
-            // 若为数字，则需要强制转型，并放入参数列表中
-            // 注意：必须转型为低级别类型（低级别类型可安全转换为高级别类型使用）
-            if (StringUtil.isNumber(param)) {
-                if (StringUtil.isDigits(param)) {
-                    paramList.add(CastUtil.castInt(param));
-                } else {
-                    paramList.add(CastUtil.castFloat(param));
-                }
-            } else {
+            // 获取参数类型（支持四种类型：int/Integer、long/Long、double/Double、String）
+            Class<?> paramType = requestParamTypes[i - 1];
+            if (paramType.equals(int.class) || paramType.equals(Integer.class)) {
+                paramList.add(CastUtil.castInt(param));
+            } else if (paramType.equals(long.class) || paramType.equals(Long.class)) {
+                paramList.add(CastUtil.castLong(param));
+            } else if (paramType.equals(double.class) || paramType.equals(Double.class)) {
+                paramList.add(CastUtil.castDouble(param));
+            } else if (paramType.equals(String.class)) {
                 paramList.add(param);
             }
         }
