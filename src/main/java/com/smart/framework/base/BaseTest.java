@@ -24,7 +24,7 @@ public abstract class BaseTest {
             File sqlFile = new File(ClassUtil.getClassPath() + sqlPath);
             List<String> sqlList = FileUtils.readLines(sqlFile);
             for (String sql : sqlList) {
-                DBHelper.getInstance().update(sql);
+                DBHelper.update(sql);
             }
         } catch (Exception e) {
             logger.error("执行数据初始化脚本出错！", e);

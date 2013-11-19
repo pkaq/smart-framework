@@ -12,13 +12,11 @@ import java.util.Map;
 
 public class EntityHelper {
 
-    private static final EntityHelper instance = new EntityHelper();
+    private static final Map<Class<?>, Map<String, String>> entityMap = new HashMap<Class<?>, Map<String, String>>(); // Entity 类 => (列名 => 字段名)
 
-    private final Map<Class<?>, Map<String, String>> entityMap = new HashMap<Class<?>, Map<String, String>>(); // Entity 类 => (列名 => 字段名)
-
-    private EntityHelper() {
+    static {
         // 获取并遍历所有 Entity 类
-        List<Class<?>> entityClassList = ClassHelper.getInstance().getClassListBySuper(BaseEntity.class);
+        List<Class<?>> entityClassList = ClassHelper.getClassListBySuper(BaseEntity.class);
         for (Class<?> entityClass : entityClassList) {
             // 获取并遍历该 Entity 类中所有的字段（不包括父类中的方法）
             Field[] fields = entityClass.getDeclaredFields();
@@ -47,11 +45,7 @@ public class EntityHelper {
         }
     }
 
-    public static EntityHelper getInstance() {
-        return instance;
-    }
-
-    public Map<Class<?>, Map<String, String>> getEntityMap() {
+    public static Map<Class<?>, Map<String, String>> getEntityMap() {
         return entityMap;
     }
 }

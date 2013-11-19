@@ -13,13 +13,11 @@ import java.util.Map;
 
 public class ActionHelper {
 
-    private static final ActionHelper instance = new ActionHelper();
+    private static final Map<RequestBean, ActionBean> actionMap = new HashMap<RequestBean, ActionBean>();
 
-    private final Map<RequestBean, ActionBean> actionMap = new HashMap<RequestBean, ActionBean>();
-
-    private ActionHelper() {
+    static {
         // 获取并遍历所有 Action 类
-        List<Class<?>> actionClassList = ClassHelper.getInstance().getClassListBySuper(BaseAction.class);
+        List<Class<?>> actionClassList = ClassHelper.getClassListBySuper(BaseAction.class);
         for (Class<?> actionClass : actionClassList) {
             // 获取并遍历该 Action 类中所有的方法（不包括父类中的方法）
             Method[] actionMethods = actionClass.getDeclaredMethods();
@@ -44,11 +42,7 @@ public class ActionHelper {
         }
     }
 
-    public static ActionHelper getInstance() {
-        return instance;
-    }
-
-    public Map<RequestBean, ActionBean> getActionMap() {
+    public static Map<RequestBean, ActionBean> getActionMap() {
         return actionMap;
     }
 }

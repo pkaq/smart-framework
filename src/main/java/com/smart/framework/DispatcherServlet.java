@@ -31,8 +31,8 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
 
     // 获取相关配置项
-    private final String homePage = ConfigHelper.getInstance().getStringProperty("app.home_page");
-    private final String jspPath = ConfigHelper.getInstance().getStringProperty("app.jsp_path");
+    private final String homePage = ConfigHelper.getStringProperty(Constant.APP_HOME_PAGE);
+    private final String jspPath = ConfigHelper.getStringProperty(Constant.APP_JSP_PATH);
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,7 +59,7 @@ public class DispatcherServlet extends HttpServlet {
         Map<String, String> requestParamMap = WebUtil.getRequestParamMap(request);
         try {
             // 获取并遍历 Action 映射
-            Map<RequestBean, ActionBean> actionMap = ActionHelper.getInstance().getActionMap();
+            Map<RequestBean, ActionBean> actionMap = ActionHelper.getActionMap();
             for (Map.Entry<RequestBean, ActionBean> actionEntry : actionMap.entrySet()) {
                 // 从 RequestBean 中获取 Request 相关属性
                 RequestBean requestBean = actionEntry.getKey();
@@ -127,7 +127,7 @@ public class DispatcherServlet extends HttpServlet {
         Class<?> actionClass = actionBean.getActionClass();
         Method actionMethod = actionBean.getActionMethod();
         // 从 BeanHelper 中创建 Action 实例
-        Object actionInstance = BeanHelper.getInstance().getBean(actionClass);
+        Object actionInstance = BeanHelper.getBean(actionClass);
         // 调用 Action 方法
         Object actionMethodResult;
         try {
@@ -147,8 +147,8 @@ public class DispatcherServlet extends HttpServlet {
         if (e.getCause() instanceof AuthException) {
             // 若为认证异常，则分两种情况进行处理
             if (WebUtil.isAJAX(request)) {
-                // 若为 AJAX 请求，则发送 403 错误
-                WebUtil.sendError(403, response);
+                // 若为 AJAX 请求，则发送 FORBIDDEN(403) 错误
+                WebUtil.sendError(HttpServletResponse.SC_FORBIDDEN, response);
             } else {
                 // 否则重定向到首页
                 WebUtil.redirectRequest("/", request, response);

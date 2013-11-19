@@ -1,5 +1,6 @@
 package com.smart.framework.helper;
 
+import com.smart.framework.Constant;
 import com.smart.framework.annotation.Aspect;
 import com.smart.framework.annotation.Order;
 import com.smart.framework.aspect.PluginAspect;
@@ -24,9 +25,8 @@ import org.apache.log4j.Logger;
 public class AOPHelper {
 
     private static final Logger logger = Logger.getLogger(AOPHelper.class);
-    private static final AOPHelper instance = new AOPHelper();
 
-    private AOPHelper() {
+    static {
         try {
             // 创建 Aspect Map（用于存放切面类与目标类列表的映射关系）
             Map<Class<?>, List<Class<?>>> aspectMap = createAspectMap();
@@ -40,22 +40,18 @@ public class AOPHelper {
                 // 创建代理实例
                 Object proxyInstance = ProxyManager.getInstance().createProxy(targetClass, baseAspectList);
                 // 获取目标实例（从 IOC 容器中获取）
-                Object targetInstance = BeanHelper.getInstance().getBean(targetClass);
+                Object targetInstance = BeanHelper.getBean(targetClass);
                 // 复制目标实例中的成员变量到代理实例中
                 ObjectUtil.copyFields(targetInstance, proxyInstance);
                 // 用代理实例覆盖目标实例（放入 IOC 容器中）
-                BeanHelper.getInstance().getBeanMap().put(targetClass, proxyInstance);
+                BeanHelper.getBeanMap().put(targetClass, proxyInstance);
             }
         } catch (Exception e) {
             logger.error("初始化 AOPHelper 出错！", e);
         }
     }
 
-    public static AOPHelper getInstance() {
-        return instance;
-    }
-
-    private Map<Class<?>, List<Class<?>>> createAspectMap() throws Exception {
+    private static Map<Class<?>, List<Class<?>>> createAspectMap() throws Exception {
         // 定义 Aspect Map
         Map<Class<?>, List<Class<?>>> aspectMap = new LinkedHashMap<Class<?>, List<Class<?>>>();
         // 添加插件切面
@@ -68,25 +64,23 @@ public class AOPHelper {
         return aspectMap;
     }
 
-    private void addPluginAspect(Map<Class<?>, List<Class<?>>> aspectMap) throws Exception {
+    private static void addPluginAspect(Map<Class<?>, List<Class<?>>> aspectMap) throws Exception {
         // 获取插件包名下父类为 PluginAspect 的所有类（插件切面类）
-        List<Class<?>> pluginAspectClassList = ClassUtil.getClassListBySuper("com.smart.plugin", PluginAspect.class);
+        List<Class<?>> pluginAspectClassList = ClassUtil.getClassListBySuper(Constant.PLUGIN_PACKAGE, PluginAspect.class);
         if (CollectionUtil.isNotEmpty(pluginAspectClassList)) {
             // 遍历所有插件切面类
             for (Class<?> pluginAspectClass : pluginAspectClassList) {
                 // 创建插件切面类实例
                 PluginAspect pluginAspect = (PluginAspect) pluginAspectClass.newInstance();
-                // 初始化插件
-                pluginAspect.initPlugin();
                 // 将插件切面类及其所对应的目标类列表放入 Aspect Map 中
                 aspectMap.put(pluginAspectClass, pluginAspect.getTargetClassList());
             }
         }
     }
 
-    private void addUserAspect(Map<Class<?>, List<Class<?>>> aspectMap) throws Exception {
+    private static void addUserAspect(Map<Class<?>, List<Class<?>>> aspectMap) throws Exception {
         // 获取切面类
-        List<Class<?>> aspectClassList = ClassHelper.getInstance().getClassListBySuper(BaseAspect.class);
+        List<Class<?>> aspectClassList = ClassHelper.getClassListBySuper(BaseAspect.class);
         // 排序切面类
         sortAspectClassList(aspectClassList);
         // 遍历切面类
@@ -103,13 +97,13 @@ public class AOPHelper {
         }
     }
 
-    private void addTransactionAspect(Map<Class<?>, List<Class<?>>> aspectMap) {
+    private static void addTransactionAspect(Map<Class<?>, List<Class<?>>> aspectMap) {
         // 使用 TransactionAspect 横切所有 Service 类
-        List<Class<?>> serviceClassList = ClassHelper.getInstance().getClassListBySuper(BaseService.class);
+        List<Class<?>> serviceClassList = ClassHelper.getClassListBySuper(BaseService.class);
         aspectMap.put(TransactionAspect.class, serviceClassList);
     }
 
-    private void sortAspectClassList(List<Class<?>> aspectClassList) {
+    private static void sortAspectClassList(List<Class<?>> aspectClassList) {
         // 排序切面类列表
         Collections.sort(aspectClassList, new Comparator<Class<?>>() {
             @Override
@@ -133,7 +127,7 @@ public class AOPHelper {
         });
     }
 
-    private List<Class<?>> createTargetClassList(Aspect aspect) throws Exception {
+    private static List<Class<?>> createTargetClassList(Aspect aspect) throws Exception {
         // 初始化目标类列表
         List<Class<?>> targetClassList = new ArrayList<Class<?>>();
         // 获取 @Aspect 注解相关属性
@@ -144,13 +138,13 @@ public class AOPHelper {
             targetClassList.add(Class.forName(pkg + "." + cls));
         } else {
             // 否则（包名不为空）添加该包名下所有类
-            targetClassList.addAll(ClassHelper.getInstance().getClassListByPackage(pkg));
+            targetClassList.addAll(ClassHelper.getClassListByPackage(pkg));
         }
         // 返回目标类列表
         return targetClassList;
     }
 
-    private Map<Class<?>, List<Proxy>> createTargetMap(Map<Class<?>, List<Class<?>>> aspectMap) throws Exception {
+    private static Map<Class<?>, List<Proxy>> createTargetMap(Map<Class<?>, List<Class<?>>> aspectMap) throws Exception {
         // 定义 Target Map
         Map<Class<?>, List<Proxy>> targetMap = new HashMap<Class<?>, List<Proxy>>();
         // 遍历 Aspect Map

@@ -12,8 +12,6 @@ public class TransactionAspect extends BaseAspect {
 
     private static final Logger logger = Logger.getLogger(TransactionAspect.class);
 
-    private static final DBHelper dbHelper = DBHelper.getInstance();
-
     @Override
     public boolean intercept(Class<?> cls, Method method, Object[] params) {
         return method.isAnnotationPresent(Transaction.class);
@@ -22,7 +20,7 @@ public class TransactionAspect extends BaseAspect {
     @Override
     public void before(Class<?> cls, Method method, Object[] params) throws Exception {
         // 开启事务
-        dbHelper.beginTransaction();
+        DBHelper.beginTransaction();
         if (logger.isDebugEnabled()) {
             logger.debug("[Begin Transaction]");
         }
@@ -34,7 +32,7 @@ public class TransactionAspect extends BaseAspect {
     @Override
     public void after(Class<?> cls, Method method, Object[] params, Object result) throws Exception {
         // 提交事务
-        dbHelper.commitTransaction();
+        DBHelper.commitTransaction();
         if (logger.isDebugEnabled()) {
             logger.debug("[Commit Transaction]");
         }
@@ -43,7 +41,7 @@ public class TransactionAspect extends BaseAspect {
     @Override
     public void error(Class<?> cls, Method method, Object[] params, Exception e) {
         // 回滚事务
-        dbHelper.rollbackTransaction();
+        DBHelper.rollbackTransaction();
         if (logger.isDebugEnabled()) {
             logger.debug("[Rollback Transaction]");
         }
@@ -53,9 +51,9 @@ public class TransactionAspect extends BaseAspect {
         // 缺省使用数据库默认隔离级别，可在 @Transaction 注解上设置特定的隔离级别
         Transaction transaction = method.getAnnotation(Transaction.class);
         int currentIsolation = transaction.isolation();
-        int defaultIsolation = dbHelper.getDefaultIsolationLevel();
+        int defaultIsolation = DBHelper.getDefaultIsolationLevel();
         if (currentIsolation != defaultIsolation) {
-            Connection conn = dbHelper.getConnectionFromThreadLocal();
+            Connection conn = DBHelper.getConnectionFromThreadLocal();
             conn.setTransactionIsolation(currentIsolation);
             if (logger.isDebugEnabled()) {
                 logger.debug("[Set Transaction Isolation] Isolation: " + currentIsolation);

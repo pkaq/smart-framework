@@ -14,21 +14,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 @MultipartConfig
-@WebServlet(name = "upload", urlPatterns = "/upload.do")
+@WebServlet(name = Constant.SERVLET_UPLOAD, urlPatterns = Constant.REQUEST_UPLOAD)
 public class UploadServlet extends HttpServlet {
-
-    private static final String UPLOAD_BASE_PATH = "static/upload/";    // 文件上传基础路径
-    private static final String UPLOAD_RELATIVE_PATH = "path";          // 文件上传相对路径
-    private static final String UPLOAD_FILE_NAME = "file";              // 文件标签的 file 名称
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 获取文件路径
-        String relativePath = request.getParameter(UPLOAD_RELATIVE_PATH);
-        String filePath = WebUtil.getUploadFilePath(request, UPLOAD_BASE_PATH + relativePath);
+        String pathName = request.getParameter(Constant.UPLOAD_PATH_NAME);
+        String filePath = WebUtil.getUploadFilePath(request, Constant.UPLOAD_BASE_PATH + pathName);
 
         // 获取文件名
-        Part part = request.getPart(UPLOAD_FILE_NAME);
+        Part part = request.getPart(Constant.UPLOAD_INPUT_NAME);
         String fileName = WebUtil.getUploadFileName(request, part);
 
         // 写入文件
@@ -36,9 +32,9 @@ public class UploadServlet extends HttpServlet {
 
         // 返回结果
         Map<String, Object> data = new HashMap<String, Object>();
-        data.put("fileName", fileName);
-        data.put("fileType", part.getContentType());
-        data.put("fileSize", part.getSize());
+        data.put(Constant.UPLOAD_FILE_NAME, fileName);
+        data.put(Constant.UPLOAD_FILE_TYPE, part.getContentType());
+        data.put(Constant.UPLOAD_FILE_SIZE, part.getSize());
         WebUtil.writeJSON(response, new Result(true).data(data));
     }
 }
