@@ -76,6 +76,8 @@ public class AOPHelper {
             for (Class<?> pluginAspectClass : pluginAspectClassList) {
                 // 创建插件切面类实例
                 PluginAspect pluginAspect = (PluginAspect) pluginAspectClass.newInstance();
+                // 初始化插件
+                pluginAspect.initPlugin();
                 // 将插件切面类及其所对应的目标类列表放入 Aspect Map 中
                 aspectMap.put(pluginAspectClass, pluginAspect.getTargetClassList());
             }
