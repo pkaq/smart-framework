@@ -5,7 +5,5 @@ import java.util.List;
 
 public abstract class PluginAspect implements Proxy {
 
-    public abstract void initPlugin();
-
     public abstract List<Class<?>> getTargetClassList();
 }

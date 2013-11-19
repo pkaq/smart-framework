@@ -6,6 +6,7 @@ import com.smart.framework.helper.BeanHelper;
 import com.smart.framework.helper.DBHelper;
 import com.smart.framework.helper.EntityHelper;
 import com.smart.framework.helper.IOCHelper;
+import com.smart.framework.helper.PluginHelper;
 import org.apache.log4j.Logger;
 
 public final class Smart {
@@ -21,6 +22,7 @@ public final class Smart {
                 BeanHelper.class,
                 AOPHelper.class,
                 IOCHelper.class,
+                PluginHelper.class,
             };
             for (Class<?> cls : classList) {
                 Class.forName(cls.getName());
