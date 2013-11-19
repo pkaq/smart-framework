@@ -7,6 +7,9 @@ import org.apache.commons.lang.math.NumberUtils;
 
 public class StringUtil {
 
+    // 字符串分隔符
+    public static final String SEPARATOR = String.valueOf((char) 29);
+
     // 判断字符串是否非空
     public static boolean isNotEmpty(String str) {
         return StringUtils.isNotEmpty(str);

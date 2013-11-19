@@ -115,9 +115,22 @@ public class WebUtil {
                 Enumeration<String> paramNames = request.getParameterNames();
                 while (paramNames.hasMoreElements()) {
                     String paramName = paramNames.nextElement();
-                    String paramValue = request.getParameter(paramName);
                     if (checkParamName(paramName)) {
-                        paramMap.put(paramName, paramValue);
+                        String[] paramValues = request.getParameterValues(paramName);
+                        if (ArrayUtil.isNotEmpty(paramValues)) {
+                            if (paramValues.length == 1) {
+                                paramMap.put(paramName, paramValues[0]);
+                            } else {
+                                StringBuilder paramValue = new StringBuilder("");
+                                for (int i = 0; i < paramValues.length; i++) {
+                                    paramValue.append(paramValues[i]);
+                                    if (i != paramValues.length - 1) {
+                                        paramValue.append(StringUtil.SEPARATOR);
+                                    }
+                                }
+                                paramMap.put(paramName, paramValue.toString());
+                            }
+                        }
                     }
                 }
             }
