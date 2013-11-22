@@ -1,6 +1,8 @@
 package com.smart.framework;
 
 import com.smart.framework.bean.Result;
+import com.smart.framework.helper.ConfigHelper;
+import com.smart.framework.util.FileUtil;
 import com.smart.framework.util.WebUtil;
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,16 +21,21 @@ public class UploadServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 获取文件路径
+        // 获取相关文件路径
         String pathName = request.getParameter(Constant.UPLOAD_PATH_NAME);
-        String filePath = WebUtil.getUploadFilePath(request, Constant.UPLOAD_BASE_PATH + pathName);
+        String relativePath = ConfigHelper.getStringProperty(Constant.APP_WWW_PATH) + Constant.UPLOAD_BASE_PATH + pathName;
+        String filePath = WebUtil.getUploadFilePath(request, relativePath);
 
         // 获取文件名
         Part part = request.getPart(Constant.UPLOAD_INPUT_NAME);
         String fileName = WebUtil.getUploadFileName(request, part);
 
+        // 创建文件
+        String absolutePath = filePath + "/" + fileName;
+        FileUtil.createFile(absolutePath);
+
         // 写入文件
-        part.write(filePath + "/" + fileName);
+        part.write(absolutePath);
 
         // 返回结果
         Map<String, Object> data = new HashMap<String, Object>();

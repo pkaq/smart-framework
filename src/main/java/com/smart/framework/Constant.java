@@ -14,7 +14,7 @@ public interface Constant {
     String REQUEST_FAVICON = "/favicon.ico";
     String REQUEST_UPLOAD = "/upload.do";
 
-    String UPLOAD_BASE_PATH = APP_WWW_PATH + "upload/";
+    String UPLOAD_BASE_PATH = "upload/";
     String UPLOAD_PATH_NAME = "path";
     String UPLOAD_INPUT_NAME = "file";
     String UPLOAD_FILE_NAME = "file_name";

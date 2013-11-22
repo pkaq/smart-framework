@@ -63,13 +63,8 @@ public class WebUtil {
 
     // 获取上传文件路径
     public static String getUploadFilePath(HttpServletRequest request, String relativePath) {
-        // 获取绝对路径
-        String filePath = request.getServletContext().getRealPath("/") + relativePath;
-
-        // 创建文件
-        FileUtil.createFile(filePath);
-
-        return filePath;
+        // 返回绝对路径
+        return request.getServletContext().getRealPath("") + relativePath;
     }
 
     // 获取上传文件名
