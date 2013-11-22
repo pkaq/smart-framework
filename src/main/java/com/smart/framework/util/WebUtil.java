@@ -3,6 +3,7 @@ package com.smart.framework.util;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -86,7 +87,7 @@ public class WebUtil {
 
     // 从请求中获取所有参数（当参数名重复时，用后者覆盖前者）
     public static Map<String, String> getRequestParamMap(HttpServletRequest request) {
-        Map<String, String> paramMap = new HashMap<String, String>();
+        Map<String, String> paramMap = new LinkedHashMap<String, String>();
         try {
             String method = request.getMethod();
             if (method.equalsIgnoreCase("put") || method.equalsIgnoreCase("delete")) {
