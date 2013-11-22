@@ -54,6 +54,12 @@ public class IOCHelper {
         Class<?> implementClass = null;
         // 获取 Bean 字段对应的接口
         Class<?> interfaceClass = beanField.getType();
+        // 通过接口查找唯一的实现类
+        return findImplementClass(interfaceClass);
+    }
+
+    public static Class<?> findImplementClass(Class<?> interfaceClass) {
+        Class<?> implementClass = interfaceClass;
         // 判断接口上是否标注了 @Impl 注解
         if (interfaceClass.isAnnotationPresent(Impl.class)) {
             // 获取强制指定的实现类
