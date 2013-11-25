@@ -1,10 +1,12 @@
 package com.smart.framework.util;
 
+import com.smart.framework.Constant;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
@@ -19,7 +21,7 @@ public class WebUtil {
         try {
             // 设置响应头
             response.setContentType("text/plain"); // 指定内容类型为纯文本格式
-            response.setCharacterEncoding("UTF-8"); // 防止中文乱码
+            response.setCharacterEncoding(Constant.DEFAULT_CHARSET); // 防止中文乱码
 
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();
@@ -35,7 +37,7 @@ public class WebUtil {
         try {
             // 设置响应头
             response.setContentType("application/json"); // 指定内容类型为 JSON 格式
-            response.setCharacterEncoding("UTF-8"); // 防止中文乱码
+            response.setCharacterEncoding(Constant.DEFAULT_CHARSET); // 防止中文乱码
 
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();
@@ -51,7 +53,7 @@ public class WebUtil {
         try {
             // 设置响应头
             response.setContentType("text/html"); // 指定内容类型为 HTML 格式
-            response.setCharacterEncoding("UTF-8"); // 防止中文乱码
+            response.setCharacterEncoding(Constant.DEFAULT_CHARSET); // 防止中文乱码
 
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();
@@ -71,7 +73,7 @@ public class WebUtil {
     // 获取上传文件名
     public static String getUploadFileName(HttpServletRequest request, Part part) {
         // 防止中文乱码（可放在 EncodingFilter 中处理）
-//        request.setCharacterEncoding("UTF-8");
+//        request.setCharacterEncoding(Constant.DEFAULT_CHARSET);
 
         // 从请求头中获取文件名
         String cd = part.getHeader("Content-Disposition");
@@ -91,7 +93,7 @@ public class WebUtil {
         try {
             String method = request.getMethod();
             if (method.equalsIgnoreCase("put") || method.equalsIgnoreCase("delete")) {
-                String queryString = CodecUtil.decodeForUTF8(StreamUtil.toString(request.getInputStream()));
+                String queryString = CodecUtil.decodeUTF8(StreamUtil.toString(request.getInputStream()));
                 if (StringUtil.isNotEmpty(queryString)) {
                     String[] qsArray = StringUtil.splitString(queryString, "&");
                     if (ArrayUtil.isNotEmpty(qsArray)) {
@@ -198,5 +200,41 @@ public class WebUtil {
         String servletPath = request.getServletPath();
         String pathInfo = StringUtil.defaultIfEmpty(request.getPathInfo(), "");
         return servletPath + pathInfo;
+    }
+
+    // 将数据放入 Cookie 中
+    public static void addCookie(HttpServletResponse response, String name, String value, String domain, int expires) {
+        try {
+            if (StringUtil.isNotEmpty(name)) {
+                value = CodecUtil.encodeUTF8(value);
+                Cookie cookie = new Cookie(name, value);
+                cookie.setDomain(domain);
+                cookie.setMaxAge(expires);
+                response.addCookie(cookie);
+            }
+        } catch (Exception e) {
+            logger.error("添加 Cookie 出错！", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    // 从 Cookie 中获取数据
+    public static String getCookie(HttpServletRequest request, String name) {
+        String value = "";
+        try {
+            Cookie[] cookieArray = request.getCookies();
+            if (cookieArray != null) {
+                for (Cookie cookie : cookieArray) {
+                    if (StringUtil.isNotEmpty(name) && name.equals(cookie.getName())) {
+                        value = CodecUtil.decodeUTF8(cookie.getValue());
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("获取 Cookie 出错！", e);
+            throw new RuntimeException(e);
+        }
+        return value;
     }
 }

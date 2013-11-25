@@ -11,8 +11,8 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class ContainerListener implements ServletContextListener {
 
-    private final String wwwPath = ConfigHelper.getStringProperty(Constant.APP_WWW_PATH);
-    private final String jspPath = ConfigHelper.getStringProperty(Constant.APP_JSP_PATH);
+    private static final String wwwPath = ConfigHelper.getStringProperty(Constant.APP_WWW_PATH);
+    private static final String jspPath = ConfigHelper.getStringProperty(Constant.APP_JSP_PATH);
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {

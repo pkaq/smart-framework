@@ -1,5 +1,6 @@
 package com.smart.framework.util;
 
+import com.smart.framework.Constant;
 import java.io.FileWriter;
 import java.io.StringWriter;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class VelocityUtil {
 
     static {
         engine.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, ClassUtil.getClassPath());
-        engine.setProperty(Velocity.ENCODING_DEFAULT, "UTF-8");
+        engine.setProperty(Velocity.ENCODING_DEFAULT, Constant.DEFAULT_CHARSET);
         engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, NullLogChute.class.getName());
     }
 
