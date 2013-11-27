@@ -1,7 +1,9 @@
 package com.smart.framework.util;
 
 import com.smart.framework.Constant;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -93,7 +95,7 @@ public class WebUtil {
         try {
             String method = request.getMethod();
             if (method.equalsIgnoreCase("put") || method.equalsIgnoreCase("delete")) {
-                String queryString = CodecUtil.decodeUTF8(StreamUtil.toString(request.getInputStream()));
+                String queryString = CodecUtil.decodeUTF8(StreamUtil.getString(request.getInputStream()));
                 if (StringUtil.isNotEmpty(queryString)) {
                     String[] qsArray = StringUtil.splitString(queryString, "&");
                     if (ArrayUtil.isNotEmpty(qsArray)) {
@@ -236,5 +238,18 @@ public class WebUtil {
             throw new RuntimeException(e);
         }
         return value;
+    }
+
+    // 获取 URL 内容
+    public static String getURLContent(String url) {
+        String content;
+        try {
+            InputStream is = new URL(url).openStream();
+            content = StreamUtil.getString(is);
+        } catch (Exception e) {
+            logger.error("获取 URL 内容出错！", e);
+            throw new RuntimeException(e);
+        }
+        return content;
     }
 }

@@ -25,8 +25,8 @@ public class StreamUtil {
         }
     }
 
-    // 从输入流中返回字符串
-    public static String toString(InputStream is) {
+    // 从输入流中获取字符串
+    public static String getString(InputStream is) {
         StringBuilder sb = new StringBuilder();
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
