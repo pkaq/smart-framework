@@ -1,6 +1,6 @@
 package com.smart.framework;
 
-public interface Constant {
+public interface FrameworkConstant {
 
     String DEFAULT_CHARSET = "UTF-8";
 
@@ -8,12 +8,12 @@ public interface Constant {
     String APP_JSP_PATH = "app.jsp_path";
     String APP_WWW_PATH = "app.www_path";
 
-    String SERVLET_DEFAULT = "default";
-    String SERVLET_JSP = "jsp";
-    String SERVLET_UPLOAD = "upload";
+    String DEFAULT_SERVLET_NAME = "default";
+    String JSP_SERVLET_NAME = "jsp";
+    String UPLOAD_SERVLET_NAME = "upload";
 
-    String REQUEST_FAVICON = "/favicon.ico";
-    String REQUEST_UPLOAD = "/upload.do";
+    String FAVICON_ICO_URL = "/favicon.ico";
+    String UPLOAD_SERVLET_URL = "/upload.do";
 
     String UPLOAD_BASE_PATH = "upload/";
     String UPLOAD_PATH_NAME = "path";

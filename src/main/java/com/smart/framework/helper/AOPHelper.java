@@ -1,6 +1,6 @@
 package com.smart.framework.helper;
 
-import com.smart.framework.Constant;
+import com.smart.framework.FrameworkConstant;
 import com.smart.framework.annotation.Aspect;
 import com.smart.framework.annotation.Order;
 import com.smart.framework.aspect.PluginAspect;
@@ -66,7 +66,7 @@ public class AOPHelper {
 
     private static void addPluginAspect(Map<Class<?>, List<Class<?>>> aspectMap) throws Exception {
         // 获取插件包名下父类为 PluginAspect 的所有类（插件切面类）
-        List<Class<?>> pluginAspectClassList = ClassUtil.getClassListBySuper(Constant.PLUGIN_PACKAGE, PluginAspect.class);
+        List<Class<?>> pluginAspectClassList = ClassUtil.getClassListBySuper(FrameworkConstant.PLUGIN_PACKAGE, PluginAspect.class);
         if (CollectionUtil.isNotEmpty(pluginAspectClassList)) {
             // 遍历所有插件切面类
             for (Class<?> pluginAspectClass : pluginAspectClassList) {

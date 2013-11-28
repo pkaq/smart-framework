@@ -1,6 +1,6 @@
 package com.smart.framework.util;
 
-import com.smart.framework.Constant;
+import com.smart.framework.FrameworkConstant;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -23,7 +23,7 @@ public class WebUtil {
         try {
             // 设置响应头
             response.setContentType("text/plain"); // 指定内容类型为纯文本格式
-            response.setCharacterEncoding(Constant.DEFAULT_CHARSET); // 防止中文乱码
+            response.setCharacterEncoding(FrameworkConstant.DEFAULT_CHARSET); // 防止中文乱码
 
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();
@@ -39,7 +39,7 @@ public class WebUtil {
         try {
             // 设置响应头
             response.setContentType("application/json"); // 指定内容类型为 JSON 格式
-            response.setCharacterEncoding(Constant.DEFAULT_CHARSET); // 防止中文乱码
+            response.setCharacterEncoding(FrameworkConstant.DEFAULT_CHARSET); // 防止中文乱码
 
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();
@@ -55,7 +55,7 @@ public class WebUtil {
         try {
             // 设置响应头
             response.setContentType("text/html"); // 指定内容类型为 HTML 格式
-            response.setCharacterEncoding(Constant.DEFAULT_CHARSET); // 防止中文乱码
+            response.setCharacterEncoding(FrameworkConstant.DEFAULT_CHARSET); // 防止中文乱码
 
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();

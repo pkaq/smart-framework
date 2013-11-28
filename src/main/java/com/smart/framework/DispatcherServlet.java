@@ -31,8 +31,8 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
 
     // 获取相关配置项
-    private final String homePage = ConfigHelper.getStringProperty(Constant.APP_HOME_PAGE);
-    private final String jspPath = ConfigHelper.getStringProperty(Constant.APP_JSP_PATH);
+    private final String homePage = ConfigHelper.getStringProperty(FrameworkConstant.APP_HOME_PAGE);
+    private final String jspPath = ConfigHelper.getStringProperty(FrameworkConstant.APP_JSP_PATH);
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,6 +1,6 @@
 package com.smart.framework.util;
 
-import com.smart.framework.Constant;
+import com.smart.framework.FrameworkConstant;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -163,7 +163,7 @@ public class FileUtil {
         try {
             FileUtil.createFile(filePath);
             os = new BufferedOutputStream(new FileOutputStream(filePath));
-            w = new OutputStreamWriter(os, Constant.DEFAULT_CHARSET);
+            w = new OutputStreamWriter(os, FrameworkConstant.DEFAULT_CHARSET);
             w.write(fileContent);
             w.flush();
         } catch (Exception e) {

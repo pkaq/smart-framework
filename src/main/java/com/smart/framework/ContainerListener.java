@@ -11,8 +11,8 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class ContainerListener implements ServletContextListener {
 
-    private static final String wwwPath = ConfigHelper.getStringProperty(Constant.APP_WWW_PATH);
-    private static final String jspPath = ConfigHelper.getStringProperty(Constant.APP_JSP_PATH);
+    private static final String wwwPath = ConfigHelper.getStringProperty(FrameworkConstant.APP_WWW_PATH);
+    private static final String jspPath = ConfigHelper.getStringProperty(FrameworkConstant.APP_JSP_PATH);
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -36,22 +36,22 @@ public class ContainerListener implements ServletContextListener {
     }
 
     private void registerDefaultServlet(ServletContext context) {
-        ServletRegistration defaultServletRegistration = context.getServletRegistration(Constant.SERVLET_DEFAULT);
-        defaultServletRegistration.addMapping(Constant.REQUEST_FAVICON);
+        ServletRegistration defaultServletReg = context.getServletRegistration(FrameworkConstant.DEFAULT_SERVLET_NAME);
+        defaultServletReg.addMapping(FrameworkConstant.FAVICON_ICO_URL);
         if (StringUtil.isNotEmpty(wwwPath)) {
-            defaultServletRegistration.addMapping(wwwPath + "*");
+            defaultServletReg.addMapping(wwwPath + "*");
         }
     }
 
     private void registerJspServlet(ServletContext context) {
         if (StringUtil.isNotEmpty(jspPath)) {
-            ServletRegistration jspServletRegistration = context.getServletRegistration(Constant.SERVLET_JSP);
-            jspServletRegistration.addMapping(jspPath + "*");
+            ServletRegistration jspServletReg = context.getServletRegistration(FrameworkConstant.JSP_SERVLET_NAME);
+            jspServletReg.addMapping(jspPath + "*");
         }
     }
 
     private void registerUploadServlet(ServletContext context) {
-        ServletRegistration uploadServletRegistration = context.getServletRegistration(Constant.SERVLET_UPLOAD);
-        uploadServletRegistration.addMapping(Constant.REQUEST_UPLOAD);
+        ServletRegistration uploadServletReg = context.getServletRegistration(FrameworkConstant.UPLOAD_SERVLET_NAME);
+        uploadServletReg.addMapping(FrameworkConstant.UPLOAD_SERVLET_URL);
     }
 }

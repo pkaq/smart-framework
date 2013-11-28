@@ -1,6 +1,6 @@
 package com.smart.framework.util;
 
-import com.smart.framework.Constant;
+import com.smart.framework.FrameworkConstant;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.UUID;
@@ -17,7 +17,7 @@ public class CodecUtil {
     public static String encodeUTF8(String str) {
         String target;
         try {
-            target = URLEncoder.encode(str, Constant.DEFAULT_CHARSET);
+            target = URLEncoder.encode(str, FrameworkConstant.DEFAULT_CHARSET);
         } catch (Exception e) {
             logger.error("编码出错！", e);
             throw new RuntimeException( e);
@@ -29,7 +29,7 @@ public class CodecUtil {
     public static String decodeUTF8(String str) {
         String target;
         try {
-            target = URLDecoder.decode(str, Constant.DEFAULT_CHARSET);
+            target = URLDecoder.decode(str, FrameworkConstant.DEFAULT_CHARSET);
         } catch (Exception e) {
             logger.error("解码出错！", e);
             throw new RuntimeException(e);
