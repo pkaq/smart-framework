@@ -105,4 +105,12 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>osc</id>
+            <name>OSC</name>
+            <url>http://maven.oschina.net/content/repositories/thirdparty/</url>
+        </repository>
+    </distributionManagement>
+
 </project>
