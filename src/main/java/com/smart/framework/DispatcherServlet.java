@@ -69,15 +69,18 @@ public class DispatcherServlet extends HttpServlet {
                 Matcher matcher = Pattern.compile(requestPath).matcher(currentRequestPath);
                 // 判断请求方法与请求路径是否同时匹配
                 if (requestMethod.equalsIgnoreCase(currentRequestMethod) && matcher.matches()) {
-                    // 获取 Action 对象
+                    // 获取 ActionBean
                     ActionBean actionBean = actionEntry.getValue();
+                    // 从 ActionBean 中获取 Action 相关属性
+                    Class<?> actionClass = actionBean.getActionClass();
+                    Method actionMethod = actionBean.getActionMethod();
                     // 获取 Action 方法参数类型
                     Class<?>[] requestParamTypes = actionBean.getActionMethod().getParameterTypes();
                     // 创建 Action 方法参数列表
                     List<Object> paramList = createParamList(matcher, requestParamMap, requestParamTypes);
                     // 处理 Action 方法
-                    handleActionMethod(request, response, actionBean, paramList);
-                    // 设置为映射成功
+                    handleActionMethod(request, response, actionClass, actionMethod, paramList);
+                    // JSP 映射成功
                     jspMapped = true;
                     // 若成功匹配，则终止循环
                     break;
@@ -122,10 +125,7 @@ public class DispatcherServlet extends HttpServlet {
         return paramList;
     }
 
-    private void handleActionMethod(HttpServletRequest request, HttpServletResponse response, ActionBean actionBean, List<Object> paramList) {
-        // 从 ActionBean 中获取 Action 相关属性
-        Class<?> actionClass = actionBean.getActionClass();
-        Method actionMethod = actionBean.getActionMethod();
+    private void handleActionMethod(HttpServletRequest request, HttpServletResponse response, Class<?> actionClass, Method actionMethod, List<Object> paramList) {
         // 从 BeanHelper 中创建 Action 实例
         Object actionInstance = BeanHelper.getBean(actionClass);
         // 调用 Action 方法

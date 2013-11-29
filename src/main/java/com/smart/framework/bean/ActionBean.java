@@ -16,15 +16,7 @@ public class ActionBean {
         return actionClass;
     }
 
-    public void setActionClass(Class<?> actionClass) {
-        this.actionClass = actionClass;
-    }
-
     public Method getActionMethod() {
         return actionMethod;
-    }
-
-    public void setActionMethod(Method actionMethod) {
-        this.actionMethod = actionMethod;
     }
 }
