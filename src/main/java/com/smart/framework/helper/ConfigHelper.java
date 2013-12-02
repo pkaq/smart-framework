@@ -1,5 +1,6 @@
 package com.smart.framework.helper;
 
+import com.smart.framework.util.CastUtil;
 import com.smart.framework.util.FileUtil;
 import com.smart.framework.util.StringUtil;
 import java.util.Properties;
@@ -20,7 +21,15 @@ public class ConfigHelper {
         int value = 0;
         String sValue = getStringProperty(key);
         if (StringUtil.isNumber(sValue)) {
-            value = Integer.parseInt(sValue);
+            value = CastUtil.castInt(sValue);
+        }
+        return value;
+    }
+
+    public static boolean getBooleanProperty(String key) {
+        boolean value = false;
+        if (configProperties.containsKey(key)) {
+            value = CastUtil.castBoolean(configProperties.getProperty(key));
         }
         return value;
     }
