@@ -1,6 +1,7 @@
 package com.smart.framework;
 
 import com.smart.framework.bean.ActionBean;
+import com.smart.framework.bean.Multipart;
 import com.smart.framework.bean.Page;
 import com.smart.framework.bean.RequestBean;
 import com.smart.framework.bean.Result;
@@ -8,12 +9,15 @@ import com.smart.framework.helper.ActionHelper;
 import com.smart.framework.helper.BeanHelper;
 import com.smart.framework.helper.ConfigHelper;
 import com.smart.framework.util.CastUtil;
+import com.smart.framework.util.CodecUtil;
 import com.smart.framework.util.MapUtil;
 import com.smart.framework.util.StringUtil;
 import com.smart.framework.util.WebUtil;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -23,6 +27,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
 @WebServlet("/*")
@@ -55,8 +63,6 @@ public class DispatcherServlet extends HttpServlet {
         boolean jspMapped = false;
         // 初始化 DataContext
         DataContext.init(request, response);
-        // 获取请求参数映射（包括：Query String 与 Form Data）
-        Map<String, String> requestParamMap = WebUtil.getRequestParamMap(request);
         try {
             // 获取并遍历 Action 映射
             Map<RequestBean, ActionBean> actionMap = ActionHelper.getActionMap();
@@ -77,7 +83,18 @@ public class DispatcherServlet extends HttpServlet {
                     // 获取 Action 方法参数类型
                     Class<?>[] requestParamTypes = actionBean.getActionMethod().getParameterTypes();
                     // 创建 Action 方法参数列表
-                    List<Object> paramList = createParamList(matcher, requestParamMap, requestParamTypes);
+                    List<Object> paramList;
+                    boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+                    if (isMultipart) {
+                        paramList = createParamListMultipart(request);
+                    } else {
+                        paramList = createParamList(matcher, requestParamTypes);
+                    }
+                    // 向参数列表中添加请求参数映射（包括：Query String 与 Form Data）
+                    Map<String, String> requestParamMap = WebUtil.getRequestParamMap(request);
+                    if (MapUtil.isNotEmpty(requestParamMap)) {
+                        paramList.add(requestParamMap);
+                    }
                     // 处理 Action 方法
                     handleActionMethod(request, response, actionClass, actionMethod, paramList);
                     // JSP 映射成功
@@ -86,6 +103,9 @@ public class DispatcherServlet extends HttpServlet {
                     break;
                 }
             }
+        } catch (Exception e) {
+            logger.error("执行 DispatcherServlet 出错！", e);
+            throw new RuntimeException(e);
         } finally {
             // 销毁 DataContext
             DataContext.destroy();
@@ -100,7 +120,45 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
-    private List<Object> createParamList(Matcher matcher, Map<String, String> requestParamMap, Class<?>[] requestParamTypes) {
+    private List<Object> createParamListMultipart(HttpServletRequest request) throws Exception {
+        // 定义参数列表
+        List<Object> paramList = new ArrayList<Object>();
+        // 创建两个 Map，分别对应 普通字段 与 文件字段
+        Map<String, String> fieldMap = new HashMap<String, String>();
+        Map<String, Multipart> multipartMap = new HashMap<String, Multipart>();
+        // 获取并遍历表单项
+        FileItemFactory factory = new DiskFileItemFactory();
+        ServletFileUpload upload = new ServletFileUpload(factory);
+        List<FileItem> items = upload.parseRequest(request);
+        for (FileItem item : items) {
+            // 分两种情况处理表单项
+            String fieldName = item.getFieldName();
+            if (item.isFormField()) {
+                // 处理普通字段
+                String fieldValue = item.getString();
+                fieldMap.put(fieldName, fieldValue);
+            } else {
+                // 处理文件字段
+                String fileName = CodecUtil.encodeBase64(item.getName());
+                InputStream inputSteam = item.getInputStream();
+                Multipart multipart = new Multipart(fileName, inputSteam);
+                multipartMap.put(fieldName, multipart);
+                fieldMap.put(fieldName, fileName);
+            }
+        }
+        // 初始化参数列表
+        if (MapUtil.isNotEmpty(fieldMap)) {
+            paramList.add(fieldMap);
+        }
+        if (MapUtil.isNotEmpty(multipartMap)) {
+            paramList.add(multipartMap);
+        }
+        // 返回参数列表
+        return paramList;
+    }
+
+    private List<Object> createParamList(Matcher matcher, Class<?>[] requestParamTypes) {
+        // 定义参数列表
         List<Object> paramList = new ArrayList<Object>();
         // 遍历正则表达式中所匹配的组
         for (int i = 1; i <= matcher.groupCount(); i++) {
@@ -118,10 +176,7 @@ public class DispatcherServlet extends HttpServlet {
                 paramList.add(param);
             }
         }
-        // 向参数列表中添加请求参数映射
-        if (MapUtil.isNotEmpty(requestParamMap)) {
-            paramList.add(requestParamMap);
-        }
+        // 返回参数列表
         return paramList;
     }
 
