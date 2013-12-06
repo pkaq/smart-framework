@@ -31,13 +31,11 @@ public class ContainerListener implements ServletContextListener {
         registerDefaultServlet(context);
         // 用 JspServlet 映射所有 JSP 请求
         registerJspServlet(context);
-        // 用 UploadServlet 映射 /upload.do 请求
-        registerUploadServlet(context);
     }
 
     private void registerDefaultServlet(ServletContext context) {
         ServletRegistration defaultServletReg = context.getServletRegistration(FrameworkConstant.DEFAULT_SERVLET_NAME);
-        defaultServletReg.addMapping(FrameworkConstant.FAVICON_ICO_URL);
+        defaultServletReg.addMapping("/favicon.ico");
         if (StringUtil.isNotEmpty(wwwPath)) {
             defaultServletReg.addMapping(wwwPath + "*");
         }
@@ -48,10 +46,5 @@ public class ContainerListener implements ServletContextListener {
             ServletRegistration jspServletReg = context.getServletRegistration(FrameworkConstant.JSP_SERVLET_NAME);
             jspServletReg.addMapping(jspPath + "*");
         }
-    }
-
-    private void registerUploadServlet(ServletContext context) {
-        ServletRegistration uploadServletReg = context.getServletRegistration(FrameworkConstant.UPLOAD_SERVLET_NAME);
-        uploadServletReg.addMapping(FrameworkConstant.UPLOAD_SERVLET_URL);
     }
 }

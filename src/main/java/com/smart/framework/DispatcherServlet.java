@@ -9,7 +9,6 @@ import com.smart.framework.helper.ActionHelper;
 import com.smart.framework.helper.BeanHelper;
 import com.smart.framework.helper.ConfigHelper;
 import com.smart.framework.util.CastUtil;
-import com.smart.framework.util.CodecUtil;
 import com.smart.framework.util.MapUtil;
 import com.smart.framework.util.StringUtil;
 import com.smart.framework.util.WebUtil;
@@ -31,6 +30,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 @WebServlet("/*")
@@ -39,8 +39,8 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
 
     // 获取相关配置项
-    private final String homePage = ConfigHelper.getStringProperty(FrameworkConstant.APP_HOME_PAGE);
-    private final String jspPath = ConfigHelper.getStringProperty(FrameworkConstant.APP_JSP_PATH);
+    private static final String homePage = ConfigHelper.getStringProperty(FrameworkConstant.APP_HOME_PAGE);
+    private static final String jspPath = ConfigHelper.getStringProperty(FrameworkConstant.APP_JSP_PATH);
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -71,32 +71,18 @@ public class DispatcherServlet extends HttpServlet {
                 RequestBean requestBean = actionEntry.getKey();
                 String requestMethod = requestBean.getRequestMethod();
                 String requestPath = requestBean.getRequestPath(); // 正则表达式
-                // 获取正则表达式匹配器（用于匹配请求路径并从中获取相应的请求参数）
-                Matcher matcher = Pattern.compile(requestPath).matcher(currentRequestPath);
+                // 获取请求路径匹配器（使用正则表达式匹配请求路径并从中获取相应的请求参数）
+                Matcher requestPathMatcher = Pattern.compile(requestPath).matcher(currentRequestPath);
                 // 判断请求方法与请求路径是否同时匹配
-                if (requestMethod.equalsIgnoreCase(currentRequestMethod) && matcher.matches()) {
-                    // 获取 ActionBean
+                if (requestMethod.equalsIgnoreCase(currentRequestMethod) && requestPathMatcher.matches()) {
+                    // 获取 ActionBean 及其相关属性
                     ActionBean actionBean = actionEntry.getValue();
-                    // 从 ActionBean 中获取 Action 相关属性
                     Class<?> actionClass = actionBean.getActionClass();
                     Method actionMethod = actionBean.getActionMethod();
-                    // 获取 Action 方法参数类型
-                    Class<?>[] requestParamTypes = actionBean.getActionMethod().getParameterTypes();
                     // 创建 Action 方法参数列表
-                    List<Object> paramList;
-                    boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-                    if (isMultipart) {
-                        paramList = createParamListMultipart(request);
-                    } else {
-                        paramList = createParamList(matcher, requestParamTypes);
-                    }
-                    // 向参数列表中添加请求参数映射（包括：Query String 与 Form Data）
-                    Map<String, String> requestParamMap = WebUtil.getRequestParamMap(request);
-                    if (MapUtil.isNotEmpty(requestParamMap)) {
-                        paramList.add(requestParamMap);
-                    }
-                    // 处理 Action 方法
-                    handleActionMethod(request, response, actionClass, actionMethod, paramList);
+                    List<Object> actionMethodParamList = createActionMethodParamList(request, requestPathMatcher, actionBean);
+                    // 调用 Action 方法
+                    invokeActionMethod(request, response, actionClass, actionMethod, actionMethodParamList);
                     // JSP 映射成功
                     jspMapped = true;
                     // 若成功匹配，则终止循环
@@ -120,52 +106,37 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
-    private List<Object> createParamListMultipart(HttpServletRequest request) throws Exception {
+    private List<Object> createActionMethodParamList(HttpServletRequest request, Matcher requestPathMatcher, ActionBean actionBean) throws Exception {
         // 定义参数列表
         List<Object> paramList = new ArrayList<Object>();
-        // 创建两个 Map，分别对应 普通字段 与 文件字段
-        Map<String, String> fieldMap = new HashMap<String, String>();
-        Map<String, Multipart> multipartMap = new HashMap<String, Multipart>();
-        // 获取并遍历表单项
-        FileItemFactory factory = new DiskFileItemFactory();
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        List<FileItem> items = upload.parseRequest(request);
-        for (FileItem item : items) {
-            // 分两种情况处理表单项
-            String fieldName = item.getFieldName();
-            if (item.isFormField()) {
-                // 处理普通字段
-                String fieldValue = item.getString();
-                fieldMap.put(fieldName, fieldValue);
-            } else {
-                // 处理文件字段
-                String fileName = CodecUtil.encodeBase64(item.getName());
-                InputStream inputSteam = item.getInputStream();
-                Multipart multipart = new Multipart(fileName, inputSteam);
-                multipartMap.put(fieldName, multipart);
-                fieldMap.put(fieldName, fileName);
+        // 获取 Action 方法参数类型
+        Class<?>[] actionParamTypes = actionBean.getActionMethod().getParameterTypes();
+        // 添加路径参数列表（请求路径中的带占位符参数）
+        paramList.addAll(createPathParamList(requestPathMatcher, actionParamTypes));
+        // 分两种情况进行处理
+        if (isMultipart(request)) {
+            // 添加 Multipart 请求参数列表
+            paramList.addAll(createMultipartParamList(request));
+        } else {
+            // 添加普通请求参数列表（包括 Query String 与 Form Data）
+            Map<String, String> requestParamMap = WebUtil.getRequestParamMap(request);
+            if (MapUtil.isNotEmpty(requestParamMap)) {
+                paramList.add(requestParamMap);
             }
-        }
-        // 初始化参数列表
-        if (MapUtil.isNotEmpty(fieldMap)) {
-            paramList.add(fieldMap);
-        }
-        if (MapUtil.isNotEmpty(multipartMap)) {
-            paramList.add(multipartMap);
         }
         // 返回参数列表
         return paramList;
     }
 
-    private List<Object> createParamList(Matcher matcher, Class<?>[] requestParamTypes) {
+    private List<Object> createPathParamList(Matcher requestPathMatcher, Class<?>[] actionParamTypes) {
         // 定义参数列表
         List<Object> paramList = new ArrayList<Object>();
         // 遍历正则表达式中所匹配的组
-        for (int i = 1; i <= matcher.groupCount(); i++) {
+        for (int i = 1; i <= requestPathMatcher.groupCount(); i++) {
             // 获取请求参数
-            String param = matcher.group(i);
+            String param = requestPathMatcher.group(i);
             // 获取参数类型（支持四种类型：int/Integer、long/Long、double/Double、String）
-            Class<?> paramType = requestParamTypes[i - 1];
+            Class<?> paramType = actionParamTypes[i - 1];
             if (paramType.equals(int.class) || paramType.equals(Integer.class)) {
                 paramList.add(CastUtil.castInt(param));
             } else if (paramType.equals(long.class) || paramType.equals(Long.class)) {
@@ -180,14 +151,51 @@ public class DispatcherServlet extends HttpServlet {
         return paramList;
     }
 
-    private void handleActionMethod(HttpServletRequest request, HttpServletResponse response, Class<?> actionClass, Method actionMethod, List<Object> paramList) {
+    private boolean isMultipart(HttpServletRequest request) {
+        return ServletFileUpload.isMultipartContent(request);
+    }
+
+    private List<Object> createMultipartParamList(HttpServletRequest request) throws Exception {
+        // 定义参数列表
+        List<Object> paramList = new ArrayList<Object>();
+        // 创建两个 Map，分别对应 普通字段 与 文件字段
+        Map<String, String> fieldMap = new HashMap<String, String>();
+        Map<String, Multipart> multipartMap = new HashMap<String, Multipart>();
+        // 获取并遍历表单项
+        FileItemFactory factory = new DiskFileItemFactory();
+        ServletFileUpload upload = new ServletFileUpload(factory);
+        List<FileItem> items = upload.parseRequest(request);
+        for (FileItem item : items) {
+            // 分两种情况处理表单项
+            String fieldName = item.getFieldName();
+            if (item.isFormField()) {
+                // 处理普通字段
+                String fieldValue = item.getString(FrameworkConstant.DEFAULT_CHARSET);
+                fieldMap.put(fieldName, fieldValue);
+            } else {
+                // 处理文件字段
+                String fileName = FilenameUtils.getName(item.getName());
+                InputStream inputSteam = item.getInputStream();
+                Multipart multipart = new Multipart(fileName, inputSteam);
+                multipartMap.put(fieldName, multipart);
+                fieldMap.put(fieldName, fileName);
+            }
+        }
+        // 初始化参数列表
+        paramList.add(fieldMap);
+        paramList.add(multipartMap);
+        // 返回参数列表
+        return paramList;
+    }
+
+    private void invokeActionMethod(HttpServletRequest request, HttpServletResponse response, Class<?> actionClass, Method actionMethod, List<Object> actionMethodParamList) {
         // 从 BeanHelper 中创建 Action 实例
         Object actionInstance = BeanHelper.getBean(actionClass);
         // 调用 Action 方法
         Object actionMethodResult;
         try {
             actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
-            actionMethodResult = actionMethod.invoke(actionInstance, paramList.toArray());
+            actionMethodResult = actionMethod.invoke(actionInstance, actionMethodParamList.toArray());
         } catch (Exception e) {
             // 处理 Action 方法异常
             handleActionMethodException(request, response, e);
@@ -219,9 +227,15 @@ public class DispatcherServlet extends HttpServlet {
         // 判断返回值类型
         if (actionMethodResult != null) {
             if (actionMethodResult instanceof Result) {
-                // 若为 Result 类型，则转换为 JSON 格式并写入响应中
+                // 若为 Result 类型，则需要分两种情况进行处理
                 Result result = (Result) actionMethodResult;
-                WebUtil.writeJSON(response, result);
+                if (isMultipart(request)) {
+                    // 转换为 HTML 格式并写入响应中（文件上传必须指定 Response 的 Content-Type 为 text/html）
+                    WebUtil.writeHTML(response, result);
+                } else {
+                    // 转换为 JSON 格式并写入响应中
+                    WebUtil.writeJSON(response, result);
+                }
             } else if (actionMethodResult instanceof Page) {
                 // 若为 Page 类型，则 转发 或 重定向 到相应的页面中
                 Page page = (Page) actionMethodResult;

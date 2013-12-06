@@ -183,4 +183,26 @@ public class FileUtil {
             }
         }
     }
+
+    // 上传文件
+    public static void uploadFile(String filePath, InputStream inputStream) {
+        OutputStream outputStream = null;
+        try {
+            createFile(filePath);
+            outputStream = new FileOutputStream(filePath);
+            StreamUtil.copyStream(inputStream, outputStream);
+        } catch (Exception e) {
+            logger.error("上传文件出错！", e);
+            throw new RuntimeException(e);
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (Exception e) {
+                    logger.error("释放资源出错！", e);
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
