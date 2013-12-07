@@ -1,40 +1,34 @@
 package com.smart.framework;
 
 import com.smart.framework.bean.ActionBean;
-import com.smart.framework.bean.Multipart;
 import com.smart.framework.bean.Page;
 import com.smart.framework.bean.RequestBean;
 import com.smart.framework.bean.Result;
 import com.smart.framework.helper.ActionHelper;
 import com.smart.framework.helper.BeanHelper;
 import com.smart.framework.helper.ConfigHelper;
+import com.smart.framework.helper.UploadHelper;
 import com.smart.framework.util.CastUtil;
-import com.smart.framework.util.CodecUtil;
 import com.smart.framework.util.MapUtil;
 import com.smart.framework.util.StringUtil;
 import com.smart.framework.util.WebUtil;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
-@WebServlet("/*")
+@WebServlet(urlPatterns = "/*", loadOnStartup = 0)
 public class DispatcherServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
@@ -44,12 +38,19 @@ public class DispatcherServlet extends HttpServlet {
     private static final String jspPath = ConfigHelper.getStringProperty(FrameworkConstant.APP_JSP_PATH);
 
     @Override
+    public void init(ServletConfig config) throws ServletException {
+        // 初始化相关配置
+        ServletContext servletContext = config.getServletContext();
+        UploadHelper.init(servletContext);
+    }
+
+    @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 获取当前请求相关数据
         String currentRequestMethod = request.getMethod();
         String currentRequestPath = WebUtil.getRequestPath(request);
         if (logger.isDebugEnabled()) {
-            logger.debug(currentRequestMethod + ":" + currentRequestPath);
+            logger.debug("[Smart] " + currentRequestMethod + ":" + currentRequestPath);
         }
         // 将“/”请求重定向到首页
         if (currentRequestPath.equals("/")) {
@@ -115,9 +116,9 @@ public class DispatcherServlet extends HttpServlet {
         // 添加路径参数列表（请求路径中的带占位符参数）
         paramList.addAll(createPathParamList(requestPathMatcher, actionParamTypes));
         // 分两种情况进行处理
-        if (isMultipart(request)) {
+        if (UploadHelper.isMultipart(request)) {
             // 添加 Multipart 请求参数列表
-            paramList.addAll(createMultipartParamList(request));
+            paramList.addAll(UploadHelper.createMultipartParamList(request));
         } else {
             // 添加普通请求参数列表（包括 Query String 与 Form Data）
             Map<String, String> requestParamMap = WebUtil.getRequestParamMap(request);
@@ -147,49 +148,6 @@ public class DispatcherServlet extends HttpServlet {
             } else if (paramType.equals(String.class)) {
                 paramList.add(param);
             }
-        }
-        // 返回参数列表
-        return paramList;
-    }
-
-    private boolean isMultipart(HttpServletRequest request) {
-        return ServletFileUpload.isMultipartContent(request);
-    }
-
-    private List<Object> createMultipartParamList(HttpServletRequest request) throws Exception {
-        // 定义参数列表
-        List<Object> paramList = new ArrayList<Object>();
-        // 创建两个对象，分别对应 普通字段 与 文件字段
-        Map<String, String> fieldMap = new HashMap<String, String>();
-        List<Multipart> multipartList = new ArrayList<Multipart>();
-        // 获取并遍历表单项
-        FileItemFactory factory = new DiskFileItemFactory();
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        List<FileItem> items = upload.parseRequest(request);
-        for (FileItem item : items) {
-            // 分两种情况处理表单项
-            String fieldName = item.getFieldName();
-            if (item.isFormField()) {
-                // 处理普通字段
-                String fieldValue = item.getString(FrameworkConstant.DEFAULT_CHARSET);
-                fieldMap.put(fieldName, fieldValue);
-            } else {
-                // 处理文件字段
-                String fileName = item.getName();
-                String originalFileName = FilenameUtils.getName(fileName); // 去掉路径（在 IE 中是包含路径的）
-                String encodedFileName = CodecUtil.encodeBase64(FilenameUtils.getBaseName(originalFileName)) + "." + FilenameUtils.getExtension(originalFileName);
-                InputStream inputSteam = item.getInputStream();
-                Multipart multipart = new Multipart(encodedFileName, inputSteam);
-                multipartList.add(multipart);
-                fieldMap.put(fieldName, encodedFileName);
-            }
-        }
-        // 初始化参数列表
-        paramList.add(fieldMap);
-        if (multipartList.size() == 1) {
-            paramList.add(multipartList.get(0));
-        } else {
-            paramList.add(multipartList);
         }
         // 返回参数列表
         return paramList;
@@ -236,7 +194,7 @@ public class DispatcherServlet extends HttpServlet {
             if (actionMethodResult instanceof Result) {
                 // 若为 Result 类型，则需要分两种情况进行处理
                 Result result = (Result) actionMethodResult;
-                if (isMultipart(request)) {
+                if (UploadHelper.isMultipart(request)) {
                     // 转换为 HTML 格式并写入响应中（文件上传必须指定 Response 的 Content-Type 为 text/html）
                     WebUtil.writeHTML(response, result);
                 } else {
