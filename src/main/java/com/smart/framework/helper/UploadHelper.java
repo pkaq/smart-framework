@@ -72,20 +72,24 @@ public class UploadHelper {
         }
         // 初始化参数列表
         paramList.add(fieldMap);
-        if (multipartList.size() == 1) {
+        if (multipartList.size() > 1) {
+            paramList.add(multipartList);
+        } else if (multipartList.size() == 1) {
             paramList.add(multipartList.get(0));
         } else {
-            paramList.add(multipartList);
+            paramList.add(null);
         }
         // 返回参数列表
         return paramList;
     }
 
     public static void upload(String basePath, Multipart multipart) {
-        String fileName = multipart.getFileName();
-        InputStream inputStream = multipart.getInputStream();
-        String filePath = basePath + fileName;
-        FileUtil.uploadFile(filePath, inputStream);
+        if (multipart != null) {
+            String fileName = multipart.getFileName();
+            InputStream inputStream = multipart.getInputStream();
+            String filePath = basePath + fileName;
+            FileUtil.uploadFile(filePath, inputStream);
+        }
     }
 
     public static void upload(String basePath, List<Multipart> multipartList) {
