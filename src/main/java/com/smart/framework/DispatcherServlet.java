@@ -9,6 +9,7 @@ import com.smart.framework.helper.ActionHelper;
 import com.smart.framework.helper.BeanHelper;
 import com.smart.framework.helper.ConfigHelper;
 import com.smart.framework.util.CastUtil;
+import com.smart.framework.util.CodecUtil;
 import com.smart.framework.util.MapUtil;
 import com.smart.framework.util.StringUtil;
 import com.smart.framework.util.WebUtil;
@@ -158,9 +159,9 @@ public class DispatcherServlet extends HttpServlet {
     private List<Object> createMultipartParamList(HttpServletRequest request) throws Exception {
         // 定义参数列表
         List<Object> paramList = new ArrayList<Object>();
-        // 创建两个 Map，分别对应 普通字段 与 文件字段
+        // 创建两个对象，分别对应 普通字段 与 文件字段
         Map<String, String> fieldMap = new HashMap<String, String>();
-        Map<String, Multipart> multipartMap = new HashMap<String, Multipart>();
+        List<Multipart> multipartList = new ArrayList<Multipart>();
         // 获取并遍历表单项
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
@@ -174,16 +175,22 @@ public class DispatcherServlet extends HttpServlet {
                 fieldMap.put(fieldName, fieldValue);
             } else {
                 // 处理文件字段
-                String fileName = FilenameUtils.getName(item.getName());
+                String fileName = item.getName();
+                String originalFileName = FilenameUtils.getName(fileName); // 去掉路径（在 IE 中是包含路径的）
+                String encodedFileName = CodecUtil.encodeBase64(FilenameUtils.getBaseName(originalFileName)) + "." + FilenameUtils.getExtension(originalFileName);
                 InputStream inputSteam = item.getInputStream();
-                Multipart multipart = new Multipart(fileName, inputSteam);
-                multipartMap.put(fieldName, multipart);
-                fieldMap.put(fieldName, fileName);
+                Multipart multipart = new Multipart(encodedFileName, inputSteam);
+                multipartList.add(multipart);
+                fieldMap.put(fieldName, encodedFileName);
             }
         }
         // 初始化参数列表
         paramList.add(fieldMap);
-        paramList.add(multipartMap);
+        if (multipartList.size() == 1) {
+            paramList.add(multipartList.get(0));
+        } else {
+            paramList.add(multipartList);
+        }
         // 返回参数列表
         return paramList;
     }
