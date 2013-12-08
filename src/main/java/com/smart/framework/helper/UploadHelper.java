@@ -61,13 +61,11 @@ public class UploadHelper {
                 fieldMap.put(fieldName, fieldValue);
             } else {
                 // 处理文件字段
-                String fileName = item.getName();
-                String originalFileName = FilenameUtils.getName(fileName); // 去掉路径（在 IE 中是包含路径的）
-                String encodedFileName = CodecUtil.encodeBase64(FilenameUtils.getBaseName(originalFileName)) + "." + FilenameUtils.getExtension(originalFileName);
+                String fileName = getFileName(item);
                 InputStream inputSteam = item.getInputStream();
-                Multipart multipart = new Multipart(encodedFileName, inputSteam);
+                Multipart multipart = new Multipart(fileName, inputSteam);
                 multipartList.add(multipart);
-                fieldMap.put(fieldName, encodedFileName);
+                fieldMap.put(fieldName, fileName);
             }
         }
         // 初始化参数列表
@@ -81,6 +79,14 @@ public class UploadHelper {
         }
         // 返回参数列表
         return paramList;
+    }
+
+    private static String getFileName(FileItem item) {
+        String fileName = item.getName();
+        fileName = FilenameUtils.getName(fileName); // 去掉路径（在 IE 中是包含路径的）
+        String prefix = FilenameUtils.getBaseName(fileName);
+        String suffix = FilenameUtils.getExtension(fileName);
+        return System.currentTimeMillis() + "-" + CodecUtil.encodeBase64(prefix) + "." + suffix;
     }
 
     public static void upload(String basePath, Multipart multipart) {
