@@ -108,9 +108,12 @@
     <distributionManagement>
         <repository>
             <id>osc</id>
-            <name>OSC</name>
             <url>http://maven.oschina.net/content/repositories/thirdparty/</url>
         </repository>
+        <snapshotRepository>
+            <id>osc</id>
+            <url>http://maven.oschina.net/content/repositories/osc_snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
 
 </project>
