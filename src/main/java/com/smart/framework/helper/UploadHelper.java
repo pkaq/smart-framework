@@ -2,7 +2,6 @@ package com.smart.framework.helper;
 
 import com.smart.framework.FrameworkConstant;
 import com.smart.framework.bean.Multipart;
-import com.smart.framework.util.CodecUtil;
 import com.smart.framework.util.FileUtil;
 import java.io.File;
 import java.io.InputStream;
@@ -28,9 +27,6 @@ public class UploadHelper {
 
     public static void init(ServletContext servletContext) {
         File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
-        if (logger.isDebugEnabled()) {
-            logger.debug("[Smart] temp dir of uploading: " + repository.getAbsolutePath());
-        }
         fileUpload = new ServletFileUpload(new DiskFileItemFactory(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD, repository));
         if (uploadLimit != 0) {
             fileUpload.setFileSizeMax(uploadLimit * 1024 * 1024);
@@ -61,11 +57,12 @@ public class UploadHelper {
                 fieldMap.put(fieldName, fieldValue);
             } else {
                 // 处理文件字段
-                String fileName = getFileName(item);
+                String originalFileName = FilenameUtils.getName(item.getName());
+                String uploadedFileName = FileUtil.getEncodedFileName(originalFileName);
                 InputStream inputSteam = item.getInputStream();
-                Multipart multipart = new Multipart(fileName, inputSteam);
+                Multipart multipart = new Multipart(uploadedFileName, inputSteam);
                 multipartList.add(multipart);
-                fieldMap.put(fieldName, fileName);
+                fieldMap.put(fieldName, uploadedFileName);
             }
         }
         // 初始化参数列表
@@ -79,28 +76,5 @@ public class UploadHelper {
         }
         // 返回参数列表
         return paramList;
-    }
-
-    private static String getFileName(FileItem item) {
-        String fileName = item.getName();
-        fileName = FilenameUtils.getName(fileName); // 去掉路径（在 IE 中是包含路径的）
-        String prefix = FilenameUtils.getBaseName(fileName);
-        String suffix = FilenameUtils.getExtension(fileName);
-        return System.currentTimeMillis() + "-" + CodecUtil.encodeBase64(prefix) + "." + suffix;
-    }
-
-    public static void upload(String basePath, Multipart multipart) {
-        if (multipart != null) {
-            String fileName = multipart.getFileName();
-            InputStream inputStream = multipart.getInputStream();
-            String filePath = basePath + fileName;
-            FileUtil.uploadFile(filePath, inputStream);
-        }
-    }
-
-    public static void upload(String basePath, List<Multipart> multipartList) {
-        for (Multipart multipart : multipartList) {
-            upload(basePath, multipart);
-        }
     }
 }
