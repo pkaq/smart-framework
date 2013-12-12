@@ -47,7 +47,7 @@ public class DataSet {
     // 查询数据条数
     public static int selectCount(Class<?> cls, String condition, Object... params) {
         String sql = SQLHelper.generateSelectSQLForCount(cls, condition);
-        return DBHelper.queryCount(cls, sql, params);
+        return DBHelper.queryCount(sql, params);
     }
 
     // 查询多条数据，并转为列表（分页方式）
