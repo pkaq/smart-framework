@@ -168,7 +168,7 @@ public class DBHelper {
     }
 
     // 执行查询（返回 count 结果）
-    public static int queryCount(Class<?> cls, String sql, Object... params) {
+    public static int queryCount(String sql, Object... params) {
         return CastUtil.castInt(DBUtil.queryColumn(runner, "count(*)", sql, params));
     }
 
