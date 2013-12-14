@@ -1,17 +1,14 @@
 package com.smart.framework.util;
 
 import com.smart.framework.FrameworkConstant;
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Properties;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
@@ -183,7 +180,6 @@ public class FileUtil {
                 }
             } catch (Exception e) {
                 logger.error("释放资源出错！", e);
-                e.printStackTrace();
             }
         }
     }
@@ -200,36 +196,5 @@ public class FileUtil {
         String prefix = FilenameUtils.getBaseName(fileName);
         String suffix = FilenameUtils.getExtension(fileName);
         return CodecUtil.decodeBase64(prefix) + "." + suffix;
-    }
-
-    // 上传文件
-    public static void uploadFile(String filePath, InputStream inputStream) {
-        try {
-            createFile(filePath);
-            OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(filePath));
-            StreamUtil.copyStream(inputStream, outputStream);
-        } catch (Exception e) {
-            logger.error("上传文件出错！", e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    // 下载文件
-    public static void downloadFile(String filePath, HttpServletResponse response) {
-        try {
-            String originalFileName = FilenameUtils.getName(filePath);
-            String decodedFileName = getDecodedFileName(originalFileName);
-            String downloadedFileName = new String(decodedFileName.getBytes(), "ISO-8859-1");
-
-            response.setContentType("application/octet-stream");
-            response.addHeader("Content-Disposition", "attachment;filename=" + downloadedFileName);
-
-            InputStream inputStream = new BufferedInputStream(new FileInputStream(filePath));
-            OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
-            StreamUtil.copyStream(inputStream, outputStream);
-        } catch (Exception e) {
-            logger.error("下载文件出错！", e);
-            throw new RuntimeException(e);
-        }
     }
 }

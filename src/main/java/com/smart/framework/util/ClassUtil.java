@@ -139,7 +139,7 @@ public class ClassUtil {
                         if (isRecursive) {
                             String subPackagePath = getSubPackagePath(packagePath, fileName);
                             String subPackageName = getSubPackageName(packageName, fileName);
-                            addClass(classList, subPackagePath, subPackageName, isRecursive);
+                            addClass(classList, subPackagePath, subPackageName, true);
                         }
                     }
                 }

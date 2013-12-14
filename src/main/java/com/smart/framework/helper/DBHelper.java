@@ -4,6 +4,7 @@ import com.smart.framework.util.CastUtil;
 import com.smart.framework.util.DBUtil;
 import com.smart.framework.util.StringUtil;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -20,16 +21,7 @@ public class DBHelper {
     // 定义一个局部线程变量（使每个线程都拥有自己的连接）
     private static final ThreadLocal<Connection> connContainer = new ThreadLocal<Connection>();
 
-    private static String dbType;
-
     static {
-        // 初始化数据源
-        initDataSource();
-        // 获取数据库类型
-        initDBType();
-    }
-
-    private static void initDataSource() {
         // 从配置文件中获取配置项
         String driver = ConfigHelper.getStringProperty("jdbc.driver");
         String url = ConfigHelper.getStringProperty("jdbc.url");
@@ -55,14 +47,6 @@ public class DBHelper {
         }
         if (maxIdle != 0) {
             ds.setMaxIdle(maxIdle);
-        }
-    }
-
-    private static void initDBType() {
-        try {
-            dbType = ds.getConnection().getMetaData().getDatabaseProductName();
-        } catch (Exception e) {
-            logger.error("初始化 DBHelper 出错！", e);
         }
     }
 
@@ -145,6 +129,13 @@ public class DBHelper {
 
     // 获取数据库类型
     public static String getDBType() {
+        String dbType;
+        try {
+            dbType = ds.getConnection().getMetaData().getDatabaseProductName();
+        } catch (SQLException e) {
+            logger.error("获取数据库类型出错！", e);
+            throw new RuntimeException(e);
+        }
         return dbType;
     }
 

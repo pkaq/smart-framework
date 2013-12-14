@@ -3,8 +3,13 @@ package com.smart.framework.helper;
 import com.smart.framework.FrameworkConstant;
 import com.smart.framework.bean.Multipart;
 import com.smart.framework.util.FileUtil;
+import com.smart.framework.util.StreamUtil;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,5 +81,20 @@ public class UploadHelper {
         }
         // 返回参数列表
         return paramList;
+    }
+
+    public static void uploadFile(String basePath, Multipart multipart) {
+        try {
+            // 创建文件路径（绝对路径）
+            String filePath = basePath + multipart.getFileName();
+            FileUtil.createFile(filePath);
+            // 执行流复制操作
+            InputStream inputStream = new BufferedInputStream(multipart.getInputStream());
+            OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(filePath));
+            StreamUtil.copyStream(inputStream, outputStream);
+        } catch (Exception e) {
+            logger.error("上传文件出错！", e);
+            throw new RuntimeException(e);
+        }
     }
 }

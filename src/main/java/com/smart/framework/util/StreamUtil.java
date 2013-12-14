@@ -14,7 +14,7 @@ public class StreamUtil {
     public static void copyStream(InputStream inputStream, OutputStream outputStream) {
         try {
             int length;
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[4 * 1024];
             while ((length = inputStream.read(buffer, 0, buffer.length)) != -1) {
                 outputStream.write(buffer, 0, length);
             }
@@ -28,7 +28,6 @@ public class StreamUtil {
                 outputStream.close();
             } catch (Exception e) {
                 logger.error("释放资源出错！", e);
-                e.printStackTrace();
             }
         }
     }

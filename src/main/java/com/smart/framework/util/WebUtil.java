@@ -1,7 +1,11 @@
 package com.smart.framework.util;
 
 import com.smart.framework.FrameworkConstant;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Enumeration;
@@ -12,6 +16,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 public class WebUtil {
@@ -251,5 +256,24 @@ public class WebUtil {
             throw new RuntimeException(e);
         }
         return content;
+    }
+
+    // 下载文件
+    public static void downloadFile(HttpServletResponse response, String filePath) {
+        try {
+            String originalFileName = FilenameUtils.getName(filePath);
+            String decodedFileName = FileUtil.getDecodedFileName(originalFileName);
+            String downloadedFileName = new String(decodedFileName.getBytes(), "ISO-8859-1");
+
+            response.setContentType("application/octet-stream");
+            response.addHeader("Content-Disposition", "attachment;filename=" + downloadedFileName);
+
+            InputStream inputStream = new BufferedInputStream(new FileInputStream(filePath));
+            OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+            StreamUtil.copyStream(inputStream, outputStream);
+        } catch (Exception e) {
+            logger.error("下载文件出错！", e);
+            throw new RuntimeException(e);
+        }
     }
 }
