@@ -14,7 +14,7 @@ public class SQLHelper {
 
     private static final Logger logger = Logger.getLogger(SQLHelper.class);
 
-    private static final Properties sqlProps = FileUtil.loadPropFile("sql.properties");
+    private static final Properties sqlProps = FileUtil.loadPropsFile("sql.properties");
 
     public static String getSQL(String key) {
         String value = "";

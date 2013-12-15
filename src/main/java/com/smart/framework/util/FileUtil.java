@@ -18,8 +18,8 @@ public class FileUtil {
     private static final Logger logger = Logger.getLogger(FileUtil.class);
 
     // 加载 properties 文件
-    public static Properties loadPropFile(String propPath) {
-        Properties prop = new Properties();
+    public static Properties loadPropsFile(String propPath) {
+        Properties props = new Properties();
         InputStream is = null;
         try {
             String suffix = ".properties";
@@ -28,7 +28,7 @@ public class FileUtil {
             }
             is = Thread.currentThread().getContextClassLoader().getResourceAsStream(propPath);
             if (is != null) {
-                prop.load(is);
+                props.load(is);
             }
         } catch (Exception e) {
             logger.error("加载 properties 文件出错！", e);
@@ -42,7 +42,7 @@ public class FileUtil {
                 logger.error("加载 properties 文件出错！", e);
             }
         }
-        return prop;
+        return props;
     }
 
     // 创建目录

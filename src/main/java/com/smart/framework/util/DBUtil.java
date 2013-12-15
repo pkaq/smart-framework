@@ -1,7 +1,6 @@
 package com.smart.framework.util;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -22,45 +21,6 @@ import org.apache.log4j.Logger;
 public class DBUtil {
 
     private static final Logger logger = Logger.getLogger(DBUtil.class);
-
-    // 打开数据库连接（type: MySQL，Oracle，SQLServer）
-    public static Connection openConnection(String type, String host, String port, String name, String username, String password) {
-        Connection conn;
-        try {
-            String driver;
-            String url;
-            if (type.equalsIgnoreCase("MySQL")) {
-                driver = "com.mysql.jdbc.Driver";
-                url = "jdbc:mysql://" + host + ":" + port + "/" + name;
-            } else if (type.equalsIgnoreCase("Oracle")) {
-                driver = "oracle.jdbc.driver.OracleDriver";
-                url = "jdbc:oracle:thin:@" + host + ":" + port + ":" + name;
-            } else if (type.equalsIgnoreCase("SQLServer")) {
-                driver = "com.microsoft.jdbc.sqlserver.SQLServerDriver";
-                url = "jdbc:sqlserver://" + host + ":" + port + ";databaseName=" + name;
-            } else {
-                throw new RuntimeException();
-            }
-            Class.forName(driver);
-            conn = DriverManager.getConnection(url, username, password);
-        } catch (Exception e) {
-            logger.error("打开数据库连接出错！", e);
-            throw new RuntimeException(e);
-        }
-        return conn;
-    }
-
-    // 关闭数据库连接
-    public static void closeConnection(Connection conn) {
-        try {
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (Exception e) {
-            logger.error("关闭数据库连接出错！", e);
-            throw new RuntimeException(e);
-        }
-    }
 
     // 查询（返回 Array）
     public static Object[] queryArray(QueryRunner runner, String sql, Object... params) {

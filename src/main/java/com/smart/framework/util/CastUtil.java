@@ -33,27 +33,6 @@ public class CastUtil {
         return doubleValue;
     }
 
-    // 转为 float 型
-    public static float castFloat(Object obj) {
-        return CastUtil.castFloat(obj, 0);
-    }
-
-    // 转为 float 型（提供默认值）
-    public static float castFloat(Object obj, float defaultValue) {
-        float floatValue = defaultValue;
-        if (obj != null) {
-            String strValue = castString(obj);
-            if (StringUtil.isNotEmpty(strValue)) {
-                try {
-                    floatValue = Float.parseFloat(strValue);
-                } catch (NumberFormatException e) {
-                    floatValue = defaultValue;
-                }
-            }
-        }
-        return floatValue;
-    }
-
     // 转为 long 型
     public static long castLong(Object obj) {
         return CastUtil.castLong(obj, 0);
