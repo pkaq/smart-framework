@@ -7,37 +7,18 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 public class WebUtil {
 
     private static final Logger logger = Logger.getLogger(WebUtil.class);
-
-    // 将数据以纯文本格式写入响应中
-    public static void writeText(HttpServletResponse response, Object data) {
-        try {
-            // 设置响应头
-            response.setContentType("text/plain"); // 指定内容类型为纯文本格式
-            response.setCharacterEncoding(FrameworkConstant.DEFAULT_CHARSET); // 防止中文乱码
-
-            // 向响应中写入数据
-            PrintWriter writer = response.getWriter();
-            writer.write(data + ""); // 转为字符串
-        } catch (Exception e) {
-            logger.error("在响应中写数据出错！", e);
-            throw new RuntimeException(e);
-        }
-    }
 
     // 将数据以 JSON 格式写入响应中
     public static void writeJSON(HttpServletResponse response, Object data) {
@@ -69,29 +50,6 @@ public class WebUtil {
             logger.error("在响应中写数据出错！", e);
             throw new RuntimeException(e);
         }
-    }
-
-    // 获取上传文件路径
-    public static String getUploadFilePath(HttpServletRequest request, String relativePath) {
-        // 返回绝对路径
-        return request.getServletContext().getRealPath("") + relativePath;
-    }
-
-    // 获取上传文件名
-    public static String getUploadFileName(HttpServletRequest request, Part part) {
-        // 防止中文乱码（可放在 EncodingFilter 中处理）
-//        request.setCharacterEncoding(Constant.DEFAULT_CHARSET);
-
-        // 从请求头中获取文件名
-        String cd = part.getHeader("Content-Disposition");
-        String fileName = cd.substring(cd.lastIndexOf("=") + 2, cd.length() - 1);
-
-        // 解决 IE 浏览器文件名问题
-        if (fileName.contains("\\")) {
-            fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
-        }
-
-        return fileName;
     }
 
     // 从请求中获取所有参数（当参数名重复时，用后者覆盖前者）
@@ -150,23 +108,6 @@ public class WebUtil {
         return !paramName.equals("_"); // 忽略 jQuery 缓存参数
     }
 
-    // 创建查询映射（查询字符串格式：a:1;b:2）
-    public static Map<String, String> createQueryMap(String queryString) {
-        Map<String, String> queryMap = new HashMap<String, String>();
-        if (StringUtil.isNotEmpty(queryString)) {
-            String[] queryArray = queryString.split(";");
-            if (ArrayUtil.isNotEmpty(queryArray)) {
-                for (String query : queryArray) {
-                    String[] fieldArray = query.split(":");
-                    if (ArrayUtil.isNotEmpty(fieldArray) && fieldArray.length == 2) {
-                        queryMap.put(fieldArray[0], fieldArray[1]);
-                    }
-                }
-            }
-        }
-        return queryMap;
-    }
-
     // 转发请求
     public static void forwardRequest(String path, HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -209,22 +150,6 @@ public class WebUtil {
         return servletPath + pathInfo;
     }
 
-    // 将数据放入 Cookie 中
-    public static void addCookie(HttpServletResponse response, String name, String value, String domain, int expires) {
-        try {
-            if (StringUtil.isNotEmpty(name)) {
-                value = CodecUtil.encodeUTF8(value);
-                Cookie cookie = new Cookie(name, value);
-                cookie.setDomain(domain);
-                cookie.setMaxAge(expires);
-                response.addCookie(cookie);
-            }
-        } catch (Exception e) {
-            logger.error("添加 Cookie 出错！", e);
-            throw new RuntimeException(e);
-        }
-    }
-
     // 从 Cookie 中获取数据
     public static String getCookie(HttpServletRequest request, String name) {
         String value = "";
@@ -243,19 +168,6 @@ public class WebUtil {
             throw new RuntimeException(e);
         }
         return value;
-    }
-
-    // 获取 URL 内容
-    public static String getURLContent(String url) {
-        String content;
-        try {
-            InputStream is = new URL(url).openStream();
-            content = StreamUtil.getString(is);
-        } catch (Exception e) {
-            logger.error("获取 URL 内容出错！", e);
-            throw new RuntimeException(e);
-        }
-        return content;
     }
 
     // 下载文件
