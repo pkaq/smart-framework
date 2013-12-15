@@ -4,6 +4,8 @@ import com.smart.framework.bean.ActionBean;
 import com.smart.framework.bean.Page;
 import com.smart.framework.bean.RequestBean;
 import com.smart.framework.bean.Result;
+import com.smart.framework.exception.AccessException;
+import com.smart.framework.exception.UploadException;
 import com.smart.framework.helper.ActionHelper;
 import com.smart.framework.helper.BeanHelper;
 import com.smart.framework.helper.ConfigHelper;
@@ -91,9 +93,10 @@ public class DispatcherServlet extends HttpServlet {
                     break;
                 }
             }
+        } catch (UploadException e) {
+            logger.error("文件上传出错！", e);
         } catch (Exception e) {
             logger.error("执行 DispatcherServlet 出错！", e);
-            throw new RuntimeException(e);
         } finally {
             // 销毁 DataContext
             DataContext.destroy();
@@ -157,34 +160,30 @@ public class DispatcherServlet extends HttpServlet {
         // 从 BeanHelper 中创建 Action 实例
         Object actionInstance = BeanHelper.getBean(actionClass);
         // 调用 Action 方法
-        Object actionMethodResult;
+        Object actionMethodResult = null;
         try {
             actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
             actionMethodResult = actionMethod.invoke(actionInstance, actionMethodParamList.toArray());
+        } catch (AccessException e) {
+            // 处理访问异常
+            handleAccessException(request, response);
         } catch (Exception e) {
-            // 处理 Action 方法异常
-            handleActionMethodException(request, response, e);
-            // 直接返回
-            return;
+            // 对于其它类型的异常，只需记录错误日志，并向上抛出异常
+            logger.error("调用 Action 方法出错！", e);
+            throw new RuntimeException(e); // 这里需要向上抛出异常，否则无法定位到错误页面
         }
         // 处理 Action 方法返回值
         handleActionMethodReturn(request, response, actionMethodResult);
     }
 
-    private void handleActionMethodException(HttpServletRequest request, HttpServletResponse response, Exception e) {
-        if (e.getCause() instanceof AuthException) {
-            // 若为认证异常，则分两种情况进行处理
-            if (WebUtil.isAJAX(request)) {
-                // 若为 AJAX 请求，则发送 FORBIDDEN(403) 错误
-                WebUtil.sendError(HttpServletResponse.SC_FORBIDDEN, response);
-            } else {
-                // 否则重定向到首页
-                WebUtil.redirectRequest("/", request, response);
-            }
+    private void handleAccessException(HttpServletRequest request, HttpServletResponse response) {
+        // 分两种情况进行处理
+        if (WebUtil.isAJAX(request)) {
+            // 若为 AJAX 请求，则发送 FORBIDDEN(403) 错误
+            WebUtil.sendError(HttpServletResponse.SC_FORBIDDEN, response);
         } else {
-            // 若为其他异常，则记录错误日志
-            logger.error("调用 Action 方法出错！", e);
-            throw new RuntimeException(e); // 这里需要向上抛出异常，否则无法定位到错误页面
+            // 否则重定向到首页
+            WebUtil.redirectRequest("/", request, response);
         }
     }
 
@@ -195,10 +194,10 @@ public class DispatcherServlet extends HttpServlet {
                 // 若为 Result 类型，则需要分两种情况进行处理
                 Result result = (Result) actionMethodResult;
                 if (UploadHelper.isMultipart(request)) {
-                    // 转换为 HTML 格式并写入响应中（文件上传必须指定 Response 的 Content-Type 为 text/html）
+                    // 对于 multipart 类型，说明是文件下载，需要转换为 HTML 格式并写入响应中
                     WebUtil.writeHTML(response, result);
                 } else {
-                    // 转换为 JSON 格式并写入响应中
+                    // 对于其它类型，统一转换为 JSON 格式并写入响应中
                     WebUtil.writeJSON(response, result);
                 }
             } else if (actionMethodResult instanceof Page) {

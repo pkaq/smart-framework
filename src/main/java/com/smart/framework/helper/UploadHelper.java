@@ -2,6 +2,7 @@ package com.smart.framework.helper;
 
 import com.smart.framework.FrameworkConstant;
 import com.smart.framework.bean.Multipart;
+import com.smart.framework.exception.UploadException;
 import com.smart.framework.util.FileUtil;
 import com.smart.framework.util.StreamUtil;
 import java.io.BufferedInputStream;
@@ -17,24 +18,29 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 public class UploadHelper {
 
     private static final Logger logger = Logger.getLogger(UploadHelper.class);
 
+    // 获取上传限制
     private static final int uploadLimit = ConfigHelper.getNumberProperty(FrameworkConstant.APP_UPLOAD_LIMIT);
 
+    // 定义一个 FileUpload 对象（用于解析所上传的文件）
     private static ServletFileUpload fileUpload;
 
     public static void init(ServletContext servletContext) {
+        // 获取一个临时目录（使用 Tomcat 的 work 目录）
         File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+        // 创建 FileUpload 对象
         fileUpload = new ServletFileUpload(new DiskFileItemFactory(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD, repository));
+        // 设置上传限制
         if (uploadLimit != 0) {
-            fileUpload.setFileSizeMax(uploadLimit * 1024 * 1024);
+            fileUpload.setFileSizeMax(uploadLimit * 1024 * 1024); // 单位为 M
             if (logger.isDebugEnabled()) {
                 logger.debug("[Smart] limit of uploading: " + uploadLimit + "M");
             }
@@ -42,6 +48,7 @@ public class UploadHelper {
     }
 
     public static boolean isMultipart(HttpServletRequest request) {
+        // 判断上传文件的内容是否为 multipart 类型
         return ServletFileUpload.isMultipartContent(request);
     }
 
@@ -52,21 +59,31 @@ public class UploadHelper {
         Map<String, String> fieldMap = new HashMap<String, String>();
         List<Multipart> multipartList = new ArrayList<Multipart>();
         // 获取并遍历表单项
-        List<FileItem> items = fileUpload.parseRequest(request);
-        for (FileItem item : items) {
+        List<FileItem> fileItemList;
+        try {
+            fileItemList = fileUpload.parseRequest(request);
+        } catch (FileUploadBase.FileSizeLimitExceededException e) {
+            // 异常转换（抛出自定义异常）
+            throw new UploadException(e);
+        }
+        for (FileItem fileItem : fileItemList) {
             // 分两种情况处理表单项
-            String fieldName = item.getFieldName();
-            if (item.isFormField()) {
+            String fieldName = fileItem.getFieldName();
+            if (fileItem.isFormField()) {
                 // 处理普通字段
-                String fieldValue = item.getString(FrameworkConstant.DEFAULT_CHARSET);
+                String fieldValue = fileItem.getString(FrameworkConstant.DEFAULT_CHARSET);
                 fieldMap.put(fieldName, fieldValue);
             } else {
                 // 处理文件字段
-                String originalFileName = FilenameUtils.getName(item.getName());
+                String originalFileName = FileUtil.getRealFileName(fileItem.getName());
                 String uploadedFileName = FileUtil.getEncodedFileName(originalFileName);
-                InputStream inputSteam = item.getInputStream();
-                Multipart multipart = new Multipart(uploadedFileName, inputSteam);
+                String contentType = fileItem.getContentType();
+                long fileSize = fileItem.getSize();
+                InputStream inputSteam = fileItem.getInputStream();
+                // 创建 Multipart 对象，并将其添加到 multipartList 中
+                Multipart multipart = new Multipart(uploadedFileName, contentType, fileSize, inputSteam);
                 multipartList.add(multipart);
+                // 将所上传文件的文件名存入 fieldMap 中
                 fieldMap.put(fieldName, uploadedFileName);
             }
         }

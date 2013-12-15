@@ -184,6 +184,11 @@ public class FileUtil {
         }
     }
 
+    // 获取真实文件名（去掉文件路径）
+    public static String getRealFileName(String fileName) {
+        return FilenameUtils.getName(fileName);
+    }
+
     // 获取编码后的文件名（将文件名进行 BASE64 编码）
     public static String getEncodedFileName(String fileName) {
         String prefix = FilenameUtils.getBaseName(fileName);
