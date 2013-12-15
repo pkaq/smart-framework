@@ -7,13 +7,14 @@ import com.smart.framework.util.ClassUtil;
 import java.io.File;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RunWith(OrderedRunner.class)
 public abstract class BaseTest {
 
-    private static final Logger logger = Logger.getLogger(BaseTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(BaseTest.class);
 
     static {
         Smart.init();

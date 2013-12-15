@@ -3,11 +3,12 @@ package com.smart.framework.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ObjectUtil {
 
-    private static final Logger logger = Logger.getLogger(ObjectUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(ObjectUtil.class);
 
     // 设置成员变量
     public static void setField(Object obj, String fieldName, Object fieldValue) {

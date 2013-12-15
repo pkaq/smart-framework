@@ -4,11 +4,12 @@ import com.smart.framework.annotation.Bean;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BeanHelper {
 
-    private static final Logger logger = Logger.getLogger(BeanHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(BeanHelper.class);
 
     private static final Map<Class<?>, Object> beanMap = new HashMap<Class<?>, Object>(); // Bean 类 => Bean 实例
 

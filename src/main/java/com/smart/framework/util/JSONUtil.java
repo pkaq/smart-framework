@@ -1,11 +1,12 @@
 package com.smart.framework.util;
 
-import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JSONUtil {
 
-    private static final Logger logger = Logger.getLogger(JSONUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(JSONUtil.class);
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

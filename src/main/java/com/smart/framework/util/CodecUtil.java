@@ -8,11 +8,12 @@ import java.util.UUID;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CodecUtil {
 
-    private static final Logger logger = Logger.getLogger(CodecUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(CodecUtil.class);
 
     // 将字符串 UTF-8 编码
     public static String encodeUTF8(String str) {

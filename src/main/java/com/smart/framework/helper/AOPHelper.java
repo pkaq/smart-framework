@@ -20,11 +20,12 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AOPHelper {
 
-    private static final Logger logger = Logger.getLogger(AOPHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(AOPHelper.class);
 
     static {
         try {

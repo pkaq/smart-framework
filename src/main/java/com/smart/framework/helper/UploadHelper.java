@@ -21,11 +21,12 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UploadHelper {
 
-    private static final Logger logger = Logger.getLogger(UploadHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(UploadHelper.class);
 
     // 获取上传限制
     private static final int uploadLimit = ConfigHelper.getNumberProperty(FrameworkConstant.APP_UPLOAD_LIMIT);
@@ -42,7 +43,7 @@ public class UploadHelper {
         if (uploadLimit != 0) {
             fileUpload.setFileSizeMax(uploadLimit * 1024 * 1024); // 单位为 M
             if (logger.isDebugEnabled()) {
-                logger.debug("[Smart] limit of uploading: " + uploadLimit + "M");
+                logger.debug("[Smart] limit of uploading: {}M", uploadLimit);
             }
         }
     }

@@ -11,11 +11,12 @@ import java.io.Writer;
 import java.util.Properties;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FileUtil {
 
-    private static final Logger logger = Logger.getLogger(FileUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
 
     // 加载 properties 文件
     public static Properties loadPropsFile(String propPath) {

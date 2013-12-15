@@ -10,11 +10,12 @@ import java.util.Map;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DBHelper {
 
-    private static final Logger logger = Logger.getLogger(DBHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(DBHelper.class);
 
     // 定义一个局部线程变量（使每个线程都拥有自己的连接）
     private static final ThreadLocal<Connection> connContainer = new ThreadLocal<Connection>();

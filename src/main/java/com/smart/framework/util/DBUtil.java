@@ -16,11 +16,12 @@ import org.apache.commons.dbutils.handlers.KeyedHandler;
 import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DBUtil {
 
-    private static final Logger logger = Logger.getLogger(DBUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(DBUtil.class);
 
     // 查询（返回 Array）
     public static Object[] queryArray(QueryRunner runner, String sql, Object... params) {
@@ -166,7 +167,7 @@ public class DBUtil {
 
     private static void printSQL(String sql) {
         if (logger.isDebugEnabled()) {
-            logger.debug("[Smart] SQL - " + sql);
+            logger.debug("[Smart] SQL - {}", sql);
         }
     }
 }

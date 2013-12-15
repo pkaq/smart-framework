@@ -5,11 +5,12 @@ import com.smart.framework.Plugin;
 import com.smart.framework.util.ClassUtil;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PluginHelper {
 
-    private static final Logger logger = Logger.getLogger(PluginHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(PluginHelper.class);
 
     // 创建一个 Plugin 列表（用于存放 Plugin 实例）
     private static final List<Plugin> pluginList = new ArrayList<Plugin>();

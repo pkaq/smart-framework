@@ -28,12 +28,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @WebServlet(urlPatterns = "/*", loadOnStartup = 0)
 public class DispatcherServlet extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 
     // 获取相关配置项
     private static final String homePage = ConfigHelper.getStringProperty(FrameworkConstant.APP_HOME_PAGE);
@@ -52,7 +53,7 @@ public class DispatcherServlet extends HttpServlet {
         String currentRequestMethod = request.getMethod();
         String currentRequestPath = WebUtil.getRequestPath(request);
         if (logger.isDebugEnabled()) {
-            logger.debug("[Smart] " + currentRequestMethod + ":" + currentRequestPath);
+            logger.debug("[Smart] {}:{}", currentRequestMethod, currentRequestPath);
         }
         // 将“/”请求重定向到首页
         if (currentRequestPath.equals("/")) {

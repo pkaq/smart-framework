@@ -14,11 +14,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WebUtil {
 
-    private static final Logger logger = Logger.getLogger(WebUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebUtil.class);
 
     // 将数据以 JSON 格式写入响应中
     public static void writeJSON(HttpServletResponse response, Object data) {

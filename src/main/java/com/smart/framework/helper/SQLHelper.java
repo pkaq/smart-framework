@@ -8,11 +8,12 @@ import com.smart.framework.util.StringUtil;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SQLHelper {
 
-    private static final Logger logger = Logger.getLogger(SQLHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(SQLHelper.class);
 
     private static final Properties sqlProps = FileUtil.loadPropsFile("sql.properties");
 

@@ -10,11 +10,12 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ClassUtil {
 
-    private static final Logger logger = Logger.getLogger(ClassUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(ClassUtil.class);
 
     // 获取指定包名下的所有类
     public static List<Class<?>> getClassList(String packageName, boolean isRecursive) {

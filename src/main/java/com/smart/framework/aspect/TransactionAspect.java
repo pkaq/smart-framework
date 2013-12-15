@@ -6,11 +6,12 @@ import com.smart.framework.helper.DBHelper;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TransactionAspect extends BaseAspect {
 
-    private static final Logger logger = Logger.getLogger(TransactionAspect.class);
+    private static final Logger logger = LoggerFactory.getLogger(TransactionAspect.class);
 
     @Override
     public boolean intercept(Class<?> cls, Method method, Object[] params) {
@@ -56,7 +57,7 @@ public class TransactionAspect extends BaseAspect {
             Connection conn = DBHelper.getConnectionFromThreadLocal();
             conn.setTransactionIsolation(currentIsolation);
             if (logger.isDebugEnabled()) {
-                logger.debug("[Set Transaction Isolation] Isolation: " + currentIsolation);
+                logger.debug("[Set Transaction Isolation] Isolation: {}", currentIsolation);
             }
         }
     }
