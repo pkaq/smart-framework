@@ -189,14 +189,14 @@ public class FileUtil {
         return FilenameUtils.getName(fileName);
     }
 
-    // 获取编码后的文件名（将文件名进行 BASE64 编码）
+    // 获取编码后的文件名（将文件名进行 Base64 编码）
     public static String getEncodedFileName(String fileName) {
         String prefix = FilenameUtils.getBaseName(fileName);
         String suffix = FilenameUtils.getExtension(fileName);
         return CodecUtil.encodeBase64(prefix) + "." + suffix;
     }
 
-    // 获取解码后的文件名（将文件名进行 BASE64 解码）
+    // 获取解码后的文件名（将文件名进行 Base64 解码）
     public static String getDecodedFileName(String fileName) {
         String prefix = FilenameUtils.getBaseName(fileName);
         String suffix = FilenameUtils.getExtension(fileName);

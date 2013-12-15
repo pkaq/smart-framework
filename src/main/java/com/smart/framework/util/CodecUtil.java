@@ -1,6 +1,7 @@
 package com.smart.framework.util;
 
 import com.smart.framework.FrameworkConstant;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.UUID;
@@ -20,7 +21,7 @@ public class CodecUtil {
             target = URLEncoder.encode(str, FrameworkConstant.DEFAULT_CHARSET);
         } catch (Exception e) {
             logger.error("编码出错！", e);
-            throw new RuntimeException( e);
+            throw new RuntimeException(e);
         }
         return target;
     }
@@ -39,12 +40,26 @@ public class CodecUtil {
 
     // 将字符串 Base64 编码
     public static String encodeBase64(String str) {
-        return Base64.encodeBase64String(str.getBytes());
+        String target;
+        try {
+            target = Base64.encodeBase64String(str.getBytes(FrameworkConstant.DEFAULT_CHARSET));
+        } catch (UnsupportedEncodingException e) {
+            logger.error("编码出错！", e);
+            throw new RuntimeException(e);
+        }
+        return target;
     }
 
     // 将字符串 Base64 解码
     public static String decodeBase64(String str) {
-        return new String(Base64.decodeBase64(str.getBytes()));
+        String target;
+        try {
+            target = new String(Base64.decodeBase64(str), FrameworkConstant.DEFAULT_CHARSET);
+        } catch (UnsupportedEncodingException e) {
+            logger.error("解码出错！", e);
+            throw new RuntimeException(e);
+        }
+        return target;
     }
 
     // 将字符串 MD5 加密
