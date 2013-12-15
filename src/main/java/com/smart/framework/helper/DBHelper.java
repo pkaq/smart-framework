@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.log4j.Logger;
@@ -15,21 +16,20 @@ public class DBHelper {
 
     private static final Logger logger = Logger.getLogger(DBHelper.class);
 
-    private static final BasicDataSource ds = new BasicDataSource();
-    private static final QueryRunner runner = new QueryRunner(ds);
-
     // 定义一个局部线程变量（使每个线程都拥有自己的连接）
     private static final ThreadLocal<Connection> connContainer = new ThreadLocal<Connection>();
 
-    static {
-        // 从配置文件中获取配置项
-        String driver = ConfigHelper.getStringProperty("jdbc.driver");
-        String url = ConfigHelper.getStringProperty("jdbc.url");
-        String username = ConfigHelper.getStringProperty("jdbc.username");
-        String password = ConfigHelper.getStringProperty("jdbc.password");
-        int maxActive = ConfigHelper.getNumberProperty("jdbc.max.active");
-        int maxIdle = ConfigHelper.getNumberProperty("jdbc.max.idle");
-        // 设置数据源相关字段
+    // 从配置文件中获取配置项
+    private static final String driver = ConfigHelper.getStringProperty("jdbc.driver");
+    private static final String url = ConfigHelper.getStringProperty("jdbc.url");
+    private static final String username = ConfigHelper.getStringProperty("jdbc.username");
+    private static final String password = ConfigHelper.getStringProperty("jdbc.password");
+    private static final int maxActive = ConfigHelper.getNumberProperty("jdbc.max.active");
+    private static final int maxIdle = ConfigHelper.getNumberProperty("jdbc.max.idle");
+
+    // 获取数据源
+    public static DataSource getDataSource() {
+        BasicDataSource ds = new BasicDataSource();
         if (StringUtil.isNotEmpty(driver)) {
             ds.setDriverClassName(driver);
         }
@@ -48,13 +48,14 @@ public class DBHelper {
         if (maxIdle != 0) {
             ds.setMaxIdle(maxIdle);
         }
+        return ds;
     }
 
     // 从数据源中获取数据库连接
     public static Connection getConnectionFromDataSource() {
         Connection conn;
         try {
-            conn = ds.getConnection();
+            conn = getDataSource().getConnection();
         } catch (Exception e) {
             logger.error("从数据源中获取数据库连接出错！", e);
             throw new RuntimeException(e);
@@ -131,7 +132,7 @@ public class DBHelper {
     public static String getDBType() {
         String dbType;
         try {
-            dbType = ds.getConnection().getMetaData().getDatabaseProductName();
+            dbType = getDataSource().getConnection().getMetaData().getDatabaseProductName();
         } catch (SQLException e) {
             logger.error("获取数据库类型出错！", e);
             throw new RuntimeException(e);
@@ -141,35 +142,40 @@ public class DBHelper {
 
     // 执行查询（返回一个对象）
     public static <T> T queryBean(Class<T> cls, String sql, Object... params) {
-        Map<String, String> map = EntityHelper.getEntityMap().get(cls);
-        return DBUtil.queryBean(runner, cls, map, sql, params);
+        return DBUtil.queryBean(getQueryRunner(), cls, getEntityMap(cls), sql, params);
     }
 
     // 执行查询（返回多个对象）
     public static <T> List<T> queryBeanList(Class<T> cls, String sql, Object... params) {
-        Map<String, String> map = EntityHelper.getEntityMap().get(cls);
-        return DBUtil.queryBeanList(runner, cls, map, sql, params);
+        return DBUtil.queryBeanList(getQueryRunner(), cls, getEntityMap(cls), sql, params);
     }
 
     // 执行更新（包括 UPDATE、INSERT、DELETE）
     public static int update(String sql, Object... params) {
-        // 若当前线程中存在连接，则传入（用于事务处理），否则将从数据源中获取连接
-        Connection conn = getConnectionFromThreadLocal();
-        return DBUtil.update(runner, conn, sql, params);
+        // 更新操作需使用 ThreadLocal 中的 Connection（为了保证在同一个事务中）
+        return DBUtil.update(getQueryRunner(), getConnectionFromThreadLocal(), sql, params);
     }
 
     // 执行查询（返回 count 结果）
     public static int queryCount(String sql, Object... params) {
-        return CastUtil.castInt(DBUtil.queryColumn(runner, "count(*)", sql, params));
+        return CastUtil.castInt(DBUtil.queryColumn(getQueryRunner(), "count(*)", sql, params));
     }
 
     // 查询映射列表
     public static List<Map<String, Object>> queryMapList(String sql, Object... params) {
-        return DBUtil.queryMapList(runner, sql, params);
+        return DBUtil.queryMapList(getQueryRunner(), sql, params);
     }
 
     // 查询单列数据
     public static Object queryColumn(String column, String sql, Object... params) {
-        return DBUtil.queryColumn(runner, column, sql, params);
+        return DBUtil.queryColumn(getQueryRunner(), column, sql, params);
+    }
+
+    private static QueryRunner getQueryRunner() {
+        return new QueryRunner(getDataSource());
+    }
+
+    private static Map<String, String> getEntityMap(Class<?> cls) {
+        return EntityHelper.getEntityMap().get(cls);
     }
 }
