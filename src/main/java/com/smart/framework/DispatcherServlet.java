@@ -163,6 +163,10 @@ public class DispatcherServlet extends HttpServlet {
         // 调用 Action 方法
         Object actionMethodResult = null;
         try {
+            Class<?>[] paramTypes = actionMethod.getParameterTypes();
+            if (paramTypes.length != actionMethodParamList.size()) {
+                throw new RuntimeException("由于参数不匹配，无法调用 Action 方法！");
+            }
             actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
             actionMethodResult = actionMethod.invoke(actionInstance, actionMethodParamList.toArray());
         } catch (Exception e) {
