@@ -14,4 +14,10 @@ public class MapUtil {
     public static boolean isEmpty(Map<?, ?> map) {
         return MapUtils.isEmpty(map);
     }
+
+    // 转置 Map
+    @SuppressWarnings("unchecked")
+    public static <K, V> Map<V, K> inverse(Map<K, V> map) {
+        return MapUtils.invertMap(map);
+    }
 }
