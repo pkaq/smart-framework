@@ -161,7 +161,7 @@ public class DispatcherServlet extends HttpServlet {
         // 从 BeanHelper 中创建 Action 实例
         Object actionInstance = BeanHelper.getBean(actionClass);
         // 调用 Action 方法
-        Object actionMethodResult = null;
+        Object actionMethodResult;
         try {
             Class<?>[] paramTypes = actionMethod.getParameterTypes();
             if (paramTypes.length != actionMethodParamList.size()) {
@@ -203,7 +203,7 @@ public class DispatcherServlet extends HttpServlet {
                 // 若为 Result 类型，则需要分两种情况进行处理
                 Result result = (Result) actionMethodResult;
                 if (UploadHelper.isMultipart(request)) {
-                    // 对于 multipart 类型，说明是文件下载，需要转换为 HTML 格式并写入响应中
+                    // 对于 multipart 类型，说明是文件上传，需要转换为 HTML 格式并写入响应中
                     WebUtil.writeHTML(response, result);
                 } else {
                     // 对于其它类型，统一转换为 JSON 格式并写入响应中
