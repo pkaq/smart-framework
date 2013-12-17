@@ -1,7 +1,7 @@
 package com.smart.framework.helper;
 
+import com.smart.framework.annotation.Action;
 import com.smart.framework.annotation.Request;
-import com.smart.framework.base.BaseAction;
 import com.smart.framework.bean.ActionBean;
 import com.smart.framework.bean.RequestBean;
 import com.smart.framework.util.ArrayUtil;
@@ -17,7 +17,7 @@ public class ActionHelper {
 
     static {
         // 获取并遍历所有 Action 类
-        List<Class<?>> actionClassList = ClassHelper.getClassListBySuper(BaseAction.class);
+        List<Class<?>> actionClassList = ClassHelper.getClassListByAnnotation(Action.class);
         for (Class<?> actionClass : actionClassList) {
             // 获取并遍历该 Action 类中所有的方法（不包括父类中的方法）
             Method[] actionMethods = actionClass.getDeclaredMethods();

@@ -3,10 +3,10 @@ package com.smart.framework.helper;
 import com.smart.framework.FrameworkConstant;
 import com.smart.framework.annotation.Aspect;
 import com.smart.framework.annotation.Order;
+import com.smart.framework.annotation.Service;
 import com.smart.framework.aspect.PluginAspect;
 import com.smart.framework.aspect.TransactionAspect;
 import com.smart.framework.base.BaseAspect;
-import com.smart.framework.base.BaseService;
 import com.smart.framework.proxy.Proxy;
 import com.smart.framework.proxy.ProxyManager;
 import com.smart.framework.util.ClassUtil;
@@ -100,7 +100,7 @@ public class AOPHelper {
 
     private static void addTransactionAspect(Map<Class<?>, List<Class<?>>> aspectMap) {
         // 使用 TransactionAspect 横切所有 Service 类
-        List<Class<?>> serviceClassList = ClassHelper.getClassListBySuper(BaseService.class);
+        List<Class<?>> serviceClassList = ClassHelper.getClassListByAnnotation(Service.class);
         aspectMap.put(TransactionAspect.class, serviceClassList);
     }
 
