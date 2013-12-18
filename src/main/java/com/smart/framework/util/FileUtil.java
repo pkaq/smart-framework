@@ -203,4 +203,9 @@ public class FileUtil {
         String suffix = FilenameUtils.getExtension(fileName);
         return CodecUtil.decodeBase64(prefix) + "." + suffix;
     }
+
+    // 判断文件是否存在
+    public static boolean checkFileExists(String filePath) {
+        return new File(filePath).exists();
+    }
 }
