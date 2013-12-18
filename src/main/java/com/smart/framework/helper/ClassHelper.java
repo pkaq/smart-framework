@@ -8,8 +8,8 @@ public class ClassHelper {
 
     private static final String packageName = ConfigHelper.getStringProperty("app.package");
 
-    public static List<Class<?>> getClassListByPackage(String pkg) {
-        return ClassUtil.getClassList(pkg, true);
+    public static List<Class<?>> getClassList() {
+        return ClassUtil.getClassList(packageName, true);
     }
 
     public static List<Class<?>> getClassListBySuper(Class<?> superClass) {

@@ -139,7 +139,7 @@ public class AOPHelper {
             targetClassList.add(Class.forName(pkg + "." + cls));
         } else {
             // 否则（包名不为空）添加该包名下所有类
-            targetClassList.addAll(ClassHelper.getClassListByPackage(pkg));
+            targetClassList.addAll(ClassUtil.getClassList(pkg, true));
         }
         // 返回目标类列表
         return targetClassList;
