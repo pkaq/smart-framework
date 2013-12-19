@@ -196,11 +196,13 @@ public class WebUtil {
         }
     }
 
-    // 设置自动重定向 URL
+    // 设置 Redirect URL 到 Session 中
     public static void setRedirectURL(HttpServletRequest request, String sessionKey) {
-        HttpSession session = request.getSession();
-        String requestPath = request.getRequestURL().toString();
-        session.setAttribute(sessionKey, requestPath);
+        if (!isAJAX(request)) {
+            HttpSession session = request.getSession();
+            String requestPath = request.getRequestURL().toString();
+            session.setAttribute(sessionKey, requestPath);
+        }
     }
 
     // 创建验证码
