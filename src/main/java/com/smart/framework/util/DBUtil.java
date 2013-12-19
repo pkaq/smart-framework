@@ -1,6 +1,9 @@
 package com.smart.framework.util;
 
+import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -84,11 +87,11 @@ public class DBUtil {
             } else {
                 result = runner.query(sql, new BeanHandler<T>(cls), params);
             }
-            printSQL(sql);
         } catch (SQLException e) {
             logger.error("查询出错！", e);
             throw new RuntimeException(e);
         }
+        printSQL(sql);
         return result;
     }
 
@@ -101,11 +104,11 @@ public class DBUtil {
             } else {
                 result = runner.query(sql, new BeanListHandler<T>(cls), params);
             }
-            printSQL(sql);
         } catch (SQLException e) {
             logger.error("查询出错！", e);
             throw new RuntimeException(e);
         }
+        printSQL(sql);
         return result;
     }
 
@@ -157,12 +160,37 @@ public class DBUtil {
             } else {
                 result = runner.update(sql, params);
             }
-            printSQL(sql);
         } catch (SQLException e) {
             logger.error("更新出错！", e);
             throw new RuntimeException(e);
         }
+        printSQL(sql);
         return result;
+    }
+
+    // 插入（返回自动生成的主键）
+    public static Serializable insertReturnPK(Connection conn, String sql, Object... params) {
+        Serializable key = null;
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            if (ArrayUtil.isNotEmpty(params)) {
+                for (int i = 0; i < params.length; i++) {
+                    pstmt.setObject(i + 1, params[i]);
+                }
+            }
+            int rows = pstmt.executeUpdate();
+            if (rows == 1) {
+                ResultSet rs = pstmt.getGeneratedKeys();
+                if (rs.next()) {
+                    key = (Serializable) rs.getObject(1);
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("插入出错！", e);
+            throw new RuntimeException(e);
+        }
+        printSQL(sql);
+        return key;
     }
 
     private static void printSQL(String sql) {

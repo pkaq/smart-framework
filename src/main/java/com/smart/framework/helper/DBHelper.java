@@ -52,31 +52,29 @@ public class DBHelper {
         return ds;
     }
 
-    // 从数据源中获取数据库连接
-    public static Connection getConnectionFromDataSource() {
+    public static Connection getConnection() {
         Connection conn;
         try {
-            conn = getDataSource().getConnection();
-        } catch (Exception e) {
-            logger.error("从数据源中获取数据库连接出错！", e);
+            // 先从 ThreadLocal 中获取 Connection
+            conn = connContainer.get();
+            if (conn == null) {
+                // 若不存在，则从 DataSource 中获取 Connection
+                conn = getDataSource().getConnection();
+            }
+        } catch (SQLException e) {
+            logger.error("获取数据库连接出错！", e);
             throw new RuntimeException(e);
         }
         return conn;
     }
 
-    // 从线程局部变量中获取数据库连接
-    public static Connection getConnectionFromThreadLocal() {
-        return connContainer.get();
-    }
-
     // 开启事务
     public static void beginTransaction() {
-        Connection conn = getConnectionFromThreadLocal();
-        if (conn == null) {
+        Connection conn = getConnection();
+        if (conn != null) {
             try {
-                conn = getConnectionFromDataSource();
                 conn.setAutoCommit(false);
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 logger.error("开启事务出错！", e);
                 throw new RuntimeException(e);
             } finally {
@@ -87,12 +85,12 @@ public class DBHelper {
 
     // 提交事务
     public static void commitTransaction() {
-        Connection conn = getConnectionFromThreadLocal();
+        Connection conn = getConnection();
         if (conn != null) {
             try {
                 conn.commit();
                 conn.close();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 logger.error("提交事务出错！", e);
                 throw new RuntimeException(e);
             } finally {
@@ -103,12 +101,12 @@ public class DBHelper {
 
     // 回滚事务
     public static void rollbackTransaction() {
-        Connection conn = getConnectionFromThreadLocal();
+        Connection conn = getConnection();
         if (conn != null) {
             try {
                 conn.rollback();
                 conn.close();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 logger.error("回滚事务出错！", e);
                 throw new RuntimeException(e);
             } finally {
@@ -121,8 +119,8 @@ public class DBHelper {
     public static int getDefaultIsolationLevel() {
         int level;
         try {
-            level = getConnectionFromThreadLocal().getMetaData().getDefaultTransactionIsolation();
-        } catch (Exception e) {
+            level = getConnection().getMetaData().getDefaultTransactionIsolation();
+        } catch (SQLException e) {
             logger.error("获取数据库默认事务隔离级别出错！", e);
             throw new RuntimeException(e);
         }
@@ -154,7 +152,7 @@ public class DBHelper {
     // 执行更新（包括 UPDATE、INSERT、DELETE）
     public static int update(String sql, Object... params) {
         // 更新操作需使用 ThreadLocal 中的 Connection（为了保证在同一个事务中）
-        return DBUtil.update(getQueryRunner(), getConnectionFromThreadLocal(), sql, params);
+        return DBUtil.update(getQueryRunner(), getConnection(), sql, params);
     }
 
     // 执行查询（返回 count 结果）

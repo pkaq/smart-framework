@@ -103,13 +103,15 @@ public class UploadHelper {
 
     public static void uploadFile(String basePath, Multipart multipart) {
         try {
-            // 创建文件路径（绝对路径）
-            String filePath = basePath + multipart.getFileName();
-            FileUtil.createFile(filePath);
-            // 执行流复制操作
-            InputStream inputStream = new BufferedInputStream(multipart.getInputStream());
-            OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(filePath));
-            StreamUtil.copyStream(inputStream, outputStream);
+            if (multipart != null) {
+                // 创建文件路径（绝对路径）
+                String filePath = basePath + multipart.getFileName();
+                FileUtil.createFile(filePath);
+                // 执行流复制操作
+                InputStream inputStream = new BufferedInputStream(multipart.getInputStream());
+                OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(filePath));
+                StreamUtil.copyStream(inputStream, outputStream);
+            }
         } catch (Exception e) {
             logger.error("上传文件出错！", e);
             throw new RuntimeException(e);
