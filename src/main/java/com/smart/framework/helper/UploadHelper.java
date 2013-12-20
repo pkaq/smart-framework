@@ -3,6 +3,7 @@ package com.smart.framework.helper;
 import com.smart.framework.FrameworkConstant;
 import com.smart.framework.bean.Multipart;
 import com.smart.framework.exception.UploadException;
+import com.smart.framework.util.CollectionUtil;
 import com.smart.framework.util.FileUtil;
 import com.smart.framework.util.StreamUtil;
 import com.smart.framework.util.StringUtil;
@@ -93,10 +94,8 @@ public class UploadHelper {
         }
         // 初始化参数列表
         paramList.add(fieldMap);
-        if (multipartList.size() > 1) {
+        if (CollectionUtil.isNotEmpty(multipartList)) {
             paramList.add(multipartList);
-        } else if (multipartList.size() == 1) {
-            paramList.add(multipartList.get(0));
         } else {
             paramList.add(null);
         }
