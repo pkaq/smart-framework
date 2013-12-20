@@ -5,6 +5,7 @@ import com.smart.framework.bean.Multipart;
 import com.smart.framework.exception.UploadException;
 import com.smart.framework.util.FileUtil;
 import com.smart.framework.util.StreamUtil;
+import com.smart.framework.util.StringUtil;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -77,15 +78,17 @@ public class UploadHelper {
             } else {
                 // 处理文件字段
                 String originalFileName = FileUtil.getRealFileName(fileItem.getName());
-                String uploadedFileName = FileUtil.getEncodedFileName(originalFileName);
-                String contentType = fileItem.getContentType();
-                long fileSize = fileItem.getSize();
-                InputStream inputSteam = fileItem.getInputStream();
-                // 创建 Multipart 对象，并将其添加到 multipartList 中
-                Multipart multipart = new Multipart(uploadedFileName, contentType, fileSize, inputSteam);
-                multipartList.add(multipart);
-                // 将所上传文件的文件名存入 fieldMap 中
-                fieldMap.put(fieldName, uploadedFileName);
+                if (StringUtil.isNotEmpty(originalFileName)) {
+                    String uploadedFileName = FileUtil.getEncodedFileName(originalFileName);
+                    String contentType = fileItem.getContentType();
+                    long fileSize = fileItem.getSize();
+                    InputStream inputSteam = fileItem.getInputStream();
+                    // 创建 Multipart 对象，并将其添加到 multipartList 中
+                    Multipart multipart = new Multipart(uploadedFileName, contentType, fileSize, inputSteam);
+                    multipartList.add(multipart);
+                    // 将所上传文件的文件名存入 fieldMap 中
+                    fieldMap.put(fieldName, uploadedFileName);
+                }
             }
         }
         // 初始化参数列表
