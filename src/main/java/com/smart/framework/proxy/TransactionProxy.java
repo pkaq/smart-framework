@@ -1,16 +1,14 @@
-package com.smart.framework.aspect;
+package com.smart.framework.proxy;
 
 import com.smart.framework.annotation.Transaction;
 import com.smart.framework.helper.DBHelper;
-import com.smart.framework.proxy.Proxy;
-import com.smart.framework.proxy.ProxyChain;
 import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TransactionAspect implements Proxy {
+public class TransactionProxy implements Proxy {
 
-    private static final Logger logger = LoggerFactory.getLogger(TransactionAspect.class);
+    private static final Logger logger = LoggerFactory.getLogger(TransactionProxy.class);
 
     @Override
     public Object doProxy(ProxyChain proxyChain) throws Exception {
