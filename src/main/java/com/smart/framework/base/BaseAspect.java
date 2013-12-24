@@ -25,7 +25,7 @@ public abstract class BaseAspect implements Proxy {
             }
         } catch (Exception e) {
             error(cls, method, params, e);
-            throw e; // 将异常继续往上抛，抛给它的调用者
+            throw e;
         } finally {
             end();
         }
