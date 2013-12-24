@@ -17,11 +17,26 @@ public class ClassUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ClassUtil.class);
 
+    // 获取类加载器
+    public static ClassLoader getClassLoader() {
+        return Thread.currentThread().getContextClassLoader();
+    }
+
+    // 获取类路径
+    public static String getClassPath() {
+        String classpath = "";
+        URL resource = getClassLoader().getResource("");
+        if (resource != null) {
+            classpath = resource.getPath();
+        }
+        return classpath;
+    }
+
     // 获取指定包名下的所有类
     public static List<Class<?>> getClassList(String packageName, boolean isRecursive) {
         List<Class<?>> classList = new ArrayList<Class<?>>();
         try {
-            Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageName.replace(".", "/"));
+            Enumeration<URL> urls = getClassLoader().getResources(packageName.replace(".", "/"));
             while (urls.hasMoreElements()) {
                 URL url = urls.nextElement();
                 if (url != null) {
@@ -57,7 +72,7 @@ public class ClassUtil {
     public static List<Class<?>> getClassListByAnnotation(String packageName, Class<? extends Annotation> annotationClass) {
         List<Class<?>> classList = new ArrayList<Class<?>>();
         try {
-            Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageName.replace(".", "/"));
+            Enumeration<URL> urls = getClassLoader().getResources(packageName.replace(".", "/"));
             while (urls.hasMoreElements()) {
                 URL url = urls.nextElement();
                 if (url != null) {
@@ -94,7 +109,7 @@ public class ClassUtil {
     public static List<Class<?>> getClassListBySuper(String packageName, Class<?> superClass) {
         List<Class<?>> classList = new ArrayList<Class<?>>();
         try {
-            Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageName.replace(".", "/"));
+            Enumeration<URL> urls = getClassLoader().getResources(packageName.replace(".", "/"));
             while (urls.hasMoreElements()) {
                 URL url = urls.nextElement();
                 if (url != null) {
@@ -232,15 +247,5 @@ public class ClassUtil {
             logger.error("添加类出错！", e);
             throw new RuntimeException(e);
         }
-    }
-
-    // 获取类路径
-    public static String getClassPath() {
-        String classpath = "";
-        URL resource = Thread.currentThread().getContextClassLoader().getResource("");
-        if (resource != null) {
-            classpath = resource.getPath();
-        }
-        return classpath;
     }
 }
