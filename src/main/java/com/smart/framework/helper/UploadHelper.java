@@ -87,8 +87,6 @@ public class UploadHelper {
                     // 创建 Multipart 对象，并将其添加到 multipartList 中
                     Multipart multipart = new Multipart(uploadedFileName, contentType, fileSize, inputSteam);
                     multipartList.add(multipart);
-                    // 将所上传文件的文件名存入 fieldMap 中
-                    fieldMap.put(fieldName, uploadedFileName);
                 }
             }
         }
