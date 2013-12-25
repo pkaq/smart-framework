@@ -28,7 +28,7 @@ public class FileUtil {
             if (propsPath.lastIndexOf(suffix) == -1) {
                 propsPath += suffix;
             }
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(propsPath);
+            is = ClassUtil.getClassLoader().getResourceAsStream(propsPath);
             if (is != null) {
                 props.load(is);
             }

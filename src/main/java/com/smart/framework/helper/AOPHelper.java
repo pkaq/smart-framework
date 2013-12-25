@@ -4,11 +4,11 @@ import com.smart.framework.FrameworkConstant;
 import com.smart.framework.annotation.Aspect;
 import com.smart.framework.annotation.Order;
 import com.smart.framework.annotation.Service;
-import com.smart.framework.aspect.PluginAspect;
-import com.smart.framework.aspect.TransactionAspect;
 import com.smart.framework.base.BaseAspect;
+import com.smart.framework.proxy.PluginProxy;
 import com.smart.framework.proxy.Proxy;
 import com.smart.framework.proxy.ProxyManager;
+import com.smart.framework.proxy.TransactionProxy;
 import com.smart.framework.util.ClassUtil;
 import com.smart.framework.util.CollectionUtil;
 import com.smart.framework.util.ObjectUtil;
@@ -29,17 +29,17 @@ public class AOPHelper {
 
     static {
         try {
-            // 创建 Aspect Map（用于存放切面类与目标类列表的映射关系）
-            Map<Class<?>, List<Class<?>>> aspectMap = createAspectMap();
-            // 创建 Target Map（用于存放目标类与代理类列表 的映射关系）
-            Map<Class<?>, List<Proxy>> targetMap = createTargetMap(aspectMap);
+            // 创建 Proxy Map（用于 存放代理类 与 目标类列表 的映射关系）
+            Map<Class<?>, List<Class<?>>> proxyMap = createProxyMap();
+            // 创建 Target Map（用于 存放目标类 与 代理类列表 的映射关系）
+            Map<Class<?>, List<Proxy>> targetMap = createTargetMap(proxyMap);
             // 遍历 Target Map
             for (Map.Entry<Class<?>, List<Proxy>> targetEntry : targetMap.entrySet()) {
                 // 分别获取 map 中的 key 与 value
                 Class<?> targetClass = targetEntry.getKey();
-                List<Proxy> baseAspectList = targetEntry.getValue();
+                List<Proxy> proxyList = targetEntry.getValue();
                 // 创建代理实例
-                Object proxyInstance = ProxyManager.getInstance().createProxy(targetClass, baseAspectList);
+                Object proxyInstance = ProxyManager.getInstance().createProxy(targetClass, proxyList);
                 // 获取目标实例（从 IOC 容器中获取）
                 Object targetInstance = BeanHelper.getBean(targetClass);
                 // 复制目标实例中的成员变量到代理实例中
@@ -52,35 +52,31 @@ public class AOPHelper {
         }
     }
 
-    private static Map<Class<?>, List<Class<?>>> createAspectMap() throws Exception {
-        // 定义 Aspect Map
-        Map<Class<?>, List<Class<?>>> aspectMap = new LinkedHashMap<Class<?>, List<Class<?>>>();
-        // 添加插件切面
-        addPluginAspect(aspectMap);
-        // 添加用户界面
-        addUserAspect(aspectMap);
-        // 添加事务切面
-        addTransactionAspect(aspectMap);
-        // 返回 Aspect Map
-        return aspectMap;
+    private static Map<Class<?>, List<Class<?>>> createProxyMap() throws Exception {
+        Map<Class<?>, List<Class<?>>> proxyMap = new LinkedHashMap<Class<?>, List<Class<?>>>();
+        // 添加相关代理
+        addPluginProxy(proxyMap);      // 插件代理
+        addAspectProxy(proxyMap);      // 切面代理
+        addTransactionProxy(proxyMap); // 事务代理
+        return proxyMap;
     }
 
-    private static void addPluginAspect(Map<Class<?>, List<Class<?>>> aspectMap) throws Exception {
-        // 获取插件包名下父类为 PluginAspect 的所有类（插件切面类）
-        List<Class<?>> pluginAspectClassList = ClassUtil.getClassListBySuper(FrameworkConstant.PLUGIN_PACKAGE, PluginAspect.class);
-        if (CollectionUtil.isNotEmpty(pluginAspectClassList)) {
-            // 遍历所有插件切面类
-            for (Class<?> pluginAspectClass : pluginAspectClassList) {
-                // 创建插件切面类实例
-                PluginAspect pluginAspect = (PluginAspect) pluginAspectClass.newInstance();
-                // 将插件切面类及其所对应的目标类列表放入 Aspect Map 中
-                aspectMap.put(pluginAspectClass, pluginAspect.getTargetClassList());
+    private static void addPluginProxy(Map<Class<?>, List<Class<?>>> proxyMap) throws Exception {
+        // 获取插件包名下父类为 PluginProxy 的所有类（插件代理类）
+        List<Class<?>> pluginProxyClassList = ClassUtil.getClassListBySuper(FrameworkConstant.PLUGIN_PACKAGE, PluginProxy.class);
+        if (CollectionUtil.isNotEmpty(pluginProxyClassList)) {
+            // 遍历所有插件代理类
+            for (Class<?> pluginProxyClass : pluginProxyClassList) {
+                // 创建插件代理类实例
+                PluginProxy pluginProxy = (PluginProxy) pluginProxyClass.newInstance();
+                // 将插件代理类及其所对应的目标类列表放入 Proxy Map 中
+                proxyMap.put(pluginProxyClass, pluginProxy.getTargetClassList());
             }
         }
     }
 
-    private static void addUserAspect(Map<Class<?>, List<Class<?>>> aspectMap) throws Exception {
-        // 获取切面类
+    private static void addAspectProxy(Map<Class<?>, List<Class<?>>> proxyMap) throws Exception {
+        // 获取切面类（所有继承于 BaseAspect 的类）
         List<Class<?>> aspectClassList = ClassHelper.getClassListBySuper(BaseAspect.class);
         // 排序切面类
         sortAspectClassList(aspectClassList);
@@ -92,21 +88,21 @@ public class AOPHelper {
                 Aspect aspect = aspectClass.getAnnotation(Aspect.class);
                 // 创建目标类列表
                 List<Class<?>> targetClassList = createTargetClassList(aspect);
-                // 初始化 Aspect Map
-                aspectMap.put(aspectClass, targetClassList);
+                // 初始化 Proxy Map
+                proxyMap.put(aspectClass, targetClassList);
             }
         }
     }
 
-    private static void addTransactionAspect(Map<Class<?>, List<Class<?>>> aspectMap) {
-        // 使用 TransactionAspect 横切所有 Service 类
+    private static void addTransactionProxy(Map<Class<?>, List<Class<?>>> proxyMap) {
+        // 使用 TransactionProxy 代理所有 Service 类
         List<Class<?>> serviceClassList = ClassHelper.getClassListByAnnotation(Service.class);
-        aspectMap.put(TransactionAspect.class, serviceClassList);
+        proxyMap.put(TransactionProxy.class, serviceClassList);
     }
 
-    private static void sortAspectClassList(List<Class<?>> aspectClassList) {
-        // 排序切面类列表
-        Collections.sort(aspectClassList, new Comparator<Class<?>>() {
+    private static void sortAspectClassList(List<Class<?>> proxyClassList) {
+        // 排序代理类列表
+        Collections.sort(proxyClassList, new Comparator<Class<?>>() {
             @Override
             public int compare(Class<?> aspect1, Class<?> aspect2) {
                 if (aspect1.isAnnotationPresent(Order.class) || aspect2.isAnnotationPresent(Order.class)) {
@@ -129,7 +125,6 @@ public class AOPHelper {
     }
 
     private static List<Class<?>> createTargetClassList(Aspect aspect) throws Exception {
-        // 初始化目标类列表
         List<Class<?>> targetClassList = new ArrayList<Class<?>>();
         // 获取 @Aspect 注解相关属性
         String pkg = aspect.pkg(); // 包名
@@ -141,23 +136,21 @@ public class AOPHelper {
             // 否则（包名不为空）添加该包名下所有类
             targetClassList.addAll(ClassUtil.getClassList(pkg, true));
         }
-        // 返回目标类列表
         return targetClassList;
     }
 
-    private static Map<Class<?>, List<Proxy>> createTargetMap(Map<Class<?>, List<Class<?>>> aspectMap) throws Exception {
-        // 定义 Target Map
+    private static Map<Class<?>, List<Proxy>> createTargetMap(Map<Class<?>, List<Class<?>>> proxyMap) throws Exception {
         Map<Class<?>, List<Proxy>> targetMap = new HashMap<Class<?>, List<Proxy>>();
-        // 遍历 Aspect Map
-        for (Map.Entry<Class<?>, List<Class<?>>> aspectEntry : aspectMap.entrySet()) {
+        // 遍历 Proxy Map
+        for (Map.Entry<Class<?>, List<Class<?>>> proxyEntry : proxyMap.entrySet()) {
             // 分别获取 map 中的 key 与 value
-            Class<?> aspectClass = aspectEntry.getKey();
-            List<Class<?>> targetClassList = aspectEntry.getValue();
+            Class<?> proxyClass = proxyEntry.getKey();
+            List<Class<?>> targetClassList = proxyEntry.getValue();
             // 遍历目标类列表
             for (Class<?> targetClass : targetClassList) {
                 // 创建代理类（切面类）实例
-                Proxy baseAspect = (Proxy) aspectClass.newInstance();
-                // 初始化 Aspect Map
+                Proxy baseAspect = (Proxy) proxyClass.newInstance();
+                // 初始化 Target Map
                 if (targetMap.containsKey(targetClass)) {
                     targetMap.get(targetClass).add(baseAspect);
                 } else {
@@ -167,7 +160,6 @@ public class AOPHelper {
                 }
             }
         }
-        // 返回 Target Map
         return targetMap;
     }
 }
