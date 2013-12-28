@@ -48,4 +48,8 @@ public class BeanHelper {
         }
         return (T) beanMap.get(cls);
     }
+
+    public static void setBean(Class<?> cls, Object obj) {
+        beanMap.put(cls, obj);
+    }
 }

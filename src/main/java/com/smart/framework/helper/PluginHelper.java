@@ -28,7 +28,7 @@ public class PluginHelper {
                 pluginList.add(plugin);
             }
         } catch (Exception e) {
-            logger.error("初始化 BeanHelper 出错！", e);
+            logger.error("初始化 PluginHelper 出错！", e);
         }
     }
 
