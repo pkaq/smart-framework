@@ -39,8 +39,8 @@ public class IOCHelper {
                                 Object implementInstance = beanMap.get(implementClass);
                                 // 设置该 Bean 字段的值
                                 if (implementInstance != null) {
-                                    beanField.setAccessible(true); // 取消类型安全检测（可提高反射性能）
-                                    beanField.set(beanInstance, implementInstance); // beanInstance 是普通实例，或 CGLib 动态代理实例（不能使 JDK 动态代理实例）
+                                    beanField.setAccessible(true); // 将字段设置为 public
+                                    beanField.set(beanInstance, implementInstance); // 设置字段初始值
                                 }
                             }
                         }

@@ -4,14 +4,13 @@ import com.smart.framework.FrameworkConstant;
 import com.smart.framework.annotation.Aspect;
 import com.smart.framework.annotation.Order;
 import com.smart.framework.annotation.Service;
-import com.smart.framework.base.BaseAspect;
+import com.smart.framework.proxy.AspectProxy;
 import com.smart.framework.proxy.PluginProxy;
 import com.smart.framework.proxy.Proxy;
 import com.smart.framework.proxy.ProxyManager;
 import com.smart.framework.proxy.TransactionProxy;
 import com.smart.framework.util.ClassUtil;
 import com.smart.framework.util.CollectionUtil;
-import com.smart.framework.util.ObjectUtil;
 import com.smart.framework.util.StringUtil;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,13 +38,9 @@ public class AOPHelper {
                 Class<?> targetClass = targetEntry.getKey();
                 List<Proxy> proxyList = targetEntry.getValue();
                 // 创建代理实例
-                Object proxyInstance = ProxyManager.getInstance().createProxy(targetClass, proxyList);
-                // 获取目标实例（从 IOC 容器中获取）
-                Object targetInstance = BeanHelper.getBean(targetClass);
-                // 复制目标实例中的成员变量到代理实例中
-                ObjectUtil.copyFields(targetInstance, proxyInstance);
-                // 用代理实例覆盖目标实例（放入 IOC 容器中）
-                BeanHelper.getBeanMap().put(targetClass, proxyInstance);
+                Object proxyInstance = ProxyManager.createProxy(targetClass, proxyList);
+                // 用代理实例覆盖目标实例，并放入 IOC 容器中
+                BeanHelper.setBean(targetClass, proxyInstance);
             }
         } catch (Exception e) {
             logger.error("初始化 AOPHelper 出错！", e);
@@ -77,19 +72,19 @@ public class AOPHelper {
 
     private static void addAspectProxy(Map<Class<?>, List<Class<?>>> proxyMap) throws Exception {
         // 获取切面类（所有继承于 BaseAspect 的类）
-        List<Class<?>> aspectClassList = ClassHelper.getClassListBySuper(BaseAspect.class);
+        List<Class<?>> aspectProxyClassList = ClassHelper.getClassListBySuper(AspectProxy.class);
         // 排序切面类
-        sortAspectClassList(aspectClassList);
+        sortAspectProxyClassList(aspectProxyClassList);
         // 遍历切面类
-        for (Class<?> aspectClass : aspectClassList) {
+        for (Class<?> aspectProxyClass : aspectProxyClassList) {
             // 判断 @Aspect 注解是否存在
-            if (aspectClass.isAnnotationPresent(Aspect.class)) {
+            if (aspectProxyClass.isAnnotationPresent(Aspect.class)) {
                 // 获取 @Aspect 注解
-                Aspect aspect = aspectClass.getAnnotation(Aspect.class);
+                Aspect aspect = aspectProxyClass.getAnnotation(Aspect.class);
                 // 创建目标类列表
                 List<Class<?>> targetClassList = createTargetClassList(aspect);
                 // 初始化 Proxy Map
-                proxyMap.put(aspectClass, targetClassList);
+                proxyMap.put(aspectProxyClass, targetClassList);
             }
         }
     }
@@ -100,7 +95,7 @@ public class AOPHelper {
         proxyMap.put(TransactionProxy.class, serviceClassList);
     }
 
-    private static void sortAspectClassList(List<Class<?>> proxyClassList) {
+    private static void sortAspectProxyClassList(List<Class<?>> proxyClassList) {
         // 排序代理类列表
         Collections.sort(proxyClassList, new Comparator<Class<?>>() {
             @Override

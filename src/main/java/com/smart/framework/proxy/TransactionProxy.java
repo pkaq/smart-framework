@@ -11,8 +11,8 @@ public class TransactionProxy implements Proxy {
     private static final Logger logger = LoggerFactory.getLogger(TransactionProxy.class);
 
     @Override
-    public Object doProxy(ProxyChain proxyChain) throws Exception {
-        Object result;
+    public Object doProxy(ProxyChain proxyChain) throws Throwable {
+        Object result = null;
         try {
             Method method = proxyChain.getTargetMethod();
             if (method.isAnnotationPresent(Transaction.class)) {
@@ -38,8 +38,7 @@ public class TransactionProxy implements Proxy {
             if (logger.isDebugEnabled()) {
                 logger.debug("[Smart] rollback transaction");
             }
-            // 向上抛出异常
-            throw e;
+            logger.error("操作数据库出错！", e);
         }
         return result;
     }

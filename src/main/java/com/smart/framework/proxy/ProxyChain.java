@@ -1,27 +1,32 @@
 package com.smart.framework.proxy;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import net.sf.cglib.proxy.MethodProxy;
 
 public class ProxyChain {
 
-    private Class<?> targetClass;
-    private Object targetObject;
-    private Method targetMethod;
-    private Object[] methodParams;
-    private MethodProxy methodProxy;
+    private final Class<?> targetClass;
+    private final Object targetObject;
+    private final Method targetMethod;
+    private final MethodProxy methodProxy;
+    private final Object[] methodParams;
 
-    private List<Proxy> proxyList;
-    private int currentProxyIndex = 0;
+    private List<Proxy> proxyList = new ArrayList<Proxy>();
+    private int proxyIndex = 0;
 
-    public ProxyChain(Class<?> targetClass, Object targetObject, Method targetMethod, Object[] methodParams, MethodProxy methodProxy, List<Proxy> proxyList) {
+    public ProxyChain(Class<?> targetClass, Object targetObject, Method targetMethod, MethodProxy methodProxy, Object[] methodParams, List<Proxy> proxyList) {
         this.targetClass = targetClass;
         this.targetObject = targetObject;
         this.targetMethod = targetMethod;
-        this.methodParams = methodParams;
         this.methodProxy = methodProxy;
+        this.methodParams = methodParams;
         this.proxyList = proxyList;
+    }
+
+    public Object[] getMethodParams() {
+        return methodParams;
     }
 
     public Class<?> getTargetClass() {
@@ -32,20 +37,12 @@ public class ProxyChain {
         return targetMethod;
     }
 
-    public Object[] getMethodParams() {
-        return methodParams;
-    }
-
-    public Object doProxyChain() throws Exception {
+    public Object doProxyChain() throws Throwable {
         Object methodResult;
-        if (currentProxyIndex < proxyList.size()) {
-            methodResult = proxyList.get(currentProxyIndex++).doProxy(this);
+        if (proxyIndex < proxyList.size()) {
+            methodResult = proxyList.get(proxyIndex++).doProxy(this);
         } else {
-            try {
-                methodResult = methodProxy.invokeSuper(targetObject, methodParams);
-            } catch (Throwable throwable) {
-                throw new RuntimeException(throwable);
-            }
+            methodResult = methodProxy.invokeSuper(targetObject, methodParams);
         }
         return methodResult;
     }

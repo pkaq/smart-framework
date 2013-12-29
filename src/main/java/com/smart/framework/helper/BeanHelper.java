@@ -1,7 +1,6 @@
 package com.smart.framework.helper;
 
 import com.smart.framework.annotation.Action;
-import com.smart.framework.annotation.Aspect;
 import com.smart.framework.annotation.Bean;
 import com.smart.framework.annotation.Service;
 import java.util.HashMap;
@@ -24,8 +23,7 @@ public class BeanHelper {
                 // 处理带有 @Bean/@Service/@Action/@Aspect 注解的类
                 if (cls.isAnnotationPresent(Bean.class) ||
                     cls.isAnnotationPresent(Service.class) ||
-                    cls.isAnnotationPresent(Action.class) ||
-                    cls.isAnnotationPresent(Aspect.class)) {
+                    cls.isAnnotationPresent(Action.class)) {
                     // 创建 Bean 实例
                     Object beanInstance = cls.newInstance();
                     // 将 Bean 实例放入 Bean Map 中（键为 Bean 类，值为 Bean 实例）
