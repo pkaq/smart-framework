@@ -1,7 +1,9 @@
 package com.smart.framework.util;
 
 import com.smart.framework.FrameworkConstant;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -18,7 +20,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -199,9 +200,8 @@ public class WebUtil {
     // 设置 Redirect URL 到 Session 中
     public static void setRedirectURL(HttpServletRequest request, String sessionKey) {
         if (!isAJAX(request)) {
-            HttpSession session = request.getSession();
-            String requestPath = request.getRequestURL().toString();
-            session.setAttribute(sessionKey, requestPath);
+            String requestPath = getRequestPath(request);
+            request.getSession().setAttribute(sessionKey, requestPath);
         }
     }
 

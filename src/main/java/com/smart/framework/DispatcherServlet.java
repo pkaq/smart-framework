@@ -5,6 +5,7 @@ import com.smart.framework.bean.Page;
 import com.smart.framework.bean.RequestBean;
 import com.smart.framework.bean.Result;
 import com.smart.framework.exception.AccessException;
+import com.smart.framework.exception.PermissionException;
 import com.smart.framework.exception.UploadException;
 import com.smart.framework.helper.ActionHelper;
 import com.smart.framework.helper.BeanHelper;
@@ -39,6 +40,7 @@ public class DispatcherServlet extends HttpServlet {
     // 获取相关配置项
     private static final String homePage = ConfigHelper.getStringProperty(FrameworkConstant.APP_HOME_PAGE);
     private static final String jspPath = ConfigHelper.getStringProperty(FrameworkConstant.APP_JSP_PATH);
+    private static final String forbiddenURL = ConfigHelper.getStringProperty(FrameworkConstant.APP_FORBIDDEN_URL);
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -180,7 +182,8 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void handleActionMethodException(HttpServletRequest request, HttpServletResponse response, Exception e) {
-        if (e.getCause() instanceof AccessException) {
+        Throwable cause = e.getCause();
+        if (cause instanceof AccessException) {
             // 分两种情况进行处理
             if (WebUtil.isAJAX(request)) {
                 // 若为 AJAX 请求，则发送 FORBIDDEN(403) 错误
@@ -189,6 +192,9 @@ public class DispatcherServlet extends HttpServlet {
                 // 否则重定向到首页
                 WebUtil.redirectRequest("/", request, response);
             }
+        } else if (cause instanceof PermissionException) {
+            // 若为权限异常，则跳转到 Forbidden URL
+            WebUtil.redirectRequest(forbiddenURL, request, response);
         } else {
             // 若为其他异常，则记录错误日志
             logger.error("调用 Action 方法出错！", e);
