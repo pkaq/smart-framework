@@ -6,7 +6,7 @@ public class ArrayUtil {
 
     // 判断数组是否非空
     public static boolean isNotEmpty(Object[] array) {
-        return ArrayUtils.isNotEmpty(array);
+        return !ArrayUtils.isEmpty(array);
     }
 
     // 判断数组是否为空
