@@ -24,10 +24,12 @@ public class VelocityTemplateEngine implements TemplateEngine {
     private final VelocityEngine velocityEngine = new VelocityEngine();
 
     public VelocityTemplateEngine() {
+        // 使用 classpath 作为模板根路径
         init(ClassUtil.getClassPath());
     }
 
     public VelocityTemplateEngine(String templateLoaderPath) {
+        // 使用自定义模板根路径
         init(templateLoaderPath);
     }
 
@@ -40,12 +42,12 @@ public class VelocityTemplateEngine implements TemplateEngine {
     }
 
     @Override
-    public void generateDocument(String templatePath, Map<String, Object> dataMap, String documentPath) {
-        Context context = new VelocityContext(dataMap);
+    public void generateDocument(String templatePath, Map<String, Object> templateDataMap, String targetFilePath) {
         Writer writer = null;
+        Context context = new VelocityContext(templateDataMap);
         try {
-            FileUtil.createFile(documentPath);
-            writer = new FileWriter(documentPath);
+            FileUtil.createFile(targetFilePath);
+            writer = new FileWriter(targetFilePath);
             velocityEngine.mergeTemplate(templatePath, FrameworkConstant.DEFAULT_CHARSET, context, writer);
         } catch (Exception e) {
             logger.error("处理模板出错！", e);
@@ -61,14 +63,14 @@ public class VelocityTemplateEngine implements TemplateEngine {
     }
 
     @Override
-    public String generateString(String templateString, Map<String, Object> dataMap) {
-        String result = "";
-        Context context = new VelocityContext(dataMap);
+    public String generateString(String templateString, Map<String, Object> templateDataMap) {
+        String targetString = templateString;
+        Context context = new VelocityContext(templateDataMap);
         Writer writer = null;
         try {
             writer = new StringWriter();
             if (velocityEngine.evaluate(context, writer, "", templateString)) {
-                result = writer.toString();
+                targetString = writer.toString();
             }
         } catch (Exception e) {
             logger.error("处理模板出错！", e);
@@ -81,6 +83,6 @@ public class VelocityTemplateEngine implements TemplateEngine {
                 }
             }
         }
-        return result;
+        return targetString;
     }
 }
