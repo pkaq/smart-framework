@@ -2,7 +2,7 @@ package com.smart.framework.generator;
 
 import java.util.Map;
 
-public interface Generator {
+public interface TemplateEngine {
 
     void generateDocument(String templateFilePath, Map<String, Object> dataMap, String documentFilePath);
 

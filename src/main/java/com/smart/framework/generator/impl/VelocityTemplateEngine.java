@@ -1,7 +1,7 @@
 package com.smart.framework.generator.impl;
 
 import com.smart.framework.FrameworkConstant;
-import com.smart.framework.generator.Generator;
+import com.smart.framework.generator.TemplateEngine;
 import com.smart.framework.util.ClassUtil;
 import com.smart.framework.util.FileUtil;
 import java.io.FileWriter;
@@ -17,17 +17,17 @@ import org.apache.velocity.runtime.log.NullLogChute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class VelocityGenerator implements Generator {
+public class VelocityTemplateEngine implements TemplateEngine {
 
-    private static final Logger logger = LoggerFactory.getLogger(VelocityGenerator.class);
+    private static final Logger logger = LoggerFactory.getLogger(VelocityTemplateEngine.class);
 
     private final VelocityEngine velocityEngine = new VelocityEngine();
 
-    public VelocityGenerator() {
+    public VelocityTemplateEngine() {
         init(ClassUtil.getClassPath());
     }
 
-    public VelocityGenerator(String templateLoaderPath) {
+    public VelocityTemplateEngine(String templateLoaderPath) {
         init(templateLoaderPath);
     }
 
@@ -48,7 +48,7 @@ public class VelocityGenerator implements Generator {
             writer = new FileWriter(documentPath);
             velocityEngine.mergeTemplate(templatePath, FrameworkConstant.DEFAULT_CHARSET, context, writer);
         } catch (Exception e) {
-            logger.error("合并模板出错！", e);
+            logger.error("处理模板出错！", e);
         } finally {
             if (writer != null) {
                 try {
@@ -71,7 +71,7 @@ public class VelocityGenerator implements Generator {
                 result = writer.toString();
             }
         } catch (Exception e) {
-            logger.error("合并模板出错！", e);
+            logger.error("处理模板出错！", e);
         } finally {
             if (writer != null) {
                 try {
