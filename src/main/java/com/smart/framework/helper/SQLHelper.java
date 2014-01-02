@@ -2,8 +2,8 @@ package com.smart.framework.helper;
 
 import com.smart.framework.annotation.Table;
 import com.smart.framework.util.CollectionUtil;
-import com.smart.framework.util.FileUtil;
 import com.smart.framework.util.MapUtil;
+import com.smart.framework.util.PropsUtil;
 import com.smart.framework.util.StringUtil;
 import java.util.Collection;
 import java.util.Map;
@@ -15,7 +15,7 @@ public class SQLHelper {
 
     private static final Logger logger = LoggerFactory.getLogger(SQLHelper.class);
 
-    private static final Properties sqlProps = FileUtil.loadPropsFile("sql.properties");
+    private static final Properties sqlProps = PropsUtil.loadProps("sql.properties");
 
     public static String getSQL(String key) {
         String value = "";

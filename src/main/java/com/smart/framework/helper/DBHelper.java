@@ -21,12 +21,12 @@ public class DBHelper {
     private static final ThreadLocal<Connection> connContainer = new ThreadLocal<Connection>();
 
     // 从配置文件中获取配置项
-    private static final String driver = ConfigHelper.getStringProperty("jdbc.driver");
-    private static final String url = ConfigHelper.getStringProperty("jdbc.url");
-    private static final String username = ConfigHelper.getStringProperty("jdbc.username");
-    private static final String password = ConfigHelper.getStringProperty("jdbc.password");
-    private static final int maxActive = ConfigHelper.getNumberProperty("jdbc.max.active");
-    private static final int maxIdle = ConfigHelper.getNumberProperty("jdbc.max.idle");
+    private static final String driver = ConfigHelper.getConfigString("jdbc.driver");
+    private static final String url = ConfigHelper.getConfigString("jdbc.url");
+    private static final String username = ConfigHelper.getConfigString("jdbc.username");
+    private static final String password = ConfigHelper.getConfigString("jdbc.password");
+    private static final int maxActive = ConfigHelper.getConfigNumber("jdbc.max.active");
+    private static final int maxIdle = ConfigHelper.getConfigNumber("jdbc.max.idle");
 
     // 获取数据源
     public static DataSource getDataSource() {

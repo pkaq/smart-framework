@@ -42,7 +42,7 @@ public class VelocityTemplateEngine implements TemplateEngine {
     }
 
     @Override
-    public void generateDocument(String templatePath, Map<String, Object> templateDataMap, String targetFilePath) {
+    public void mergeTemplateFile(String templatePath, Map<String, Object> templateDataMap, String targetFilePath) {
         Writer writer = null;
         Context context = new VelocityContext(templateDataMap);
         try {
@@ -63,8 +63,32 @@ public class VelocityTemplateEngine implements TemplateEngine {
     }
 
     @Override
-    public String generateString(String templateString, Map<String, Object> templateDataMap) {
-        String targetString = templateString;
+    public String mergeTemplateFile(String templateFilePath, Map<String, Object> templateDataMap) {
+        String targetString = "";
+        Context context = new VelocityContext(templateDataMap);
+        Writer writer = null;
+        try {
+            writer = new StringWriter();
+            if (velocityEngine.mergeTemplate(templateFilePath, FrameworkConstant.DEFAULT_CHARSET, context, writer)) {
+                targetString = writer.toString();
+            }
+        } catch (Exception e) {
+            logger.error("处理模板出错！", e);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (Exception e) {
+                    logger.error("释放资源出错！", e);
+                }
+            }
+        }
+        return targetString;
+    }
+
+    @Override
+    public String mergeTemplateString(String templateString, Map<String, Object> templateDataMap) {
+        String targetString = "";
         Context context = new VelocityContext(templateDataMap);
         Writer writer = null;
         try {
