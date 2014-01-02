@@ -165,9 +165,14 @@ public class DBHelper {
         return DBUtil.queryMapList(getQueryRunner(), sql, params);
     }
 
-    // 查询单列数据
-    public static Object queryColumn(String column, String sql, Object... params) {
+    // 查询单列数据（返回一个对象）
+    public static <T> T queryColumn(String column, String sql, Object... params) {
         return DBUtil.queryColumn(getQueryRunner(), column, sql, params);
+    }
+
+    // 查询单列数据（返回多个对象）
+    public static <T> List<T> queryColumnList(String column, String sql, Object... params) {
+        return DBUtil.queryColumnList(getQueryRunner(), column, sql, params);
     }
 
     private static QueryRunner getQueryRunner() {

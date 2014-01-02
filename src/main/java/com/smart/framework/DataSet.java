@@ -11,13 +11,13 @@ import java.util.Map;
 
 public class DataSet {
 
-    // 查询单条数据，并转为对象
+    // 查询单条数据，并转为相应类型的对象
     public static <T> T select(Class<T> cls, String condition, Object... params) {
         String sql = SQLHelper.generateSelectSQL(cls, condition, "");
         return DBHelper.queryBean(cls, sql, params);
     }
 
-    // 查询多条数据，并转为列表
+    // 查询多条数据，并转为相应类型的列表
     public static <T> List<T> selectList(Class<T> cls, String condition, String sort, Object... params) {
         String sql = SQLHelper.generateSelectSQL(cls, condition, sort);
         return DBHelper.queryBeanList(cls, sql, params);
@@ -65,5 +65,17 @@ public class DataSet {
             map.put(id, obj);
         }
         return map;
+    }
+
+    // 根据列名查询单条数据，并转为相应类型的对象
+    public static <T> T selectColumn(Class<T> cls, String column, String condition, Object... params) {
+        String sql = SQLHelper.generateSelectSQL(cls, condition, "");
+        return DBHelper.queryColumn(column, sql, params);
+    }
+
+    // 根据列名查询多条数据，并转为相应类型的列表
+    public static <T> List<T> selectColumnList(Class<?> cls, String column, String condition, String sort, Object... params) {
+        String sql = SQLHelper.generateSelectSQL(cls, condition, sort);
+        return DBHelper.queryColumnList(column, sql, params);
     }
 }

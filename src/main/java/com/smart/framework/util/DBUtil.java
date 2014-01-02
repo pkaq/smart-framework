@@ -113,10 +113,10 @@ public class DBUtil {
     }
 
     // 查询指定列名的值（单条数据）
-    public static Object queryColumn(QueryRunner runner, String column, String sql, Object... params) {
-        Object result;
+    public static <T> T queryColumn(QueryRunner runner, String column, String sql, Object... params) {
+        T result;
         try {
-            result = runner.query(sql, new ScalarHandler<Object>(column), params);
+            result = runner.query(sql, new ScalarHandler<T>(column), params);
         } catch (SQLException e) {
             logger.error("查询出错！", e);
             throw new RuntimeException(e);
