@@ -126,7 +126,7 @@ public class AOPHelper {
         String cls = aspect.cls(); // 类名
         if (StringUtil.isNotEmpty(pkg) && StringUtil.isNotEmpty(cls)) {
             // 如果包名与类名均不为空，则添加指定类
-            targetClassList.add(Class.forName(pkg + "." + cls));
+            targetClassList.add(ClassUtil.loadClass(pkg + "." + cls, false));
         } else {
             // 否则（包名不为空）添加该包名下所有类
             targetClassList.addAll(ClassUtil.getClassList(pkg, true));

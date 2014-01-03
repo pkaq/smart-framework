@@ -57,7 +57,7 @@ public class ObjectUtil {
     public static <T> T newInstance(String className) {
         T instance;
         try {
-            Class<?> commandClass = Class.forName(className);
+            Class<?> commandClass = ClassUtil.loadClass(className, true);
             instance = (T) commandClass.newInstance();
         } catch (Exception e) {
             logger.error("创建实例出错！", e);
