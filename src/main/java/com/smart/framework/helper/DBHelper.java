@@ -3,13 +3,15 @@ package com.smart.framework.helper;
 import com.smart.framework.util.CastUtil;
 import com.smart.framework.util.DBUtil;
 import com.smart.framework.util.StringUtil;
+import com.smart.framework.util.XMLUtil;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
+import org.dom4j.Document;
+import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,34 +22,42 @@ public class DBHelper {
     // 定义一个局部线程变量（使每个线程都拥有自己的连接）
     private static final ThreadLocal<Connection> connContainer = new ThreadLocal<Connection>();
 
-    // 从配置文件中获取配置项
-    private static final String driver = ConfigHelper.getConfigString("jdbc.driver");
-    private static final String url = ConfigHelper.getConfigString("jdbc.url");
-    private static final String username = ConfigHelper.getConfigString("jdbc.username");
-    private static final String password = ConfigHelper.getConfigString("jdbc.password");
-    private static final int maxActive = ConfigHelper.getConfigNumber("jdbc.max.active");
-    private static final int maxIdle = ConfigHelper.getConfigNumber("jdbc.max.idle");
+    // 创建数据源
+    private static BasicDataSource ds = createDataSource();
 
-    // 获取数据源
-    public static DataSource getDataSource() {
-        BasicDataSource ds = new BasicDataSource();
-        if (StringUtil.isNotEmpty(driver)) {
-            ds.setDriverClassName(driver);
-        }
-        if (StringUtil.isNotEmpty(url)) {
-            ds.setUrl(url);
-        }
-        if (StringUtil.isNotEmpty(username)) {
-            ds.setUsername(username);
-        }
-        if (StringUtil.isNotEmpty(password)) {
-            ds.setPassword(password);
-        }
-        if (maxActive != 0) {
-            ds.setMaxActive(maxActive);
-        }
-        if (maxIdle != 0) {
-            ds.setMaxIdle(maxIdle);
+    private static BasicDataSource createDataSource() {
+        // 读取 XML 配置文件
+        Document doc = XMLUtil.loadDocument("db.xml");
+        if (doc != null) {
+            // 获取根元素
+            Element db = doc.getRootElement();
+            // 获取相关配置项
+            String driver = db.elementTextTrim("driver");
+            String url = db.elementTextTrim("url");
+            String username = db.elementTextTrim("username");
+            String password = db.elementTextTrim("password");
+            int maxActive = CastUtil.castInt(db.elementTextTrim("maxActive"), 0);
+            int maxIdle = CastUtil.castInt(db.elementTextTrim("maxIdle"), 0);
+            // 创建并初始化 DBCP 数据源
+            ds = new BasicDataSource();
+            if (StringUtil.isNotEmpty(driver)) {
+                ds.setDriverClassName(driver);
+            }
+            if (StringUtil.isNotEmpty(url)) {
+                ds.setUrl(url);
+            }
+            if (StringUtil.isNotEmpty(username)) {
+                ds.setUsername(username);
+            }
+            if (StringUtil.isNotEmpty(password)) {
+                ds.setPassword(password);
+            }
+            if (maxActive != 0) {
+                ds.setMaxActive(maxActive);
+            }
+            if (maxIdle != 0) {
+                ds.setMaxIdle(maxIdle);
+            }
         }
         return ds;
     }
@@ -59,7 +69,7 @@ public class DBHelper {
             conn = connContainer.get();
             if (conn == null) {
                 // 若不存在，则从 DataSource 中获取 Connection
-                conn = getDataSource().getConnection();
+                conn = ds.getConnection();
             }
         } catch (SQLException e) {
             logger.error("获取数据库连接出错！", e);
@@ -131,7 +141,7 @@ public class DBHelper {
     public static String getDBType() {
         String dbType;
         try {
-            dbType = getDataSource().getConnection().getMetaData().getDatabaseProductName();
+            dbType = ds.getConnection().getMetaData().getDatabaseProductName();
         } catch (SQLException e) {
             logger.error("获取数据库类型出错！", e);
             throw new RuntimeException(e);
@@ -176,7 +186,7 @@ public class DBHelper {
     }
 
     private static QueryRunner getQueryRunner() {
-        return new QueryRunner(getDataSource());
+        return new QueryRunner(ds);
     }
 
     private static Map<String, String> getEntityMap(Class<?> cls) {

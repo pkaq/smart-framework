@@ -1,6 +1,7 @@
 package com.smart.framework.base;
 
 import com.smart.framework.util.JSONUtil;
+import com.smart.framework.util.XMLUtil;
 import java.io.Serializable;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -26,5 +27,9 @@ public abstract class BaseBean implements Serializable {
 
     public String toJson() {
         return JSONUtil.toJSON(this);
+    }
+
+    public String toXML() {
+        return XMLUtil.toXML(this);
     }
 }
