@@ -45,7 +45,7 @@ public class DataSet {
     }
 
     // 查询数据条数
-    public static int selectCount(Class<?> cls, String condition, Object... params) {
+    public static long selectCount(Class<?> cls, String condition, Object... params) {
         String sql = SQLHelper.generateSelectSQLForCount(cls, condition);
         return DBHelper.queryCount(sql, params);
     }
