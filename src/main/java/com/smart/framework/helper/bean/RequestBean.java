@@ -1,4 +1,4 @@
-package com.smart.framework.bean;
+package com.smart.framework.helper.bean;
 
 public class RequestBean {
 

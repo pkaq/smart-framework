@@ -1,6 +1,5 @@
 package com.smart.framework.base;
 
-import com.smart.framework.util.JSONUtil;
 import java.io.Serializable;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -22,9 +21,5 @@ public abstract class BaseBean implements Serializable {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }
-
-    public String toJson() {
-        return JSONUtil.toJSON(this);
     }
 }

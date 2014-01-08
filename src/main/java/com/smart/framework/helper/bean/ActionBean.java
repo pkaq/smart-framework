@@ -1,4 +1,4 @@
-package com.smart.framework.bean;
+package com.smart.framework.helper.bean;
 
 import java.lang.reflect.Method;
 

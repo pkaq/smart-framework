@@ -1,8 +1,6 @@
 package com.smart.framework;
 
-import com.smart.framework.bean.ActionBean;
 import com.smart.framework.bean.Page;
-import com.smart.framework.bean.RequestBean;
 import com.smart.framework.bean.Result;
 import com.smart.framework.exception.AccessException;
 import com.smart.framework.exception.PermissionException;
@@ -11,6 +9,8 @@ import com.smart.framework.helper.ActionHelper;
 import com.smart.framework.helper.BeanHelper;
 import com.smart.framework.helper.ConfigHelper;
 import com.smart.framework.helper.UploadHelper;
+import com.smart.framework.helper.bean.ActionBean;
+import com.smart.framework.helper.bean.RequestBean;
 import com.smart.framework.util.CastUtil;
 import com.smart.framework.util.MapUtil;
 import com.smart.framework.util.StringUtil;
