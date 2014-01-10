@@ -43,7 +43,7 @@ public class CodecUtil {
     public static String encodeBase64(String str) {
         String target;
         try {
-            target = Base64.encodeBase64String(str.getBytes(FrameworkConstant.DEFAULT_CHARSET));
+            target = Base64.encodeBase64URLSafeString(str.getBytes(FrameworkConstant.DEFAULT_CHARSET));
         } catch (UnsupportedEncodingException e) {
             logger.error("编码出错！", e);
             throw new RuntimeException(e);
