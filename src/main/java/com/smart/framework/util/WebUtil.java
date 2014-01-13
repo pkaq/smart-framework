@@ -187,7 +187,7 @@ public class WebUtil {
     public static void downloadFile(HttpServletResponse response, String filePath) {
         try {
             String originalFileName = FilenameUtils.getName(filePath);
-            String downloadedFileName = new String(originalFileName.getBytes(), FrameworkConstant.CHARSET_ISO);
+            String downloadedFileName = new String(originalFileName.getBytes("GBK"), FrameworkConstant.CHARSET_ISO);
 
             response.setContentType("application/octet-stream");
             response.addHeader("Content-Disposition", "attachment;filename=\"" + downloadedFileName + "\"");
@@ -276,5 +276,11 @@ public class WebUtil {
             throw new RuntimeException(e);
         }
         return captcha.toString();
+    }
+
+    // 是否为 IE 浏览器
+    public boolean isIE(HttpServletRequest request) {
+        String agent = request.getHeader("User-Agent");
+        return agent != null && agent.contains("MSIE");
     }
 }
