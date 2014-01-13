@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class WebUtil {
         try {
             // 设置响应头
             response.setContentType("application/json"); // 指定内容类型为 JSON 格式
-            response.setCharacterEncoding(FrameworkConstant.DEFAULT_CHARSET); // 防止中文乱码
+            response.setCharacterEncoding(FrameworkConstant.CHARSET_UTF); // 防止中文乱码
 
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();
@@ -49,7 +50,7 @@ public class WebUtil {
         try {
             // 设置响应头
             response.setContentType("text/html"); // 指定内容类型为 HTML 格式
-            response.setCharacterEncoding(FrameworkConstant.DEFAULT_CHARSET); // 防止中文乱码
+            response.setCharacterEncoding(FrameworkConstant.CHARSET_UTF); // 防止中文乱码
 
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();
@@ -66,7 +67,7 @@ public class WebUtil {
         try {
             String method = request.getMethod();
             if (method.equalsIgnoreCase("put") || method.equalsIgnoreCase("delete")) {
-                String queryString = CodecUtil.decodeUTF8(StreamUtil.getString(request.getInputStream()));
+                String queryString = CodecUtil.urlDecode(StreamUtil.getString(request.getInputStream()));
                 if (StringUtil.isNotEmpty(queryString)) {
                     String[] qsArray = StringUtil.splitString(queryString, "&");
                     if (ArrayUtil.isNotEmpty(qsArray)) {
@@ -76,7 +77,7 @@ public class WebUtil {
                                 String paramName = array[0];
                                 String paramValue = array[1];
                                 if (checkParamName(paramName)) {
-                                    paramMap.put(paramName, paramValue);
+                                    paramMap.put(paramName, encodeParamValue(paramValue));
                                 }
                             }
                         }
@@ -90,7 +91,7 @@ public class WebUtil {
                         String[] paramValues = request.getParameterValues(paramName);
                         if (ArrayUtil.isNotEmpty(paramValues)) {
                             if (paramValues.length == 1) {
-                                paramMap.put(paramName, paramValues[0]);
+                                paramMap.put(paramName, encodeParamValue(paramValues[0]));
                             } else {
                                 StringBuilder paramValue = new StringBuilder("");
                                 for (int i = 0; i < paramValues.length; i++) {
@@ -99,7 +100,7 @@ public class WebUtil {
                                         paramValue.append(StringUtil.SEPARATOR);
                                     }
                                 }
-                                paramMap.put(paramName, paramValue.toString());
+                                paramMap.put(paramName, encodeParamValue(paramValue.toString()));
                             }
                         }
                     }
@@ -114,6 +115,10 @@ public class WebUtil {
 
     private static boolean checkParamName(String paramName) {
         return !paramName.equals("_"); // 忽略 jQuery 缓存参数
+    }
+
+    private static String encodeParamValue(String paramValue) throws UnsupportedEncodingException {
+        return new String(paramValue.getBytes(FrameworkConstant.CHARSET_ISO), FrameworkConstant.CHARSET_UTF);
     }
 
     // 转发请求
@@ -166,7 +171,7 @@ public class WebUtil {
             if (cookieArray != null) {
                 for (Cookie cookie : cookieArray) {
                     if (StringUtil.isNotEmpty(name) && name.equals(cookie.getName())) {
-                        value = CodecUtil.decodeUTF8(cookie.getValue());
+                        value = CodecUtil.urlDecode(cookie.getValue());
                         break;
                     }
                 }
@@ -182,11 +187,10 @@ public class WebUtil {
     public static void downloadFile(HttpServletResponse response, String filePath) {
         try {
             String originalFileName = FilenameUtils.getName(filePath);
-            String decodedFileName = FileUtil.getDecodedFileName(originalFileName);
-            String downloadedFileName = new String(decodedFileName.getBytes(), "ISO-8859-1");
+            String downloadedFileName = new String(originalFileName.getBytes(), FrameworkConstant.CHARSET_ISO);
 
             response.setContentType("application/octet-stream");
-            response.addHeader("Content-Disposition", "attachment;filename=" + downloadedFileName);
+            response.addHeader("Content-Disposition", "attachment;filename=\"" + downloadedFileName + "\"");
 
             InputStream inputStream = new BufferedInputStream(new FileInputStream(filePath));
             OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());

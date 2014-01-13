@@ -10,11 +10,10 @@ public class TransactionProxy implements Proxy {
 
     private static final Logger logger = LoggerFactory.getLogger(TransactionProxy.class);
 
-    private boolean isTransactional = false; // 默认不具有事务
-
     @Override
     public Object doProxy(ProxyChain proxyChain) throws Throwable {
         Object result = null;
+        boolean isTransactional = false; // 默认不具有事务
         try {
             // 获取目标方法
             Method method = proxyChain.getTargetMethod();

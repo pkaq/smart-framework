@@ -15,11 +15,11 @@ public class CodecUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(CodecUtil.class);
 
-    // 将字符串 UTF-8 编码
-    public static String encodeUTF8(String str) {
+    // 将 URL 编码
+    public static String urlEncode(String str) {
         String target;
         try {
-            target = URLEncoder.encode(str, FrameworkConstant.DEFAULT_CHARSET);
+            target = URLEncoder.encode(str, FrameworkConstant.CHARSET_UTF);
         } catch (Exception e) {
             logger.error("编码出错！", e);
             throw new RuntimeException(e);
@@ -27,11 +27,11 @@ public class CodecUtil {
         return target;
     }
 
-    // 将字符串 UTF-8 解码
-    public static String decodeUTF8(String str) {
+    // 将 URL 解码
+    public static String urlDecode(String str) {
         String target;
         try {
-            target = URLDecoder.decode(str, FrameworkConstant.DEFAULT_CHARSET);
+            target = URLDecoder.decode(str, FrameworkConstant.CHARSET_UTF);
         } catch (Exception e) {
             logger.error("解码出错！", e);
             throw new RuntimeException(e);
@@ -43,7 +43,7 @@ public class CodecUtil {
     public static String encodeBase64(String str) {
         String target;
         try {
-            target = Base64.encodeBase64URLSafeString(str.getBytes(FrameworkConstant.DEFAULT_CHARSET));
+            target = Base64.encodeBase64URLSafeString(str.getBytes(FrameworkConstant.CHARSET_UTF));
         } catch (UnsupportedEncodingException e) {
             logger.error("编码出错！", e);
             throw new RuntimeException(e);
@@ -55,7 +55,7 @@ public class CodecUtil {
     public static String decodeBase64(String str) {
         String target;
         try {
-            target = new String(Base64.decodeBase64(str), FrameworkConstant.DEFAULT_CHARSET);
+            target = new String(Base64.decodeBase64(str), FrameworkConstant.CHARSET_UTF);
         } catch (UnsupportedEncodingException e) {
             logger.error("解码出错！", e);
             throw new RuntimeException(e);

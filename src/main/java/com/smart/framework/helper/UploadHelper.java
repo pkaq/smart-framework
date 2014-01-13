@@ -74,18 +74,17 @@ public class UploadHelper {
             String fieldName = fileItem.getFieldName();
             if (fileItem.isFormField()) {
                 // 处理普通字段
-                String fieldValue = fileItem.getString(FrameworkConstant.DEFAULT_CHARSET);
+                String fieldValue = fileItem.getString(FrameworkConstant.CHARSET_UTF);
                 fieldMap.put(fieldName, fieldValue);
             } else {
                 // 处理文件字段
-                String originalFileName = FileUtil.getRealFileName(fileItem.getName());
-                if (StringUtil.isNotEmpty(originalFileName)) {
-                    String uploadedFileName = FileUtil.getEncodedFileName(originalFileName);
+                String fileName = FileUtil.getRealFileName(fileItem.getName());
+                if (StringUtil.isNotEmpty(fileName)) {
                     String contentType = fileItem.getContentType();
                     long fileSize = fileItem.getSize();
                     InputStream inputSteam = fileItem.getInputStream();
                     // 创建 Multipart 对象，并将其添加到 multipartList 中
-                    Multipart multipart = new Multipart(uploadedFileName, contentType, fileSize, inputSteam);
+                    Multipart multipart = new Multipart(fileName, contentType, fileSize, inputSteam);
                     multipartList.add(multipart);
                 }
             }

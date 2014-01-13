@@ -120,7 +120,7 @@ public class FileUtil {
         try {
             FileUtil.createFile(filePath);
             os = new BufferedOutputStream(new FileOutputStream(filePath));
-            w = new OutputStreamWriter(os, FrameworkConstant.DEFAULT_CHARSET);
+            w = new OutputStreamWriter(os, FrameworkConstant.CHARSET_UTF);
             w.write(fileContent);
             w.flush();
         } catch (Exception e) {
@@ -143,20 +143,6 @@ public class FileUtil {
     // 获取真实文件名（去掉文件路径）
     public static String getRealFileName(String fileName) {
         return FilenameUtils.getName(fileName);
-    }
-
-    // 获取编码后的文件名（将文件名进行 Base64 编码）
-    public static String getEncodedFileName(String fileName) {
-        String prefix = FilenameUtils.getBaseName(fileName);
-        String suffix = FilenameUtils.getExtension(fileName);
-        return CodecUtil.encodeBase64(prefix) + "." + suffix;
-    }
-
-    // 获取解码后的文件名（将文件名进行 Base64 解码）
-    public static String getDecodedFileName(String fileName) {
-        String prefix = FilenameUtils.getBaseName(fileName);
-        String suffix = FilenameUtils.getExtension(fileName);
-        return CodecUtil.decodeBase64(prefix) + "." + suffix;
     }
 
     // 判断文件是否存在
