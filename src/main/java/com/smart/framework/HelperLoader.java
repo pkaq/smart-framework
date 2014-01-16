@@ -9,7 +9,7 @@ import com.smart.framework.helper.IOCHelper;
 import com.smart.framework.helper.PluginHelper;
 import com.smart.framework.util.ClassUtil;
 
-public final class Smart {
+public final class HelperLoader {
 
     public static void init() {
         Class<?>[] classList = {

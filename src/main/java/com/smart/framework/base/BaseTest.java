@@ -1,7 +1,7 @@
 package com.smart.framework.base;
 
+import com.smart.framework.HelperLoader;
 import com.smart.framework.OrderedRunner;
-import com.smart.framework.Smart;
 import com.smart.framework.helper.DBHelper;
 import com.smart.framework.util.ClassUtil;
 import java.io.File;
@@ -17,7 +17,7 @@ public abstract class BaseTest {
     private static final Logger logger = LoggerFactory.getLogger(BaseTest.class);
 
     static {
-        Smart.init();
+        HelperLoader.init();
     }
 
     protected static void initSQL(String sqlPath) {
