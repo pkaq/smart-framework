@@ -92,7 +92,11 @@ public class UploadHelper {
         // 初始化参数列表
         paramList.add(fieldMap);
         if (CollectionUtil.isNotEmpty(multipartList)) {
-            paramList.add(multipartList);
+            if (multipartList.size() == 1) {
+                paramList.add(multipartList.get(0));
+            } else {
+                paramList.add(multipartList);
+            }
         } else {
             paramList.add(null);
         }
