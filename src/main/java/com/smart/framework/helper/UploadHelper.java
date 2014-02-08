@@ -2,6 +2,7 @@ package com.smart.framework.helper;
 
 import com.smart.framework.FrameworkConstant;
 import com.smart.framework.bean.Multipart;
+import com.smart.framework.bean.Multiparts;
 import com.smart.framework.exception.UploadException;
 import com.smart.framework.util.CollectionUtil;
 import com.smart.framework.util.FileUtil;
@@ -92,11 +93,7 @@ public class UploadHelper {
         // 初始化参数列表
         paramList.add(fieldMap);
         if (CollectionUtil.isNotEmpty(multipartList)) {
-            if (multipartList.size() == 1) {
-                paramList.add(multipartList.get(0));
-            } else {
-                paramList.add(multipartList);
-            }
+            paramList.add(new Multiparts(multipartList));
         } else {
             paramList.add(null);
         }
@@ -118,6 +115,12 @@ public class UploadHelper {
         } catch (Exception e) {
             logger.error("上传文件出错！", e);
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void uploadFiles(String basePath, Multiparts multiparts) {
+        for (Multipart multipart : multiparts.getAll()) {
+            uploadFile(basePath, multipart);
         }
     }
 }
