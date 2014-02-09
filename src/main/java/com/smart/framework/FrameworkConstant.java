@@ -15,4 +15,5 @@ public interface FrameworkConstant {
     String JSP_SERVLET_NAME = "jsp";
 
     String PLUGIN_PACKAGE = "com.smart.plugin";
+    String MODULE_PACKAGE = "com.smart.module";
 }

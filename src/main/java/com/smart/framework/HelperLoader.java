@@ -6,6 +6,7 @@ import com.smart.framework.helper.BeanHelper;
 import com.smart.framework.helper.DBHelper;
 import com.smart.framework.helper.EntityHelper;
 import com.smart.framework.helper.IOCHelper;
+import com.smart.framework.helper.ModuleHelper;
 import com.smart.framework.helper.PluginHelper;
 import com.smart.framework.util.ClassUtil;
 
@@ -20,6 +21,7 @@ public final class HelperLoader {
             AOPHelper.class,
             IOCHelper.class,
             PluginHelper.class,
+            ModuleHelper.class,
         };
         for (Class<?> cls : classList) {
             ClassUtil.loadClass(cls.getName(), true);

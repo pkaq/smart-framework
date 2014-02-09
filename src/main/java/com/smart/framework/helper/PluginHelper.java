@@ -24,7 +24,7 @@ public class PluginHelper {
                 Plugin plugin = (Plugin) pluginClass.newInstance();
                 // 调用初始化方法
                 plugin.init();
-                // 将 Plugin 实例添加到 Plugin 列表
+                // 将 Plugin 实例添加到 Plugin 列表中
                 pluginList.add(plugin);
             }
         } catch (Exception e) {
