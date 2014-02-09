@@ -58,8 +58,10 @@ public class DispatcherServlet extends HttpServlet {
             logger.debug("[Smart] {}:{}", currentRequestMethod, currentRequestPath);
         }
         // 将“/”请求重定向到首页
-        if (StringUtil.isNotEmpty(homePage) && currentRequestPath.equals("/")) {
-            WebUtil.redirectRequest(homePage, request, response);
+        if (currentRequestPath.equals("/")) {
+            if (StringUtil.isNotEmpty(homePage)) {
+                WebUtil.redirectRequest(homePage, request, response);
+            }
             return;
         }
         // 去掉当前请求路径末尾的“/”
