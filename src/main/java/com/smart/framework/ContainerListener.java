@@ -18,11 +18,10 @@ public class ContainerListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        ServletContext context = sce.getServletContext();
         // 初始化相关 Helper 类
         HelperLoader.init();
         // 添加 Servlet 映射
-        addServletMapping(context);
+        addServletMapping(sce.getServletContext());
     }
 
     @Override

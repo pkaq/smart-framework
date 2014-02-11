@@ -120,7 +120,7 @@ public class FileUtil {
         try {
             FileUtil.createFile(filePath);
             os = new BufferedOutputStream(new FileOutputStream(filePath));
-            w = new OutputStreamWriter(os, FrameworkConstant.CHARSET_UTF);
+            w = new OutputStreamWriter(os, FrameworkConstant.UTF_8);
             w.write(fileContent);
             w.flush();
         } catch (Exception e) {

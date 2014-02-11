@@ -75,7 +75,7 @@ public class UploadHelper {
             String fieldName = fileItem.getFieldName();
             if (fileItem.isFormField()) {
                 // 处理普通字段
-                String fieldValue = fileItem.getString(FrameworkConstant.CHARSET_UTF);
+                String fieldValue = fileItem.getString(FrameworkConstant.UTF_8);
                 fieldMap.put(fieldName, fieldValue);
             } else {
                 // 处理文件字段
@@ -92,6 +92,7 @@ public class UploadHelper {
         }
         // 初始化参数列表
         paramList.add(fieldMap);
+        // 不管一个文件还是多个文件，都映射为 Multiparts 参数
         if (CollectionUtil.isNotEmpty(multipartList)) {
             paramList.add(new Multiparts(multipartList));
         } else {

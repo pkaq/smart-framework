@@ -19,7 +19,7 @@ public class CodecUtil {
     public static String urlEncode(String str) {
         String target;
         try {
-            target = URLEncoder.encode(str, FrameworkConstant.CHARSET_UTF);
+            target = URLEncoder.encode(str, FrameworkConstant.UTF_8);
         } catch (Exception e) {
             logger.error("编码出错！", e);
             throw new RuntimeException(e);
@@ -31,7 +31,7 @@ public class CodecUtil {
     public static String urlDecode(String str) {
         String target;
         try {
-            target = URLDecoder.decode(str, FrameworkConstant.CHARSET_UTF);
+            target = URLDecoder.decode(str, FrameworkConstant.UTF_8);
         } catch (Exception e) {
             logger.error("解码出错！", e);
             throw new RuntimeException(e);
@@ -43,7 +43,7 @@ public class CodecUtil {
     public static String encodeBase64(String str) {
         String target;
         try {
-            target = Base64.encodeBase64URLSafeString(str.getBytes(FrameworkConstant.CHARSET_UTF));
+            target = Base64.encodeBase64URLSafeString(str.getBytes(FrameworkConstant.UTF_8));
         } catch (UnsupportedEncodingException e) {
             logger.error("编码出错！", e);
             throw new RuntimeException(e);
@@ -55,7 +55,7 @@ public class CodecUtil {
     public static String decodeBase64(String str) {
         String target;
         try {
-            target = new String(Base64.decodeBase64(str), FrameworkConstant.CHARSET_UTF);
+            target = new String(Base64.decodeBase64(str), FrameworkConstant.UTF_8);
         } catch (UnsupportedEncodingException e) {
             logger.error("解码出错！", e);
             throw new RuntimeException(e);
