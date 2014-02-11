@@ -26,7 +26,7 @@ public class PropsUtil {
                 props.load(is);
             }
         } catch (IOException e) {
-            logger.error("加载属性文件出错！propsPath：" + propsPath, e);
+            logger.error("加载属性文件出错！", e);
             throw new RuntimeException(e);
         } finally {
             try {
