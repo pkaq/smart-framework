@@ -166,7 +166,8 @@ public class DBHelper {
     public static int update(String sql, Object... params) {
         int result;
         try {
-            result = queryRunner.update(sql, params);
+            Connection conn = getConnection();
+            result = queryRunner.update(conn, sql, params);
         } catch (SQLException e) {
             logger.error("更新出错！", e);
             throw new RuntimeException(e);
