@@ -198,9 +198,9 @@ public class DispatcherServlet extends HttpServlet {
             // 若为权限异常，则跳转到 Forbidden URL
             WebUtil.redirectRequest(forbiddenURL, request, response);
         } else {
-            // 若为其他异常，则记录错误日志
+            // 若为其他异常，则记录错误日志，并返回错误代码
             logger.error("调用 Action 方法出错！", e);
-            throw new RuntimeException(e); // 这里需要向上抛出异常，否则无法定位到错误页面
+            WebUtil.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
         }
     }
 
