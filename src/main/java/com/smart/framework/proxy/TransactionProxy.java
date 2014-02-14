@@ -12,7 +12,7 @@ public class TransactionProxy implements Proxy {
 
     @Override
     public Object doProxy(ProxyChain proxyChain) throws Throwable {
-        Object result = null;
+        Object result;
         boolean isTransactional = false; // 默认不具有事务
         try {
             // 获取目标方法
@@ -46,7 +46,7 @@ public class TransactionProxy implements Proxy {
                     logger.debug("[Smart] rollback transaction");
                 }
             }
-            logger.error("服务端运行出错！", e);
+            throw e;
         }
         return result;
     }
