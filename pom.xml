@@ -7,9 +7,8 @@
 
     <parent>
         <groupId>com.smart</groupId>
-        <artifactId>smart-parent</artifactId>
+        <artifactId>smart</artifactId>
         <version>1.0</version>
-        <relativePath>../smart-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>smart-framework</artifactId>
