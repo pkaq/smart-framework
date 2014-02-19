@@ -38,17 +38,21 @@ public class ActionHelper {
                                 // 获取请求方法与请求路径
                                 String requestMethod = urlArray[0];
                                 String requestPath = urlArray[1];
-                                // 判断 Request Path 中是否带有占位符
-                                if (requestPath.matches(".+\\{\\w+\\}.*")) {
-                                    // 将请求路径中的占位符 {\w+} 转换为正则表达式 (\\w+)
-                                    requestPath = StringUtil.replaceAll(requestPath, "\\{\\w+\\}", "(\\\\w+)");
-                                    // 将 RequestBean 与 ActionBean 放入 Regexp Action Map 中
-                                    regexpActionMap.put(new RequestBean(requestMethod, requestPath), new ActionBean(actionClass, actionMethod));
-                                } else {
-                                    // 将 RequestBean 与 ActionBean 放入 Common Action Map 中
-                                    commonActionMap.put(new RequestBean(requestMethod, requestPath), new ActionBean(actionClass, actionMethod));
-                                }
+                                // 将 RequestBean 与 ActionBean 放入 Action Map 中
+                                putActionMap(requestMethod, requestPath, actionClass, actionMethod, commonActionMap, regexpActionMap);
                             }
+                        } else if (actionMethod.isAnnotationPresent(Request.Get.class)) {
+                            String requestPath = actionMethod.getAnnotation(Request.Get.class).value();
+                            putActionMap("GET", requestPath, actionClass, actionMethod, commonActionMap, regexpActionMap);
+                        } else if (actionMethod.isAnnotationPresent(Request.Post.class)) {
+                            String requestPath = actionMethod.getAnnotation(Request.Post.class).value();
+                            putActionMap("POST", requestPath, actionClass, actionMethod, commonActionMap, regexpActionMap);
+                        } else if (actionMethod.isAnnotationPresent(Request.Put.class)) {
+                            String requestPath = actionMethod.getAnnotation(Request.Put.class).value();
+                            putActionMap("PUT", requestPath, actionClass, actionMethod, commonActionMap, regexpActionMap);
+                        } else if (actionMethod.isAnnotationPresent(Request.Delete.class)) {
+                            String requestPath = actionMethod.getAnnotation(Request.Delete.class).value();
+                            putActionMap("DELETE", requestPath, actionClass, actionMethod, commonActionMap, regexpActionMap);
                         }
                     }
                 }
@@ -56,6 +60,19 @@ public class ActionHelper {
             // 初始化最终的 Action Map（将 Common 放在 Regexp 前面）
             actionMap.putAll(commonActionMap);
             actionMap.putAll(regexpActionMap);
+        }
+    }
+
+    private static void putActionMap(String requestMethod, String requestPath, Class<?> actionClass, Method actionMethod, Map<RequestBean, ActionBean> commonActionMap, Map<RequestBean, ActionBean> regexpActionMap) {
+        // 判断 Request Path 中是否带有占位符
+        if (requestPath.matches(".+\\{\\w+\\}.*")) {
+            // 将请求路径中的占位符 {\w+} 转换为正则表达式 (\\w+)
+            requestPath = StringUtil.replaceAll(requestPath, "\\{\\w+\\}", "(\\\\w+)");
+            // 将 RequestBean 与 ActionBean 放入 Regexp Action Map 中
+            regexpActionMap.put(new RequestBean(requestMethod, requestPath), new ActionBean(actionClass, actionMethod));
+        } else {
+            // 将 RequestBean 与 ActionBean 放入 Common Action Map 中
+            commonActionMap.put(new RequestBean(requestMethod, requestPath), new ActionBean(actionClass, actionMethod));
         }
     }
 
