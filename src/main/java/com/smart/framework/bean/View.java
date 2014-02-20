@@ -4,17 +4,17 @@ import com.smart.framework.base.BaseBean;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Page extends BaseBean {
+public class View extends BaseBean {
 
-    private String path;              // 页面路径
+    private String path;              // 视图路径
     private Map<String, Object> data; // 相关数据
 
-    public Page(String path) {
+    public View(String path) {
         this.path = path;
         data = new HashMap<String, Object>();
     }
 
-    public Page data(String key, Object value) {
+    public View data(String key, Object value) {
         data.put(key, value);
         return this;
     }

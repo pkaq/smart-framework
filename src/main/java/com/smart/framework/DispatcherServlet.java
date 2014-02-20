@@ -1,7 +1,7 @@
 package com.smart.framework;
 
-import com.smart.framework.bean.Page;
 import com.smart.framework.bean.Result;
+import com.smart.framework.bean.View;
 import com.smart.framework.exception.AccessException;
 import com.smart.framework.exception.PermissionException;
 import com.smart.framework.exception.UploadException;
@@ -217,19 +217,19 @@ public class DispatcherServlet extends HttpServlet {
                     // 对于其它类型，统一转换为 JSON 格式并写入响应中
                     WebUtil.writeJSON(response, result);
                 }
-            } else if (actionMethodResult instanceof Page) {
-                // 若为 Page 类型，则 转发 或 重定向 到相应的页面中
-                Page page = (Page) actionMethodResult;
-                if (page.isRedirect()) {
+            } else if (actionMethodResult instanceof View) {
+                // 若为 View 类型，则 转发 或 重定向 到相应的页面中
+                View view = (View) actionMethodResult;
+                if (view.isRedirect()) {
                     // 获取路径
-                    String path = page.getPath();
+                    String path = view.getPath();
                     // 重定向请求
                     WebUtil.redirectRequest(path, request, response);
                 } else {
                     // 获取路径
-                    String path = jspPath + page.getPath();
+                    String path = jspPath + view.getPath();
                     // 初始化请求属性
-                    Map<String, Object> data = page.getData();
+                    Map<String, Object> data = view.getData();
                     if (MapUtil.isNotEmpty(data)) {
                         for (Map.Entry<String, Object> entry : data.entrySet()) {
                             request.setAttribute(entry.getKey(), entry.getValue());
