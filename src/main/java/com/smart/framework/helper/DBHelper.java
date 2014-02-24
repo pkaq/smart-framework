@@ -66,6 +66,10 @@ public class DBHelper {
             if (conn == null) {
                 // 若不存在，则从 DataSource 中获取 Connection
                 conn = dataSource.getConnection();
+                // 将 Connection 放入 ThreadLocal 中
+                if (conn != null) {
+                    connContainer.set(conn);
+                }
             }
         } catch (SQLException e) {
             logger.error("获取数据库连接出错！", e);
