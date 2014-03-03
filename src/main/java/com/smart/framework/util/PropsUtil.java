@@ -1,5 +1,6 @@
 package com.smart.framework.util;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -24,8 +25,10 @@ public class PropsUtil {
             is = ClassUtil.getClassLoader().getResourceAsStream(propsPath);
             if (is != null) {
                 props.load(is);
+            } else {
+                throw new FileNotFoundException();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("加载属性文件出错！", e);
             throw new RuntimeException(e);
         } finally {
