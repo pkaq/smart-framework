@@ -19,15 +19,17 @@ public class PropsUtil {
         InputStream is = null;
         try {
             String suffix = ".properties";
+            if (StringUtil.isEmpty(propsPath)) {
+                throw new IllegalArgumentException();
+            }
             if (propsPath.lastIndexOf(suffix) == -1) {
                 propsPath += suffix;
             }
             is = ClassUtil.getClassLoader().getResourceAsStream(propsPath);
-            if (is != null) {
-                props.load(is);
-            } else {
+            if (is == null) {
                 throw new FileNotFoundException();
             }
+            props.load(is);
         } catch (Exception e) {
             logger.error("加载属性文件出错！", e);
             throw new RuntimeException(e);
