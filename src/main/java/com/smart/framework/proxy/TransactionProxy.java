@@ -23,16 +23,12 @@ public class TransactionProxy implements Proxy {
                 isTransactional = true;
                 // 开启事务
                 DBHelper.beginTransaction();
-                if (logger.isDebugEnabled()) {
-                    logger.debug("[Smart] begin transaction");
-                }
+                logger.debug("[Smart] begin transaction");
                 // 执行操作
                 result = proxyChain.doProxyChain();
                 // 提交事务
                 DBHelper.commitTransaction();
-                if (logger.isDebugEnabled()) {
-                    logger.debug("[Smart] commit transaction");
-                }
+                logger.debug("[Smart] commit transaction");
             } else {
                 // 执行操作
                 result = proxyChain.doProxyChain();
@@ -42,9 +38,7 @@ public class TransactionProxy implements Proxy {
             if (isTransactional) {
                 // 回滚事务
                 DBHelper.rollbackTransaction();
-                if (logger.isDebugEnabled()) {
-                    logger.debug("[Smart] rollback transaction");
-                }
+                logger.debug("[Smart] rollback transaction");
             }
             throw e;
         }
