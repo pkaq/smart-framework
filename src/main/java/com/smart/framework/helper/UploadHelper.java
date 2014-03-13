@@ -40,14 +40,13 @@ public class UploadHelper {
     public static void init(ServletContext servletContext) {
         // 获取一个临时目录（使用 Tomcat 的 work 目录）
         File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+        logger.debug("[Smart] temp dir of uploading: {}", repository);
         // 创建 FileUpload 对象
         fileUpload = new ServletFileUpload(new DiskFileItemFactory(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD, repository));
         // 设置上传限制
         if (uploadLimit != 0) {
             fileUpload.setFileSizeMax(uploadLimit * 1024 * 1024); // 单位为 M
-            if (logger.isDebugEnabled()) {
-                logger.debug("[Smart] limit of uploading: {}M", uploadLimit);
-            }
+            logger.debug("[Smart] limit of uploading: {}M", uploadLimit);
         }
     }
 
