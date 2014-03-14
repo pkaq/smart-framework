@@ -34,7 +34,6 @@ public class WebUtil {
             // 设置响应头
             response.setContentType("application/json"); // 指定内容类型为 JSON 格式
             response.setCharacterEncoding(FrameworkConstant.UTF_8); // 防止中文乱码
-
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();
             writer.write(JSONUtil.toJSON(data)); // 转为 JSON 字符串
@@ -52,7 +51,6 @@ public class WebUtil {
             // 设置响应头
             response.setContentType("text/html"); // 指定内容类型为 HTML 格式
             response.setCharacterEncoding(FrameworkConstant.UTF_8); // 防止中文乱码
-
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();
             writer.write(JSONUtil.toJSON(data)); // 转为 JSON 字符串
@@ -141,9 +139,9 @@ public class WebUtil {
     }
 
     // 发送错误代码
-    public static void sendError(int code, HttpServletResponse response) {
+    public static void sendError(int code, String message, HttpServletResponse response) {
         try {
-            response.sendError(code);
+            response.sendError(code, message);
         } catch (Exception e) {
             logger.error("发送错误代码出错！", e);
             throw new RuntimeException(e);
