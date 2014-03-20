@@ -4,9 +4,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JsonUtil {
+public class JsonUtil_ {
 
-    private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(JsonUtil_.class);
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

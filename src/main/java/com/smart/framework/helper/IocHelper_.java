@@ -10,9 +10,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IocHelper {
+public class IocHelper_ {
 
-    private static final Logger logger = LoggerFactory.getLogger(IocHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(IocHelper_.class);
 
     static {
         try {
