@@ -34,7 +34,7 @@ public class WebUtil {
             response.setCharacterEncoding(FrameworkConstant.UTF_8); // 防止中文乱码
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();
-            writer.write(JsonUtil_.toJson(data)); // 转为 JSON 字符串
+            writer.write(JsonUtil.toJson(data)); // 转为 JSON 字符串
             writer.flush();
             writer.close();
         } catch (Exception e) {
@@ -51,7 +51,7 @@ public class WebUtil {
             response.setCharacterEncoding(FrameworkConstant.UTF_8); // 防止中文乱码
             // 向响应中写入数据
             PrintWriter writer = response.getWriter();
-            writer.write(JsonUtil_.toJson(data)); // 转为 JSON 字符串
+            writer.write(JsonUtil.toJson(data)); // 转为 JSON 字符串
             writer.flush();
             writer.close();
         } catch (Exception e) {
