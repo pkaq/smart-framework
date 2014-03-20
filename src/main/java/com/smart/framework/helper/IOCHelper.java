@@ -10,9 +10,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IOCHelper {
+public class IocHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(IOCHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(IocHelper.class);
 
     static {
         try {
@@ -48,7 +48,7 @@ public class IOCHelper {
                 }
             }
         } catch (Exception e) {
-            logger.error("初始化 IOCHelper 出错！", e);
+            logger.error("初始化 IocHelper 出错！", e);
         }
     }
 

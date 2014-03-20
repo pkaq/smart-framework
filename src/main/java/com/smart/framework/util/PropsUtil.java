@@ -62,6 +62,15 @@ public class PropsUtil {
         return value;
     }
 
+    // 获取字符型属性（带有默认值）
+    public static String getString(Properties props, String key, String defalutValue) {
+        String value = defalutValue;
+        if (props.containsKey(key)) {
+            value = props.getProperty(key);
+        }
+        return value;
+    }
+
     // 获取数值型属性
     public static int getNumber(Properties props, String key) {
         int value = 0;
@@ -71,9 +80,23 @@ public class PropsUtil {
         return value;
     }
 
+    // 获取数值型属性（带有默认值）
+    public static int getNumber(Properties props, String key, int defaultValue) {
+        int value = defaultValue;
+        if (props.containsKey(key)) {
+            value = CastUtil.castInt(props.getProperty(key));
+        }
+        return value;
+    }
+
     // 获取布尔型属性
     public static boolean getBoolean(Properties props, String key) {
-        boolean value = false;
+        return getBoolean(props, key, false);
+    }
+
+    // 获取布尔型属性（带有默认值）
+    public static boolean getBoolean(Properties props, String key, boolean defalutValue) {
+        boolean value = defalutValue;
         if (props.containsKey(key)) {
             value = CastUtil.castBoolean(props.getProperty(key));
         }

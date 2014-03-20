@@ -1,7 +1,7 @@
 package com.smart.framework.proxy;
 
 import com.smart.framework.annotation.Transaction;
-import com.smart.framework.helper.DBHelper;
+import com.smart.framework.helper.DatabaseHelper;
 import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +22,12 @@ public class TransactionProxy implements Proxy {
                 // 设置为具有事务
                 isTransactional = true;
                 // 开启事务
-                DBHelper.beginTransaction();
+                DatabaseHelper.beginTransaction();
                 logger.debug("[Smart] begin transaction");
                 // 执行操作
                 result = proxyChain.doProxyChain();
                 // 提交事务
-                DBHelper.commitTransaction();
+                DatabaseHelper.commitTransaction();
                 logger.debug("[Smart] commit transaction");
             } else {
                 // 执行操作
@@ -37,7 +37,7 @@ public class TransactionProxy implements Proxy {
             // 判断是否具有事务
             if (isTransactional) {
                 // 回滚事务
-                DBHelper.rollbackTransaction();
+                DatabaseHelper.rollbackTransaction();
                 logger.debug("[Smart] rollback transaction");
             }
             throw e;

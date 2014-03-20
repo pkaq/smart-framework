@@ -2,7 +2,7 @@ package com.smart.framework.base;
 
 import com.smart.framework.HelperLoader;
 import com.smart.framework.OrderedRunner;
-import com.smart.framework.helper.DBHelper;
+import com.smart.framework.helper.DatabaseHelper;
 import com.smart.framework.util.ClassUtil;
 import java.io.File;
 import java.util.List;
@@ -25,7 +25,7 @@ public abstract class BaseTest {
             File sqlFile = new File(ClassUtil.getClassPath() + sqlPath);
             List<String> sqlList = FileUtils.readLines(sqlFile);
             for (String sql : sqlList) {
-                DBHelper.update(sql);
+                DatabaseHelper.update(sql);
             }
         } catch (Exception e) {
             logger.error("执行数据初始化脚本出错！", e);

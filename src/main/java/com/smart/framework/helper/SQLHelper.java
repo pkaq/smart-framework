@@ -1,5 +1,6 @@
 package com.smart.framework.helper;
 
+import com.smart.framework.FrameworkConstant;
 import com.smart.framework.annotation.Table;
 import com.smart.framework.util.CollectionUtil;
 import com.smart.framework.util.MapUtil;
@@ -8,23 +9,19 @@ import com.smart.framework.util.StringUtil;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SQLHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(SQLHelper.class);
-
-    private static final Properties sqlProps = PropsUtil.loadProps("sql.properties");
+    private static final Properties sqlProps = PropsUtil.loadProps(FrameworkConstant.SQL_PROPS);
 
     public static String getSQL(String key) {
-        String value = "";
+        String sql;
         if (sqlProps.containsKey(key)) {
-            value = sqlProps.getProperty(key);
+            sql = sqlProps.getProperty(key);
         } else {
-            logger.error("无法在 sql.properties 文件中获取属性：" + key);
+            throw new RuntimeException("无法在 " + FrameworkConstant.SQL_PROPS + " 文件中获取配置项：" + key);
         }
-        return value;
+        return sql;
     }
 
     public static String generateSelectSQL(Class<?> cls, String condition, String sort) {
@@ -96,7 +93,7 @@ public class SQLHelper {
         String table = getTable(cls);
         String where = generateWhere(condition);
         String order = generateOrder(sort);
-        String dbType = DBHelper.getDBType();
+        String dbType = DatabaseHelper.getDatabaseType();
         if (dbType.equalsIgnoreCase("mysql")) {
             int pageStart = (pageNumber - 1) * pageSize;
             appendSQLForMySQL(sql, table, where, order, pageStart, pageSize);

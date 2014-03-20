@@ -23,20 +23,33 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DBHelper {
+public class DatabaseHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(DBHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseHelper.class);
 
     // 定义一个局部线程变量（使每个线程都拥有自己的连接）
     private static final ThreadLocal<Connection> connContainer = new ThreadLocal<Connection>();
 
-    private static final DataSource dataSource = getDataSource();
+    private static String databaseType;
+    private static DataSource dataSource;
+    private static QueryRunner queryRunner;
 
-    private static final QueryRunner queryRunner = new QueryRunner(dataSource);
+    static {
+        databaseType = ConfigHelper.getConfigString("jdbc.type");
+        if (StringUtil.isNotEmpty(databaseType)) {
+            dataSource = getDataSource();
+            queryRunner = new QueryRunner(dataSource);
+        }
+    }
+
+    // 获取数据库类型
+    public static String getDatabaseType() {
+        return databaseType;
+    }
 
     // 获取数据源
     public static DataSource getDataSource() {
-        // 从 config.properties 文件中读取 JDBC 配置项
+        // 从配置文件中读取 JDBC 配置项
         String driver = ConfigHelper.getConfigString("jdbc.driver");
         String url = ConfigHelper.getConfigString("jdbc.url");
         String username = ConfigHelper.getConfigString("jdbc.username");
@@ -123,11 +136,6 @@ public class DBHelper {
                 connContainer.remove();
             }
         }
-    }
-
-    // 获取数据库类型
-    public static String getDBType() {
-        return ConfigHelper.getConfigString("jdbc.type");
     }
 
     // 执行查询（返回一个对象）

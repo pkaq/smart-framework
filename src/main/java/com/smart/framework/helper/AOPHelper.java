@@ -22,9 +22,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AOPHelper {
+public class AopHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(AOPHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(AopHelper.class);
 
     static {
         try {
