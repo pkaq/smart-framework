@@ -31,9 +31,6 @@ public class UploadHelper {
 
     private static final Logger logger = LoggerFactory.getLogger(UploadHelper.class);
 
-    // 获取上传限制
-    private static final int uploadLimit = ConfigHelper.getConfigNumber(FrameworkConstant.APP_UPLOAD_LIMIT);
-
     // 定义一个 FileUpload 对象（用于解析所上传的文件）
     private static ServletFileUpload fileUpload;
 
@@ -44,6 +41,7 @@ public class UploadHelper {
         // 创建 FileUpload 对象
         fileUpload = new ServletFileUpload(new DiskFileItemFactory(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD, repository));
         // 设置上传限制
+        int uploadLimit = FrameworkConstant.UPLOAD_LIMIT;
         if (uploadLimit != 0) {
             fileUpload.setFileSizeMax(uploadLimit * 1024 * 1024); // 单位为 M
             logger.debug("[Smart] limit of uploading: {}M", uploadLimit);

@@ -6,13 +6,11 @@ import com.smart.framework.exception.AccessException;
 import com.smart.framework.exception.PermissionException;
 import com.smart.framework.helper.ActionHelper;
 import com.smart.framework.helper.BeanHelper;
-import com.smart.framework.helper.ConfigHelper;
 import com.smart.framework.helper.UploadHelper;
 import com.smart.framework.helper.bean.ActionBean;
 import com.smart.framework.helper.bean.RequestBean;
 import com.smart.framework.util.CastUtil;
 import com.smart.framework.util.MapUtil;
-import com.smart.framework.util.StringUtil;
 import com.smart.framework.util.WebUtil;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -36,10 +34,6 @@ public class DispatcherServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 
-    // 获取相关配置项
-    private static final String homePage = ConfigHelper.getConfigString(FrameworkConstant.APP_HOME_PAGE);
-    private static final String jspPath = ConfigHelper.getConfigString(FrameworkConstant.APP_JSP_PATH);
-
     @Override
     public void init(ServletConfig config) throws ServletException {
         // 初始化相关配置
@@ -55,11 +49,7 @@ public class DispatcherServlet extends HttpServlet {
         logger.debug("[Smart] {}:{}", currentRequestMethod, currentRequestPath);
         // 将“/”请求重定向到首页
         if (currentRequestPath.equals("/")) {
-            if (StringUtil.isNotEmpty(homePage)) {
-                WebUtil.redirectRequest(homePage, request, response);
-            } else {
-                WebUtil.redirectRequest("/index.html", request, response);
-            }
+            WebUtil.redirectRequest(FrameworkConstant.HOME_PAGE, request, response);
             return;
         }
         // 去掉当前请求路径末尾的“/”
@@ -192,7 +182,7 @@ public class DispatcherServlet extends HttpServlet {
                     WebUtil.redirectRequest(path, request, response);
                 } else {
                     // 获取路径
-                    String path = jspPath + view.getPath();
+                    String path = FrameworkConstant.JSP_PATH + view.getPath();
                     // 初始化请求属性
                     Map<String, Object> data = view.getData();
                     if (MapUtil.isNotEmpty(data)) {
@@ -217,7 +207,7 @@ public class DispatcherServlet extends HttpServlet {
                 WebUtil.sendError(HttpServletResponse.SC_FORBIDDEN, "", response);
             } else {
                 // 重定向到首页
-                WebUtil.redirectRequest(homePage, request, response);
+                WebUtil.redirectRequest(FrameworkConstant.HOME_PAGE, request, response);
             }
         } else if (cause instanceof PermissionException) {
             // 跳转到 403 页面

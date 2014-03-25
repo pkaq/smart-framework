@@ -1,6 +1,5 @@
 package com.smart.framework;
 
-import com.smart.framework.helper.ConfigHelper;
 import com.smart.framework.helper.PluginHelper;
 import com.smart.framework.util.StringUtil;
 import java.util.List;
@@ -12,9 +11,6 @@ import javax.servlet.annotation.WebListener;
 
 @WebListener
 public class ContainerListener implements ServletContextListener {
-
-    private static final String wwwPath = ConfigHelper.getConfigString(FrameworkConstant.APP_WWW_PATH);
-    private static final String jspPath = ConfigHelper.getConfigString(FrameworkConstant.APP_JSP_PATH);
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -38,16 +34,19 @@ public class ContainerListener implements ServletContextListener {
     }
 
     private void registerDefaultServlet(ServletContext context) {
-        ServletRegistration defaultServlet = context.getServletRegistration(FrameworkConstant.DEFAULT_SERVLET_NAME);
+        ServletRegistration defaultServlet = context.getServletRegistration("default");
         defaultServlet.addMapping("/index.html");
         defaultServlet.addMapping("/favicon.ico");
+        String wwwPath = FrameworkConstant.WWW_PATH;
         if (StringUtil.isNotEmpty(wwwPath)) {
             defaultServlet.addMapping(wwwPath + "*");
         }
     }
 
     private void registerJspServlet(ServletContext context) {
-        ServletRegistration jspServlet = context.getServletRegistration(FrameworkConstant.JSP_SERVLET_NAME);
+        ServletRegistration jspServlet = context.getServletRegistration("jsp");
+        jspServlet.addMapping("/index.jsp");
+        String jspPath = FrameworkConstant.JSP_PATH;
         if (StringUtil.isNotEmpty(jspPath)) {
             jspServlet.addMapping(jspPath + "*");
         }
