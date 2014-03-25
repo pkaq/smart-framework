@@ -57,6 +57,8 @@ public class DispatcherServlet extends HttpServlet {
         if (currentRequestPath.equals("/")) {
             if (StringUtil.isNotEmpty(homePage)) {
                 WebUtil.redirectRequest(homePage, request, response);
+            } else {
+                WebUtil.redirectRequest("/index.html", request, response);
             }
             return;
         }

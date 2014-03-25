@@ -38,17 +38,18 @@ public class ContainerListener implements ServletContextListener {
     }
 
     private void registerDefaultServlet(ServletContext context) {
-        ServletRegistration defaultServletReg = context.getServletRegistration(FrameworkConstant.DEFAULT_SERVLET_NAME);
-        defaultServletReg.addMapping("/favicon.ico");
+        ServletRegistration defaultServlet = context.getServletRegistration(FrameworkConstant.DEFAULT_SERVLET_NAME);
+        defaultServlet.addMapping("/index.html");
+        defaultServlet.addMapping("/favicon.ico");
         if (StringUtil.isNotEmpty(wwwPath)) {
-            defaultServletReg.addMapping(wwwPath + "*");
+            defaultServlet.addMapping(wwwPath + "*");
         }
     }
 
     private void registerJspServlet(ServletContext context) {
+        ServletRegistration jspServlet = context.getServletRegistration(FrameworkConstant.JSP_SERVLET_NAME);
         if (StringUtil.isNotEmpty(jspPath)) {
-            ServletRegistration jspServletReg = context.getServletRegistration(FrameworkConstant.JSP_SERVLET_NAME);
-            jspServletReg.addMapping(jspPath + "*");
+            jspServlet.addMapping(jspPath + "*");
         }
     }
 
