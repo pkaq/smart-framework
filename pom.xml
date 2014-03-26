@@ -8,6 +8,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <smart.version>2.1</smart.version>
         <jackson.version>1.9.13</jackson.version>
         <cxf.version>2.6.9</cxf.version>
         <lucene.version>4.6.0</lucene.version>
@@ -16,7 +17,7 @@
 
     <groupId>com.smart</groupId>
     <artifactId>smart</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${smart.version}</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -248,7 +249,7 @@
             <dependency>
                 <groupId>com.smart</groupId>
                 <artifactId>smart-framework</artifactId>
-                <version>2.0</version>
+                <version>${smart.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
