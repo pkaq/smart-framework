@@ -68,7 +68,7 @@ public class SQLHelper {
         if (MapUtil.isNotEmpty(fieldMap)) {
             sql.append(" set ");
             int i = 0;
-            for (Map.Entry<String, ?> fieldEntry : fieldMap.entrySet()) {
+            for (Map.Entry<String, Object> fieldEntry : fieldMap.entrySet()) {
                 String columnName = StringUtil.camelhumpToUnderline(fieldEntry.getKey());
                 if (i == 0) {
                     sql.append(columnName).append(" = ?");
