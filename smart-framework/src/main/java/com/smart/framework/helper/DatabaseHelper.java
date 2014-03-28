@@ -68,6 +68,8 @@ public class DatabaseHelper {
         if (StringUtil.isNotEmpty(password)) {
             ds.setPassword(password);
         }
+        // 解决 java.sql.SQLException: Already closed. 的问题（连接池会自动关闭长时间没有使用的连接）
+        ds.setValidationQuery("select 1 from dual");
         return ds;
     }
 
