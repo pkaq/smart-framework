@@ -13,11 +13,11 @@ public class SmartWebApplicationInitializer implements WebApplicationInitializer
 
     @Override
     public void init(ServletContext servletContext) {
-        if (ConfigProps.isSSO()) {
-            String casServerUrlPrefix = ConfigProps.getCasServerUrlPrefix();
-            String casServerLoginUrl = ConfigProps.getCasServerLoginUrl();
-            String serverName = ConfigProps.getServerName();
-            String filterMapping = ConfigProps.getFilterMapping();
+        if (SmartProps.isSSO()) {
+            String casServerUrlPrefix = SmartProps.getCasServerUrlPrefix();
+            String casServerLoginUrl = SmartProps.getCasServerLoginUrl();
+            String serverName = SmartProps.getServerName();
+            String filterMapping = SmartProps.getFilterMapping();
 
             servletContext.addListener(SingleSignOutHttpSessionListener.class);
 
@@ -31,7 +31,7 @@ public class SmartWebApplicationInitializer implements WebApplicationInitializer
 
             FilterRegistration.Dynamic ticketValidationFilter = servletContext.addFilter("TicketValidationFilter", Cas20ProxyReceivingTicketValidationFilter.class);
             ticketValidationFilter.setInitParameter("casServerUrlPrefix", casServerUrlPrefix);
-            ticketValidationFilter.setInitParameter("serverName", ConfigProps.getServerName());
+            ticketValidationFilter.setInitParameter("serverName", SmartProps.getServerName());
             ticketValidationFilter.addMappingForUrlPatterns(null, false, filterMapping);
 
             FilterRegistration.Dynamic requestWrapperFilter = servletContext.addFilter("RequestWrapperFilter", HttpServletRequestWrapperFilter.class);
