@@ -3,7 +3,6 @@ package com.smart.security;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import org.apache.shiro.web.env.EnvironmentLoaderListener;
-import org.apache.shiro.web.servlet.ShiroFilter;
 
 public class SmartWebApplicationInitializer implements WebApplicationInitializer {
 
@@ -12,7 +11,7 @@ public class SmartWebApplicationInitializer implements WebApplicationInitializer
         // 添加 EnvironmentLoaderListener
         servletContext.addListener(EnvironmentLoaderListener.class);
         // 添加 ShiroFilter
-        FilterRegistration.Dynamic shiroFilter = servletContext.addFilter("ShiroFilter", ShiroFilter.class);
+        FilterRegistration.Dynamic shiroFilter = servletContext.addFilter("ShiroFilter", SmartShiroFilter.class);
         shiroFilter.addMappingForUrlPatterns(null, false, "/*");
     }
 }
