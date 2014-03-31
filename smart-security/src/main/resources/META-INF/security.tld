@@ -8,7 +8,7 @@
     <description>Smart Security JSP Tag</description>
     <tlib-version>1.1</tlib-version>
     <short-name>security</short-name>
-    <uri>http://security.smart.com/tag</uri>
+    <uri>/smart_security</uri>
 
     <!-- ================================================== 用户 ================================================== -->
 
