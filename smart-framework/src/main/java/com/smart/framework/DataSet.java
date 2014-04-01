@@ -15,20 +15,20 @@ import java.util.Map;
 public class DataSet {
 
     // 查询单条数据，并转为相应类型的对象
-    public static <T> T select(Class<T> cls, String condition, Object... params) {
-        String sql = SQLHelper.generateSelectSQL(cls, condition, "");
-        return DatabaseHelper.queryBean(cls, sql, params);
+    public static <T> T select(Class<T> entityClass, String condition, Object... params) {
+        String sql = SQLHelper.generateSelectSQL(entityClass, condition, "");
+        return DatabaseHelper.queryEntity(entityClass, sql, params);
     }
 
     // 查询多条数据，并转为相应类型的列表
-    public static <T> List<T> selectList(Class<T> cls, String condition, String sort, Object... params) {
-        String sql = SQLHelper.generateSelectSQL(cls, condition, sort);
-        return DatabaseHelper.queryBeanList(cls, sql, params);
+    public static <T> List<T> selectList(Class<T> entityClass, String condition, String sort, Object... params) {
+        String sql = SQLHelper.generateSelectSQL(entityClass, condition, sort);
+        return DatabaseHelper.queryEntityList(entityClass, sql, params);
     }
 
     // 插入一条数据
-    public static boolean insert(Class<?> cls, Map<String, Object> fieldMap) {
-        String sql = SQLHelper.generateInsertSQL(cls, fieldMap.keySet());
+    public static boolean insert(Class<?> entityClass, Map<String, Object> fieldMap) {
+        String sql = SQLHelper.generateInsertSQL(entityClass, fieldMap.keySet());
         int rows = DatabaseHelper.update(sql, fieldMap.values().toArray());
         return rows > 0;
     }
@@ -38,14 +38,14 @@ public class DataSet {
         if (entity == null) {
             throw new IllegalArgumentException();
         }
-        Class<?> cls = entity.getClass();
+        Class<?> entityClass = entity.getClass();
         Map<String, Object> fieldMap = createFieldMap(entity);
-        return insert(cls, fieldMap);
+        return insert(entityClass, fieldMap);
     }
 
     // 更新相关数据
-    public static boolean update(Class<?> cls, Map<String, Object> fieldMap, String condition, Object... params) {
-        String sql = SQLHelper.generateUpdateSQL(cls, fieldMap, condition);
+    public static boolean update(Class<?> entityClass, Map<String, Object> fieldMap, String condition, Object... params) {
+        String sql = SQLHelper.generateUpdateSQL(entityClass, fieldMap, condition);
         int rows = DatabaseHelper.update(sql, ArrayUtil.concat(fieldMap.values().toArray(), params));
         return rows > 0;
     }
@@ -55,16 +55,16 @@ public class DataSet {
         if (entity == null) {
             throw new IllegalArgumentException();
         }
-        Class<?> cls = entity.getClass();
+        Class<?> entityClass = entity.getClass();
         Map<String, Object> fieldMap = createFieldMap(entity);
         String condition = "id = ?";
         Object[] params = {ObjectUtil.getFieldValue(entity, "id")};
-        return update(cls, fieldMap, condition, params);
+        return update(entityClass, fieldMap, condition, params);
     }
 
     // 删除相关数据
-    public static boolean delete(Class<?> cls, String condition, Object... params) {
-        String sql = SQLHelper.generateDeleteSQL(cls, condition);
+    public static boolean delete(Class<?> entityClass, String condition, Object... params) {
+        String sql = SQLHelper.generateDeleteSQL(entityClass, condition);
         int rows = DatabaseHelper.update(sql, params);
         return rows > 0;
     }
@@ -74,28 +74,28 @@ public class DataSet {
         if (entity == null) {
             throw new IllegalArgumentException();
         }
-        Class<?> cls = entity.getClass();
+        Class<?> entityClass = entity.getClass();
         String condition = "id = ?";
         Object[] params = {ObjectUtil.getFieldValue(entity, "id")};
-        return delete(cls, condition, params);
+        return delete(entityClass, condition, params);
     }
 
     // 查询数据条数
-    public static long selectCount(Class<?> cls, String condition, Object... params) {
-        String sql = SQLHelper.generateSelectSQLForCount(cls, condition);
+    public static long selectCount(Class<?> entityClass, String condition, Object... params) {
+        String sql = SQLHelper.generateSelectSQLForCount(entityClass, condition);
         return DatabaseHelper.queryCount(sql, params);
     }
 
     // 查询多条数据，并转为列表（分页方式）
-    public static <T> List<T> selectListForPager(int pageNumber, int pageSize, Class<T> cls, String condition, String sort, Object... params) {
-        String sql = SQLHelper.generateSelectSQLForPager(pageNumber, pageSize, cls, condition, sort);
-        return DatabaseHelper.queryBeanList(cls, sql, params);
+    public static <T> List<T> selectListForPager(int pageNumber, int pageSize, Class<T> entityClass, String condition, String sort, Object... params) {
+        String sql = SQLHelper.generateSelectSQLForPager(pageNumber, pageSize, entityClass, condition, sort);
+        return DatabaseHelper.queryEntityList(entityClass, sql, params);
     }
 
     // 查询多条数据，并转为映射
-    public static <T> Map<Long, T> selectMap(Class<T> cls, String condition, Object... params) {
+    public static <T> Map<Long, T> selectMap(Class<T> entityClass, String condition, Object... params) {
         Map<Long, T> map = new HashMap<Long, T>();
-        List<T> list = selectList(cls, condition, "", params);
+        List<T> list = selectList(entityClass, condition, "", params);
         for (T obj : list) {
             Long id = CastUtil.castLong(ObjectUtil.getFieldValue(obj, "id"));
             map.put(id, obj);
@@ -104,14 +104,14 @@ public class DataSet {
     }
 
     // 根据列名查询单条数据，并转为相应类型的对象
-    public static <T> T selectColumn(Class<T> cls, String column, String condition, Object... params) {
-        String sql = SQLHelper.generateSelectSQL(cls, condition, "");
+    public static <T> T selectColumn(Class<T> entityClass, String column, String condition, Object... params) {
+        String sql = SQLHelper.generateSelectSQL(entityClass, condition, "");
         return DatabaseHelper.queryColumn(column, sql, params);
     }
 
     // 根据列名查询多条数据，并转为相应类型的列表
-    public static <T> List<T> selectColumnList(Class<?> cls, String column, String condition, String sort, Object... params) {
-        String sql = SQLHelper.generateSelectSQL(cls, condition, sort);
+    public static <T> List<T> selectColumnList(Class<?> entityClass, String column, String condition, String sort, Object... params) {
+        String sql = SQLHelper.generateSelectSQL(entityClass, condition, sort);
         return DatabaseHelper.queryColumnList(column, sql, params);
     }
 

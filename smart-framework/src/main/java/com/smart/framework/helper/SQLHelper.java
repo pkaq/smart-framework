@@ -24,15 +24,15 @@ public class SQLHelper {
         return sql;
     }
 
-    public static String generateSelectSQL(Class<?> cls, String condition, String sort) {
-        StringBuilder sql = new StringBuilder("select * from ").append(getTable(cls));
+    public static String generateSelectSQL(Class<?> entityClass, String condition, String sort) {
+        StringBuilder sql = new StringBuilder("select * from ").append(getTable(entityClass));
         sql.append(generateWhere(condition));
         sql.append(generateOrder(sort));
         return sql.toString();
     }
 
-    public static String generateInsertSQL(Class<?> cls, Collection<String> fieldNames) {
-        StringBuilder sql = new StringBuilder("insert into ").append(getTable(cls));
+    public static String generateInsertSQL(Class<?> entityClass, Collection<String> fieldNames) {
+        StringBuilder sql = new StringBuilder("insert into ").append(getTable(entityClass));
         if (CollectionUtil.isNotEmpty(fieldNames)) {
             int i = 0;
             StringBuilder columns = new StringBuilder(" ");
@@ -57,14 +57,14 @@ public class SQLHelper {
         return sql.toString();
     }
 
-    public static String generateDeleteSQL(Class<?> cls, String condition) {
-        StringBuilder sql = new StringBuilder("delete from ").append(getTable(cls));
+    public static String generateDeleteSQL(Class<?> entityClass, String condition) {
+        StringBuilder sql = new StringBuilder("delete from ").append(getTable(entityClass));
         sql.append(generateWhere(condition));
         return sql.toString();
     }
 
-    public static String generateUpdateSQL(Class<?> cls, Map<String, Object> fieldMap, String condition) {
-        StringBuilder sql = new StringBuilder("update ").append(getTable(cls));
+    public static String generateUpdateSQL(Class<?> entityClass, Map<String, Object> fieldMap, String condition) {
+        StringBuilder sql = new StringBuilder("update ").append(getTable(entityClass));
         if (MapUtil.isNotEmpty(fieldMap)) {
             sql.append(" set ");
             int i = 0;
@@ -82,15 +82,15 @@ public class SQLHelper {
         return sql.toString();
     }
 
-    public static String generateSelectSQLForCount(Class<?> cls, String condition) {
-        StringBuilder sql = new StringBuilder("select count(*) from ").append(getTable(cls));
+    public static String generateSelectSQLForCount(Class<?> entityClass, String condition) {
+        StringBuilder sql = new StringBuilder("select count(*) from ").append(getTable(entityClass));
         sql.append(generateWhere(condition));
         return sql.toString();
     }
 
-    public static String generateSelectSQLForPager(int pageNumber, int pageSize, Class<?> cls, String condition, String sort) {
+    public static String generateSelectSQLForPager(int pageNumber, int pageSize, Class<?> entityClass, String condition, String sort) {
         StringBuilder sql = new StringBuilder();
-        String table = getTable(cls);
+        String table = getTable(entityClass);
         String where = generateWhere(condition);
         String order = generateOrder(sort);
         String dbType = DatabaseHelper.getDatabaseType();
@@ -108,12 +108,12 @@ public class SQLHelper {
         return sql.toString();
     }
 
-    private static String getTable(Class<?> cls) {
+    private static String getTable(Class<?> entityClass) {
         String tableName;
-        if (cls.isAnnotationPresent(Table.class)) {
-            tableName = cls.getAnnotation(Table.class).value();
+        if (entityClass.isAnnotationPresent(Table.class)) {
+            tableName = entityClass.getAnnotation(Table.class).value();
         } else {
-            tableName = StringUtil.camelhumpToUnderline(cls.getSimpleName());
+            tableName = StringUtil.camelhumpToUnderline(entityClass.getSimpleName());
         }
         return tableName;
     }
