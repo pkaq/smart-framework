@@ -8,9 +8,6 @@ public class HasAllRolesTag extends RoleTag {
 
     private static final String ROLE_NAMES_DELIMETER = ",";
 
-    public HasAllRolesTag() {
-    }
-
     @Override
     protected boolean showTagBody(String roleNames) {
         boolean hasAllRole = false;

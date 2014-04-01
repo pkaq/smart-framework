@@ -3,12 +3,9 @@ package com.smart.security.tag;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.tags.PermissionTag;
 
-public class HasAllPermissionsTag extends PermissionTag {
+public class HasAllPermsTag extends PermissionTag {
 
     private static final String PERM_NAMES_DELIMETER = ",";
-
-    public HasAllPermissionsTag() {
-    }
 
     @Override
     protected boolean showTagBody(String permNames) {

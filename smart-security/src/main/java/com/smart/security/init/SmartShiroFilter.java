@@ -1,5 +1,9 @@
-package com.smart.security;
+package com.smart.security.init;
 
+import com.smart.security.ISmartSecurity;
+import com.smart.security.realm.SmartCustomRealm;
+import com.smart.security.realm.SmartJdbcRealm;
+import com.smart.security.tool.SmartProps;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.apache.shiro.cache.CacheManager;
@@ -26,15 +30,17 @@ public class SmartShiroFilter extends ShiroFilter {
         if (securityRealms != null) {
             String[] securityRealmArray = securityRealms.split(",");
             if (securityRealmArray.length > 0) {
-                RealmSecurityManager realmSecurityManager = (RealmSecurityManager) webSecurityManager;
                 Set<Realm> realms = new LinkedHashSet<Realm>();
                 for (String securityRealm : securityRealmArray) {
                     if (securityRealm.equalsIgnoreCase("jdbc")) {
                         addJdbcRealm(realms);
                     } else if (securityRealm.equalsIgnoreCase("ad")) {
                         addAdRealm(realms);
+                    } else if (securityRealm.equalsIgnoreCase("custom")) {
+                        addCustomRealm(realms);
                     }
                 }
+                RealmSecurityManager realmSecurityManager = (RealmSecurityManager) webSecurityManager;
                 realmSecurityManager.setRealms(realms);
             }
         }
@@ -52,6 +58,12 @@ public class SmartShiroFilter extends ShiroFilter {
         realm.setSystemPassword(SmartProps.getAdSystemPassword());
         realm.setSearchBase(SmartProps.getAdSearchBase());
         realms.add(realm);
+    }
+
+    private void addCustomRealm(Set<Realm> realms) {
+        ISmartSecurity smartSecurity = SmartProps.getSmartSecurity();
+        SmartCustomRealm smartCustomRealm = new SmartCustomRealm(smartSecurity);
+        realms.add(smartCustomRealm);
     }
 
     private void initCache(WebSecurityManager webSecurityManager) {

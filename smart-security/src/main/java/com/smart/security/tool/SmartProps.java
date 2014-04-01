@@ -1,5 +1,6 @@
-package com.smart.security;
+package com.smart.security.tool;
 
+import com.smart.security.ISmartSecurity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -43,6 +44,25 @@ public class SmartProps {
 
     public static String getRealms() {
         return smartProps.getProperty("security.realms");
+    }
+
+    public static ISmartSecurity getSmartSecurity() {
+        String className = smartProps.getProperty("security.custom.class");
+        Class<?> cls = null;
+        try {
+            cls = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            logger.error("无法从 security.custom.class 配置中找到对应的类", e);
+        }
+        ISmartSecurity smartSecurity = null;
+        if (cls != null) {
+            try {
+                smartSecurity = (ISmartSecurity) cls.newInstance();
+            } catch (Exception e) {
+                logger.error("实例化 SmartSecurity 异常", e);
+            }
+        }
+        return smartSecurity;
     }
 
     public static String getJdbcAuthcQuery() {

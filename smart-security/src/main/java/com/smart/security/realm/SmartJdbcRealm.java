@@ -1,5 +1,6 @@
-package com.smart.security;
+package com.smart.security.realm;
 
+import com.smart.security.tool.SmartProps;
 import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
 

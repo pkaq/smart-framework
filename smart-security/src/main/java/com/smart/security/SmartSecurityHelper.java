@@ -10,17 +10,15 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SecurityHelper {
+public class SmartSecurityHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(SecurityHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(SmartSecurityHelper.class);
 
     private static final PasswordService passwordService = new DefaultPasswordService();
 
     public static void login(String username, String password, boolean isRememberMe) throws LoginException {
-        // 创建 Token
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         token.setRememberMe(isRememberMe);
-        // 获取当前用户，并进行登录操作
         Subject user = SecurityUtils.getSubject();
         try {
             user.login(token);

@@ -1,8 +1,8 @@
-package com.smart.security;
+package com.smart.security.init;
 
 import javax.servlet.ServletContext;
 
-public interface WebApplicationInitializer {
+public interface ISmartInitializer {
 
     void init(ServletContext servletContext);
 }
