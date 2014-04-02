@@ -23,6 +23,7 @@
         <module>smart-framework</module>
         <module>smart-sso</module>
         <module>smart-security</module>
+        <module>smart-cache</module>
         <module>smart-plugin-cache</module>
         <module>smart-plugin-soap</module>
         <module>smart-plugin-rest</module>
