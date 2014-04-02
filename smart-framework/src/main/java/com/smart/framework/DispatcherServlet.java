@@ -1,5 +1,6 @@
 package com.smart.framework;
 
+import com.smart.framework.bean.Param;
 import com.smart.framework.bean.Result;
 import com.smart.framework.bean.View;
 import com.smart.framework.exception.AccessException;
@@ -101,20 +102,20 @@ public class DispatcherServlet extends HttpServlet {
         Method actionMethod = actionBean.getActionMethod();
         // 从 BeanHelper 中创建 Action 实例
         Object actionInstance = BeanHelper.getBean(actionClass);
-        // 调用 Action 方法
-        Object actionMethodResult;
+        // 获取 Action 方法参数
+        List<Object> paramList = createParamList(request, actionBean, requestPathMatcher);
         Class<?>[] paramTypes = actionMethod.getParameterTypes();
-        List<Object> paramList = createActionMethodParamList(request, actionBean, requestPathMatcher);
         if (paramTypes.length != paramList.size()) {
             throw new RuntimeException("由于参数不匹配，无法调用 Action 方法！");
         }
+        // 调用 Action 方法
         actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
-        actionMethodResult = actionMethod.invoke(actionInstance, paramList.toArray());
+        Object actionMethodResult = actionMethod.invoke(actionInstance, paramList.toArray());
         // 处理 Action 方法返回值
         handleActionMethodReturn(request, response, actionMethodResult);
     }
 
-    private List<Object> createActionMethodParamList(HttpServletRequest request, ActionBean actionBean, Matcher requestPathMatcher) throws Exception {
+    private List<Object> createParamList(HttpServletRequest request, ActionBean actionBean, Matcher requestPathMatcher) throws Exception {
         // 定义参数列表
         List<Object> paramList = new ArrayList<Object>();
         // 获取 Action 方法参数类型
@@ -127,9 +128,10 @@ public class DispatcherServlet extends HttpServlet {
             paramList.addAll(UploadHelper.createMultipartParamList(request));
         } else {
             // 添加普通请求参数列表（包括 Query String 与 Form Data）
-            Map<String, String> requestParamMap = WebUtil.getRequestParamMap(request);
+            Map<String, Object> requestParamMap = WebUtil.getRequestParamMap(request);
             if (MapUtil.isNotEmpty(requestParamMap)) {
-                paramList.add(requestParamMap);
+                Param param = new Param(requestParamMap);
+                paramList.add(param);
             }
         }
         // 返回参数列表

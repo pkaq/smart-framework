@@ -3,6 +3,7 @@ package com.smart.framework.helper;
 import com.smart.framework.FrameworkConstant;
 import com.smart.framework.bean.Multipart;
 import com.smart.framework.bean.Multiparts;
+import com.smart.framework.bean.Param;
 import com.smart.framework.exception.UploadException;
 import com.smart.framework.util.CollectionUtil;
 import com.smart.framework.util.FileUtil;
@@ -57,7 +58,7 @@ public class UploadHelper {
         // 定义参数列表
         List<Object> paramList = new ArrayList<Object>();
         // 创建两个对象，分别对应 普通字段 与 文件字段
-        Map<String, String> fieldMap = new HashMap<String, String>();
+        Map<String, Object> fieldMap = new HashMap<String, Object>();
         List<Multipart> multipartList = new ArrayList<Multipart>();
         // 获取并遍历表单项
         List<FileItem> fileItemList;
@@ -82,13 +83,14 @@ public class UploadHelper {
                     long fileSize = fileItem.getSize();
                     InputStream inputSteam = fileItem.getInputStream();
                     // 创建 Multipart 对象，并将其添加到 multipartList 中
-                    Multipart multipart = new Multipart(fileName, contentType, fileSize, inputSteam);
+                    Multipart multipart = new Multipart(fieldName, fileName, contentType, fileSize, inputSteam);
                     multipartList.add(multipart);
                 }
             }
         }
         // 初始化参数列表
-        paramList.add(fieldMap);
+        Param param = new Param(fieldMap);
+        paramList.add(param);
         // 不管一个文件还是多个文件，都映射为 Multiparts 参数
         if (CollectionUtil.isNotEmpty(multipartList)) {
             paramList.add(new Multiparts(multipartList));

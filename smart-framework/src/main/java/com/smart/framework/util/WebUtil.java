@@ -63,8 +63,8 @@ public class WebUtil {
     }
 
     // 从请求中获取所有参数（当参数名重复时，用后者覆盖前者）
-    public static Map<String, String> getRequestParamMap(HttpServletRequest request) {
-        Map<String, String> paramMap = new LinkedHashMap<String, String>();
+    public static Map<String, Object> getRequestParamMap(HttpServletRequest request) {
+        Map<String, Object> paramMap = new LinkedHashMap<String, Object>();
         try {
             String method = request.getMethod();
             if (method.equalsIgnoreCase("put") || method.equalsIgnoreCase("delete")) {
