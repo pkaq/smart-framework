@@ -1,18 +1,18 @@
 package com.smart.cache.impl;
 
-import com.smart.cache.Cache;
-import com.smart.cache.CacheException;
+import com.smart.cache.ISmartCache;
+import com.smart.cache.SmartCacheException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-public class MapCache<K, V> implements Cache<K, V> {
+public class DefalutCache<K, V> implements ISmartCache<K, V> {
 
     private final String name;
     private final Map<K, V> map;
 
-    public MapCache(String name, Map<K, V> map) {
+    public DefalutCache(String name, Map<K, V> map) {
         if (name == null || name.length() == 0) {
             throw new IllegalArgumentException("参数 name 非法！");
         }
@@ -28,22 +28,22 @@ public class MapCache<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public V get(K key) throws CacheException {
+    public V get(K key) throws SmartCacheException {
         return map.get(key);
     }
 
     @Override
-    public V put(K key, V value) throws CacheException {
+    public V put(K key, V value) throws SmartCacheException {
         return map.put(key, value);
     }
 
     @Override
-    public V remove(K key) throws CacheException {
+    public V remove(K key) throws SmartCacheException {
         return map.remove(key);
     }
 
     @Override
-    public void clear() throws CacheException {
+    public void clear() throws SmartCacheException {
         map.clear();
     }
 

@@ -3,42 +3,42 @@ package com.smart.cache;
 import java.util.Collection;
 import java.util.Set;
 
-public interface Cache<K, V> {
+public interface ISmartCache<K, V> {
 
     /**
      * 根据 Key 从 Cache 中获取 Value
      *
      * @param key Key
-     * @return 获取的 Value
-     * @throws CacheException
+     * @return 已获取的 Value
+     * @throws SmartCacheException
      */
-    V get(K key) throws CacheException;
+    V get(K key) throws SmartCacheException;
 
     /**
      * 将 Key 与 Value 放入 Cache 中
      *
      * @param key Key
      * @param value Value
-     * @return 放入的 Value
-     * @throws CacheException
+     * @return 放入前的 Value
+     * @throws SmartCacheException
      */
-    V put(K key, V value) throws CacheException;
+    V put(K key, V value) throws SmartCacheException;
 
     /**
      * 根据 Key 从 Cache 中移除 Value
      *
      * @param key Key
-     * @return 移除的 Value
-     * @throws CacheException
+     * @return 移除前的 Value
+     * @throws SmartCacheException
      */
-    V remove(K key) throws CacheException;
+    V remove(K key) throws SmartCacheException;
 
     /**
      * 清空 Cache
      *
-     * @throws CacheException
+     * @throws SmartCacheException
      */
-    void clear() throws CacheException;
+    void clear() throws SmartCacheException;
 
     /**
      * 获取 Cache 的 Key-Value 个数
