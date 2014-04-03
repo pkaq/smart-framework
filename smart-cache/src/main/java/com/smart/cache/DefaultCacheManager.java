@@ -1,8 +1,5 @@
-package com.smart.cache.impl;
+package com.smart.cache;
 
-import com.smart.cache.ISmartCache;
-import com.smart.cache.ISmartCacheManager;
-import com.smart.cache.SmartCacheException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -27,7 +24,7 @@ public class DefaultCacheManager implements ISmartCacheManager {
             if (cache == null) {
                 // 创建一个基于 Map 的 Cache
                 Map<K, V> map = new ReferenceMap(); // 强引用指向 key，弱引用指向 value
-                cache = new DefalutCache<K, V>(name, map);
+                cache = new DefalutCache<K, V>(map);
                 cacheMap.putIfAbsent(name, cache);
             }
             return cache;

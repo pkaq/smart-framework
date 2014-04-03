@@ -1,7 +1,5 @@
-package com.smart.cache.impl;
+package com.smart.cache;
 
-import com.smart.cache.ISmartCache;
-import com.smart.cache.SmartCacheException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -9,22 +7,13 @@ import java.util.Set;
 
 public class DefalutCache<K, V> implements ISmartCache<K, V> {
 
-    private final String name;
     private final Map<K, V> map;
 
-    public DefalutCache(String name, Map<K, V> map) {
-        if (name == null || name.length() == 0) {
-            throw new IllegalArgumentException("参数 name 非法！");
-        }
+    public DefalutCache(Map<K, V> map) {
         if (map == null) {
             throw new IllegalArgumentException("参数 map 非法！");
         }
-        this.name = name;
         this.map = map;
-    }
-
-    public String getName() {
-        return name;
     }
 
     @Override

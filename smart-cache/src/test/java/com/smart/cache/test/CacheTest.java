@@ -1,8 +1,8 @@
 package com.smart.cache.test;
 
+import com.smart.cache.DefaultCacheManager;
 import com.smart.cache.ISmartCache;
 import com.smart.cache.ISmartCacheManager;
-import com.smart.cache.impl.DefaultCacheManager;
 import org.junit.Test;
 
 public class CacheTest {
