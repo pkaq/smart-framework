@@ -16,20 +16,23 @@ public class Param extends BaseBean {
         return fieldMap;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T get(String name, Class<T> type) {
-        Object value = fieldMap.get(name);
-        if (type.equals(int.class) || type.equals(Integer.class)) {
-            value = CastUtil.castInt(value);
-        } else if (type.equals(long.class) || type.equals(Long.class)) {
-            value = CastUtil.castLong(value);
-        } else if (type.equals(double.class) || type.equals(Double.class)) {
-            value = CastUtil.castDouble(value);
-        } else if (type.equals(boolean.class) || type.equals(Boolean.class)) {
-            value = CastUtil.castBoolean(value);
-        } else {
-            value = CastUtil.castString(value);
-        }
-        return (T) value;
+    public int getInt(String name) {
+        return CastUtil.castInt(get(name));
+    }
+
+    public long getLong(String name) {
+        return CastUtil.castLong(get(name));
+    }
+
+    public double getDouble(String name) {
+        return CastUtil.castDouble(get(name));
+    }
+
+    public String getString(String name) {
+        return CastUtil.castString(get(name));
+    }
+
+    private Object get(String name) {
+        return fieldMap.get(name);
     }
 }
