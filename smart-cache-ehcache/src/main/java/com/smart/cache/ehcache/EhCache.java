@@ -70,7 +70,7 @@ public class EhCache<K, V> implements ISmartCache<K, V> {
         }
     }
 
-    public int size() {
+    public long size() {
         try {
             return cache.getSize();
         } catch (Throwable t) {

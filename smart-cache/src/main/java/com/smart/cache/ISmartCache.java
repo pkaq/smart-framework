@@ -45,7 +45,7 @@ public interface ISmartCache<K, V> {
      *
      * @return Key-Value 个数
      */
-    int size();
+    long size();
 
     /**
      * 获取 Cache 中所有的 Key 集合

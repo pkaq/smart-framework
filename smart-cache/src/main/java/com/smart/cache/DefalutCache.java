@@ -37,7 +37,7 @@ public class DefalutCache<K, V> implements ISmartCache<K, V> {
     }
 
     @Override
-    public int size() {
+    public long size() {
         return map.size();
     }
 

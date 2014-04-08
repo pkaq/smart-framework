@@ -2,10 +2,13 @@ package com.smart.cache.redis;
 
 import com.smart.cache.ISmartCache;
 import com.smart.cache.SmartCacheException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import redis.clients.jedis.Jedis;
-
-import java.util.*;
 
 /**
  * Created by Administrator on 14-4-7.
@@ -67,9 +70,9 @@ public class Redis<K,V> implements ISmartCache<K,V> {
     }
 
     @Override
-    public int size() {
+    public long size() {
         try {
-            return cache.dbSize().intValue();
+            return cache.dbSize();
         } catch (Throwable t) {
             throw new SmartCacheException(t);
         }
