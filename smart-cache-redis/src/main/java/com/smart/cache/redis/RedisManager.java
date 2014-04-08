@@ -7,15 +7,21 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 /**
  * Created by Administrator on 14-4-6.
  */
-public class RedisManager implements ISmartCacheManager,CacheConstant {
-    private final JedisPool pool;
+public class RedisManager implements ISmartCacheManager{
+
+    private final ConcurrentMap<String, Redis> cacheMap;
 
     public RedisManager() {
-        pool = new JedisPool(new JedisPoolConfig(),CACHE_IP);
+        this.cacheMap = new ConcurrentHashMap<String, Redis>();
     }
+
+
 
     @Override
     public <K, V> ISmartCache<K, V> getCache(String name) throws SmartCacheException {
@@ -23,11 +29,14 @@ public class RedisManager implements ISmartCacheManager,CacheConstant {
             throw new IllegalArgumentException("参数 name 非法！");
         }
         try {
-            Jedis jedis = pool.getResource();
-            if (jedis == null) {
-                return null;
+            // 根据 name 从 Cache Map 中获取 Cache，若为空，则创建 Cache，并将其放入 Cache Map 中
+            Redis cache = cacheMap.get(name);
+            if (cache == null) {
+                JedisPool pool = new JedisPool(new JedisPoolConfig(),RedisProps.getIpByName(name));
+                Jedis jedis= pool.getResource();
+                cache= new Redis<K, V>(jedis);
             }
-            return new Redis<K, V>(jedis);
+            return cache;
         } catch (Throwable t) {
             throw new SmartCacheException(t);
         }
