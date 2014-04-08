@@ -12,12 +12,16 @@ import java.util.Collection;
 import java.util.Set;
 
 public class RedisTest {
-
+    /**
+     * 默认cacheManager.getCache("redis");  默认对应config.properties中的cache.redis.ip
+     * cacheManager.getCache("xxx"); 对应config.properties中的cache.redis.ip.xxx
+     *
+     * */
 
     @Test
     public void test() {
         ISmartCacheManager cacheManager = new RedisManager();
-        ISmartCache<String, Object> cache = cacheManager.getCache("cache_name");
+        ISmartCache<String, Object> cache = cacheManager.getCache("redis");
         System.out.println(cache.get("lu"));
         System.out.println(cache.put("lu","heihei"));
         System.out.println(cache.get("lu"));
@@ -28,7 +32,7 @@ public class RedisTest {
     @Test
     public void test2() {
         ISmartCacheManager cacheManager = new RedisManager();
-        ISmartCache<Object, Object> cache = cacheManager.getCache("cache_name");
+        ISmartCache<Object, Object> cache = cacheManager.getCache("one");
 
 
         System.out.println(cache.put(123,123));
@@ -39,7 +43,7 @@ public class RedisTest {
     @Test
     public void testRemove(){
         ISmartCacheManager cacheManager = new RedisManager();
-        ISmartCache<Object, Object> cache = cacheManager.getCache("cache_name");
+        ISmartCache<Object, Object> cache = cacheManager.getCache("xxx");
         System.out.println(cache.get(123));
         System.out.println(cache.remove(123));
         System.out.println(cache.get(123));
