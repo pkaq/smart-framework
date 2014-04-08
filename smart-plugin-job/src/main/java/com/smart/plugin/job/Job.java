@@ -9,5 +9,21 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Job {
 
+    public enum Type {
+        CRON, TIMER
+    }
+
+    Type type() default Type.CRON;
+
     String value();
+
+    /* 当 type 为 TIMER 时，支持以下属性 */
+
+    int second() default 0;
+
+    int count() default 0;
+
+    String start() default "";
+
+    String end() default "";
 }
