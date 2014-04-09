@@ -13,13 +13,13 @@ public class SmartProps {
 
     private static final Logger logger = LoggerFactory.getLogger(SmartProps.class);
 
-    private static final Properties smartProps = new Properties();
+    private static final Properties props = new Properties();
 
     static {
         InputStream is = null;
         try {
             is = Thread.currentThread().getContextClassLoader().getResourceAsStream("smart.properties");
-            smartProps.load(is);
+            props.load(is);
         } catch (IOException e) {
             logger.error("加载属性文件出错！", e);
         } finally {
@@ -35,19 +35,19 @@ public class SmartProps {
 
     public static DataSource getDataSource() {
         BasicDataSource ds = new BasicDataSource();
-        ds.setDriverClassName(smartProps.getProperty("jdbc.driver"));
-        ds.setUrl(smartProps.getProperty("jdbc.url"));
-        ds.setUsername(smartProps.getProperty("jdbc.username"));
-        ds.setPassword(smartProps.getProperty("jdbc.password"));
+        ds.setDriverClassName(props.getProperty("jdbc.driver"));
+        ds.setUrl(props.getProperty("jdbc.url"));
+        ds.setUsername(props.getProperty("jdbc.username"));
+        ds.setPassword(props.getProperty("jdbc.password"));
         return ds;
     }
 
     public static String getRealms() {
-        return smartProps.getProperty("security.realms");
+        return props.getProperty("security.realms");
     }
 
     public static ISmartSecurity getSmartSecurity() {
-        String className = smartProps.getProperty("security.custom.class");
+        String className = props.getProperty("security.custom.class");
         Class<?> cls = null;
         try {
             cls = Class.forName(className);
@@ -66,34 +66,34 @@ public class SmartProps {
     }
 
     public static String getJdbcAuthcQuery() {
-        return smartProps.getProperty("security.jdbc.authc_query");
+        return props.getProperty("security.jdbc.authc_query");
     }
 
     public static String getJdbcRolesQuery() {
-        return smartProps.getProperty("security.jdbc.roles_query");
+        return props.getProperty("security.jdbc.roles_query");
     }
 
     public static String getJdbcPermsQuery() {
-        return smartProps.getProperty("security.jdbc.perms_query");
+        return props.getProperty("security.jdbc.perms_query");
     }
 
     public static String getAdUrl() {
-        return smartProps.getProperty("security.ad.url");
+        return props.getProperty("security.ad.url");
     }
 
     public static String getAdSystemUsername() {
-        return smartProps.getProperty("security.ad.system_username");
+        return props.getProperty("security.ad.system_username");
     }
 
     public static String getAdSystemPassword() {
-        return smartProps.getProperty("security.ad.system_password");
+        return props.getProperty("security.ad.system_password");
     }
 
     public static String getAdSearchBase() {
-        return smartProps.getProperty("security.ad.search_base");
+        return props.getProperty("security.ad.search_base");
     }
 
     public static boolean isCache() {
-        return Boolean.parseBoolean(smartProps.getProperty("security.cache"));
+        return Boolean.parseBoolean(props.getProperty("security.cache"));
     }
 }

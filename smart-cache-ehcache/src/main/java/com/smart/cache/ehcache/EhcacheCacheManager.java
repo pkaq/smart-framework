@@ -5,17 +5,19 @@ import com.smart.cache.ISmartCacheManager;
 import com.smart.cache.SmartCacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
+import org.apache.commons.lang.StringUtils;
 
-public class EhCacheManager implements ISmartCacheManager {
+public class EhcacheCacheManager implements ISmartCacheManager {
 
     private final CacheManager cacheManager;
 
-    public EhCacheManager() {
+    public EhcacheCacheManager() {
         cacheManager = CacheManager.newInstance();
     }
 
+    @Override
     public final <K, V> ISmartCache<K, V> getCache(String name) throws SmartCacheException {
-        if (name == null || name.length() == 0) {
+        if (StringUtils.isEmpty(name)) {
             throw new IllegalArgumentException("参数 name 非法！");
         }
         try {
@@ -24,7 +26,7 @@ public class EhCacheManager implements ISmartCacheManager {
                 cacheManager.addCache(name);
                 cache = cacheManager.getCache(name);
             }
-            return new EhCache<K, V>(cache);
+            return new EhcacheCache<K, V>(cache);
         } catch (Throwable t) {
             throw new SmartCacheException(t);
         }
