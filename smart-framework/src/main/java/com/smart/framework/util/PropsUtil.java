@@ -111,7 +111,7 @@ public class PropsUtil {
         Set<String> keySet = props.stringPropertyNames();
         if (CollectionUtil.isNotEmpty(keySet)) {
             for (String key : keySet) {
-                if (key.equals(prefix) || key.matches(prefix + "\\..*")) {
+                if (key.startsWith(prefix)) {
                     String value = props.getProperty(key);
                     kvMap.put(key, value);
                 }
