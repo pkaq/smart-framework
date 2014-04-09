@@ -74,13 +74,15 @@ public class AopHelper {
     private static void addAspectProxy(Map<Class<?>, List<Class<?>>> proxyMap) throws Exception {
         // 获取切面类（所有继承于 BaseAspect 的类）
         List<Class<?>> aspectProxyClassList = ClassHelper.getClassListBySuper(AspectProxy.class);
+        // 添加插件包下所有的切面类
+        aspectProxyClassList.addAll(ClassUtil.getClassListBySuper(FrameworkConstant.PLUGIN_PACKAGE, AspectProxy.class));
         // 排序切面类
         sortAspectProxyClassList(aspectProxyClassList);
         // 遍历切面类
         for (Class<?> aspectProxyClass : aspectProxyClassList) {
-            // 判断 @Aspect 注解是否存在
+            // 判断 Aspect 注解是否存在
             if (aspectProxyClass.isAnnotationPresent(Aspect.class)) {
-                // 获取 @Aspect 注解
+                // 获取 Aspect 注解
                 Aspect aspect = aspectProxyClass.getAnnotation(Aspect.class);
                 // 创建目标类列表
                 List<Class<?>> targetClassList = createTargetClassList(aspect);
