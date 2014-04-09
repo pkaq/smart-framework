@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.collections.CollectionUtils;
 
 public class DefalutCache<K, V> implements ISmartCache<K, V> {
 
@@ -44,7 +45,7 @@ public class DefalutCache<K, V> implements ISmartCache<K, V> {
     @Override
     public Set<K> keys() {
         Set<K> keys = map.keySet();
-        if (!keys.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(keys)) {
             return Collections.unmodifiableSet(keys);
         }
         return Collections.emptySet();
@@ -53,7 +54,7 @@ public class DefalutCache<K, V> implements ISmartCache<K, V> {
     @Override
     public Collection<V> values() {
         Collection<V> values = map.values();
-        if (!values.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(values)) {
             return Collections.unmodifiableCollection(values);
         }
         return Collections.emptySet();

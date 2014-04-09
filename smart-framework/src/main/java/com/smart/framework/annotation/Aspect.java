@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Aspect {
 
-    String pkg();
+    String pkg() default "";
 
     String cls() default "";
 

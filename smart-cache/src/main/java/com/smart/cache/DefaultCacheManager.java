@@ -13,6 +13,7 @@ public class DefaultCacheManager implements ISmartCacheManager {
         this.cacheMap = new ConcurrentHashMap<String, ISmartCache>();
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public <K, V> ISmartCache<K, V> getCache(String name) throws SmartCacheException {
         if (name == null || name.length() == 0) {
