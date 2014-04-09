@@ -4,23 +4,15 @@ import com.smart.framework.FrameworkConstant;
 import com.smart.framework.annotation.Aspect;
 import com.smart.framework.annotation.Order;
 import com.smart.framework.annotation.Service;
-import com.smart.framework.proxy.AspectProxy;
-import com.smart.framework.proxy.PluginProxy;
-import com.smart.framework.proxy.Proxy;
-import com.smart.framework.proxy.ProxyManager;
-import com.smart.framework.proxy.TransactionProxy;
+import com.smart.framework.proxy.*;
 import com.smart.framework.util.ClassUtil;
 import com.smart.framework.util.CollectionUtil;
 import com.smart.framework.util.StringUtil;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.annotation.Annotation;
+import java.util.*;
 
 public class AopHelper {
 
@@ -124,12 +116,33 @@ public class AopHelper {
         // 获取 @Aspect 注解相关属性
         String pkg = aspect.pkg(); // 包名
         String cls = aspect.cls(); // 类名
-        if (StringUtil.isNotEmpty(pkg) && StringUtil.isNotEmpty(cls)) {
+        Class<? extends Annotation> annotationClass = aspect.annotationClass();
+        if (StringUtil.isNotEmpty(pkg) && StringUtil.isNotEmpty(cls) && !annotationClass.equals(Aspect.class)) {
+            // 如果包名与类名还有注解均不为空，则添加指定类
+            Class<?> clazz = ClassUtil.loadClass(pkg + "." + cls, false);
+            if(clazz.isAnnotationPresent(annotationClass)){
+                targetClassList.add(clazz);
+            }
+        }
+        else if (StringUtil.isNotEmpty(pkg) && StringUtil.isNotEmpty(cls)) {
             // 如果包名与类名均不为空，则添加指定类
-            targetClassList.add(ClassUtil.loadClass(pkg + "." + cls, false));
-        } else {
-            // 否则（包名不为空）添加该包名下所有类
+            Class<?> clazz = ClassUtil.loadClass(pkg + "." + cls, false);
+            targetClassList.add(clazz);
+        }
+        else if(StringUtil.isNotEmpty(pkg)&&!annotationClass.equals(Aspect.class)){
+            // 如果包名和注解不为空，则添加指定类
+            targetClassList.addAll(ClassUtil.getClassListByAnnotation(pkg, annotationClass));
+        }
+        else if(StringUtil.isNotEmpty(pkg)){
+            //包名不为空，添加该包名下所有类
             targetClassList.addAll(ClassUtil.getClassList(pkg, true));
+        }
+        else if(!annotationClass.equals(Aspect.class)){
+            // 注解不为空，添加该注解下所有类
+            targetClassList.addAll(ClassHelper.getClassListByAnnotation(annotationClass));
+        }
+        else {
+            // 没有参数的Aspect注解
         }
         return targetClassList;
     }
