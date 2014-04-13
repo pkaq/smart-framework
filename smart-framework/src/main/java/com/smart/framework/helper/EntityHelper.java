@@ -26,7 +26,7 @@ public class EntityHelper {
                 for (Field field : fields) {
                     String fieldName = field.getName();
                     String columnName;
-                    // 若该字段上存在 @Column 注解，则优先获取注解中的列名
+                    // 若该字段上存在 Column 注解，则优先获取注解中的列名
                     if (field.isAnnotationPresent(Column.class)) {
                         columnName = field.getAnnotation(Column.class).value();
                     } else {

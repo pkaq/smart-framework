@@ -27,7 +27,7 @@ public class IocHelper {
                 if (ArrayUtil.isNotEmpty(beanFields)) {
                     // 遍历所有的 Bean 字段
                     for (Field beanField : beanFields) {
-                        // 判断当前 Bean 字段是否带有 @Inject 注解
+                        // 判断当前 Bean 字段是否带有 Inject 注解
                         if (beanField.isAnnotationPresent(Inject.class)) {
                             // 获取 Bean 字段对应的接口
                             Class<?> interfaceClass = beanField.getType();

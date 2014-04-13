@@ -77,9 +77,9 @@ public class AopHelper {
         sortAspectProxyClassList(aspectProxyClassList);
         // 遍历切面类
         for (Class<?> aspectProxyClass : aspectProxyClassList) {
-            // 判断 @Aspect 注解是否存在
+            // 判断 Aspect 注解是否存在
             if (aspectProxyClass.isAnnotationPresent(Aspect.class)) {
-                // 获取 @Aspect 注解
+                // 获取 Aspect 注解
                 Aspect aspect = aspectProxyClass.getAnnotation(Aspect.class);
                 // 创建目标类列表
                 List<Class<?>> targetClassList = createTargetClassList(aspect);
@@ -101,14 +101,14 @@ public class AopHelper {
             @Override
             public int compare(Class<?> aspect1, Class<?> aspect2) {
                 if (aspect1.isAnnotationPresent(Order.class) || aspect2.isAnnotationPresent(Order.class)) {
-                    // 若有 @Order 注解，则优先比较（序号的值越小越靠前）
+                    // 若有 Order 注解，则优先比较（序号的值越小越靠前）
                     if (aspect1.isAnnotationPresent(Order.class)) {
                         return getOrderValue(aspect1) - getOrderValue(aspect2);
                     } else {
                         return getOrderValue(aspect2) - getOrderValue(aspect1);
                     }
                 } else {
-                    // 若无 @Order 注解，则比较类名（按字母顺序升序排列）
+                    // 若无 Order 注解，则比较类名（按字母顺序升序排列）
                     return aspect1.hashCode() - aspect2.hashCode();
                 }
             }
@@ -121,7 +121,7 @@ public class AopHelper {
 
     private static List<Class<?>> createTargetClassList(Aspect aspect) throws Exception {
         List<Class<?>> targetClassList = new ArrayList<Class<?>>();
-        // 获取 @Aspect 注解相关属性
+        // 获取 Aspect 注解相关属性
         String pkg = aspect.pkg(); // 包名
         String cls = aspect.cls(); // 类名
         if (StringUtil.isNotEmpty(pkg) && StringUtil.isNotEmpty(cls)) {

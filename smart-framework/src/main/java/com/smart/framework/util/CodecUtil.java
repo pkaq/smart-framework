@@ -78,7 +78,7 @@ public class CodecUtil {
         return RandomStringUtils.randomNumeric(count);
     }
 
-    // 获取UUID（32位）
+    // 获取 UUID（32位）
     public static String createUUID() {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }

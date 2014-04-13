@@ -30,9 +30,9 @@ public class ActionHelper {
                 Method[] actionMethods = actionClass.getDeclaredMethods();
                 if (ArrayUtil.isNotEmpty(actionMethods)) {
                     for (Method actionMethod : actionMethods) {
-                        // 判断当前 Action 方法是否带有 @Request 注解
+                        // 判断当前 Action 方法是否带有 Request 注解
                         if (actionMethod.isAnnotationPresent(Request.class)) {
-                            // 获取 @Requet 注解中的 URL 字符串
+                            // 获取 Requet 注解中的 URL 字符串
                             String[] urlArray = StringUtil.splitString(actionMethod.getAnnotation(Request.class).value(), ":");
                             if (ArrayUtil.isNotEmpty(urlArray)) {
                                 // 获取请求方法与请求路径
