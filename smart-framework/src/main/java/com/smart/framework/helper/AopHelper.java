@@ -12,6 +12,7 @@ import com.smart.framework.proxy.TransactionProxy;
 import com.smart.framework.util.ClassUtil;
 import com.smart.framework.util.CollectionUtil;
 import com.smart.framework.util.StringUtil;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -73,6 +74,8 @@ public class AopHelper {
     private static void addAspectProxy(Map<Class<?>, List<Class<?>>> proxyMap) throws Exception {
         // 获取切面类（所有继承于 BaseAspect 的类）
         List<Class<?>> aspectProxyClassList = ClassHelper.getClassListBySuper(AspectProxy.class);
+        // 添加插件包下所有的切面类
+        aspectProxyClassList.addAll(ClassUtil.getClassListBySuper(FrameworkConstant.PLUGIN_PACKAGE, AspectProxy.class));
         // 排序切面类
         sortAspectProxyClassList(aspectProxyClassList);
         // 遍历切面类
@@ -121,15 +124,29 @@ public class AopHelper {
 
     private static List<Class<?>> createTargetClassList(Aspect aspect) throws Exception {
         List<Class<?>> targetClassList = new ArrayList<Class<?>>();
-        // 获取 Aspect 注解相关属性
-        String pkg = aspect.pkg(); // 包名
-        String cls = aspect.cls(); // 类名
-        if (StringUtil.isNotEmpty(pkg) && StringUtil.isNotEmpty(cls)) {
-            // 如果包名与类名均不为空，则添加指定类
-            targetClassList.add(ClassUtil.loadClass(pkg + "." + cls, false));
+        // 获取 Aspect 注解的相关属性
+        String pkg = aspect.pkg();
+        String cls = aspect.cls();
+        Class<? extends Annotation> annotation = aspect.annotation();
+        // 若包名不为空，则需进一步判断类名是否为空
+        if (StringUtil.isNotEmpty(pkg)) {
+            if (StringUtil.isNotEmpty(cls)) {
+                // 若类名不为空，则仅添加该类
+                targetClassList.add(ClassUtil.loadClass(pkg + "." + cls, false));
+            } else {
+                // 若注解不为空且不是 Aspect 注解，则添加指定包名下带有该注解的所有类
+                if (annotation != null && !annotation.equals(Aspect.class)) {
+                    targetClassList.addAll(ClassUtil.getClassListByAnnotation(pkg, annotation));
+                } else {
+                    // 否则添加该包名下所有类
+                    targetClassList.addAll(ClassUtil.getClassList(pkg, true));
+                }
+            }
         } else {
-            // 否则（包名不为空）添加该包名下所有类
-            targetClassList.addAll(ClassUtil.getClassList(pkg, true));
+            // 若注解不为空且不是 Aspect 注解，则添加应用包名下带有该注解的所有类
+            if (annotation != null && !annotation.equals(Aspect.class)) {
+                targetClassList.addAll(ClassHelper.getClassListByAnnotation(annotation));
+            }
         }
         return targetClassList;
     }

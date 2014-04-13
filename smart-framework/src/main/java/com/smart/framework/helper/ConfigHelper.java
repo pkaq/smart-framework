@@ -2,6 +2,7 @@ package com.smart.framework.helper;
 
 import com.smart.framework.FrameworkConstant;
 import com.smart.framework.util.PropsUtil;
+import java.util.Map;
 import java.util.Properties;
 
 public class ConfigHelper {
@@ -30,5 +31,9 @@ public class ConfigHelper {
 
     public static boolean getConfigBoolean(String key, boolean defaultValue) {
         return PropsUtil.getBoolean(configProps, key, defaultValue);
+    }
+
+    public static Map<String, Object> getConfigMap(String prefix) {
+        return PropsUtil.getMap(configProps, prefix);
     }
 }

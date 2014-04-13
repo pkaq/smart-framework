@@ -1,40 +1,40 @@
-package com.smart.cache.redis;
+package com.smart.cache.ehcache;
 
 import com.smart.cache.ISmartCache;
 import com.smart.cache.SmartCacheException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import net.sf.ehcache.Ehcache;
+import net.sf.ehcache.Element;
 import org.apache.commons.collections.CollectionUtils;
-import redis.clients.jedis.Jedis;
 
-/**
- * Created by Administrator on 14-4-7.
- */
-public class Redis<K,V> implements ISmartCache<K,V> {
+public class EhcacheCache<K, V> implements ISmartCache<K, V> {
 
-    private Jedis cache;
+    private Ehcache ehcache;
 
-    public Redis(Jedis cache) {
-        if (cache == null) {
-            throw new IllegalArgumentException("参数 cache 非法！");
+    public EhcacheCache(Ehcache ehcache) {
+        if (ehcache == null) {
+            throw new IllegalArgumentException("参数 ehcache 非法！");
         }
-        this.cache = cache;
+        this.ehcache = ehcache;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public V get(K key) throws SmartCacheException {
         try {
             if (key == null) {
                 return null;
             } else {
-                String str= cache.get(key.toString());
-                if (str == null) {
+                Element element = ehcache.get(key);
+                if (element == null) {
                     return null;
                 } else {
-                    return (V)str;
+                    return (V) element.getObjectValue();
                 }
             }
         } catch (Throwable t) {
@@ -45,7 +45,10 @@ public class Redis<K,V> implements ISmartCache<K,V> {
     @Override
     public V put(K key, V value) throws SmartCacheException {
         try {
-            return (V)cache.set(key.toString(),value.toString());
+            V previous = get(key);
+            Element element = new Element(key, value);
+            ehcache.put(element);
+            return previous;
         } catch (Throwable t) {
             throw new SmartCacheException(t);
         }
@@ -54,7 +57,9 @@ public class Redis<K,V> implements ISmartCache<K,V> {
     @Override
     public V remove(K key) throws SmartCacheException {
         try {
-            return (V)cache.del(key.toString());
+            V previous = get(key);
+            ehcache.remove(key);
+            return previous;
         } catch (Throwable t) {
             throw new SmartCacheException(t);
         }
@@ -63,7 +68,7 @@ public class Redis<K,V> implements ISmartCache<K,V> {
     @Override
     public void clear() throws SmartCacheException {
         try {
-            cache.flushAll();
+            ehcache.removeAll();
         } catch (Throwable t) {
             throw new SmartCacheException(t);
         }
@@ -72,25 +77,25 @@ public class Redis<K,V> implements ISmartCache<K,V> {
     @Override
     public long size() {
         try {
-            return cache.dbSize();
+            return ehcache.getSize();
         } catch (Throwable t) {
             throw new SmartCacheException(t);
         }
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Set<K> keys() {
         try {
-            Set<K> keys =(Set<K>)cache.keys("*");
+            List<K> keys = ehcache.getKeys();
             if (CollectionUtils.isNotEmpty(keys)) {
-                return keys;
+                return Collections.unmodifiableSet(new LinkedHashSet<K>(keys));
             } else {
                 return Collections.emptySet();
             }
         } catch (Throwable t) {
             throw new SmartCacheException(t);
         }
-
     }
 
     @Override
@@ -99,7 +104,7 @@ public class Redis<K,V> implements ISmartCache<K,V> {
             Set<K> keys = keys();
             if (CollectionUtils.isNotEmpty(keys)) {
                 List<V> values = new ArrayList<V>(keys.size());
-                for(K key:keys){
+                for (K key : keys) {
                     V value = get(key);
                     if (value != null) {
                         values.add(value);

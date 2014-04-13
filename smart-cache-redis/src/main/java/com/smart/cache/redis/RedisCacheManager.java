@@ -1,16 +1,18 @@
-package com.smart.cache;
+package com.smart.cache.redis;
 
-import java.util.Map;
+import com.smart.cache.ISmartCache;
+import com.smart.cache.ISmartCacheManager;
+import com.smart.cache.SmartCacheException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import org.apache.commons.collections.map.ReferenceMap;
 import org.apache.commons.lang.StringUtils;
+import redis.clients.jedis.Jedis;
 
-public class DefaultCacheManager implements ISmartCacheManager {
+public class RedisCacheManager implements ISmartCacheManager {
 
     private final ConcurrentMap<String, ISmartCache> cacheMap;
 
-    public DefaultCacheManager() {
+    public RedisCacheManager() {
         this.cacheMap = new ConcurrentHashMap<String, ISmartCache>();
     }
 
@@ -21,12 +23,12 @@ public class DefaultCacheManager implements ISmartCacheManager {
             throw new IllegalArgumentException("参数 name 非法！");
         }
         try {
-            // 根据 name 从 Cache Map 中获取 Cache，若为空，则创建 Cache，并将其放入 Cache Map 中
             ISmartCache<K, V> cache = cacheMap.get(name);
             if (cache == null) {
-                // 创建一个基于 Map 的 Cache
-                Map<K, V> map = new ReferenceMap(); // 强引用指向 key，弱引用指向 value
-                cache = new DefalutCache<K, V>(map);
+                String host = SmartProps.getHost();
+                int port = SmartProps.getPort();
+                Jedis jedis = new Jedis(host, port);
+                cache = new RedisCache<K, V>(jedis);
                 cacheMap.putIfAbsent(name, cache);
             }
             return cache;

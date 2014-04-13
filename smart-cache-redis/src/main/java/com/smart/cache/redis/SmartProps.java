@@ -1,8 +1,9 @@
-package com.smart.sso;
+package com.smart.cache.redis;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,23 +31,21 @@ public class SmartProps {
         }
     }
 
-    public static boolean isSSO() {
-        return Boolean.parseBoolean(props.getProperty("sso"));
+    public static String getHost() {
+        String host = props.getProperty("cache.redis.host");
+        if (StringUtils.isEmpty(host)) {
+            host = "127.0.0.1";
+        }
+        return host;
     }
 
-    public static String getCasServerUrlPrefix() {
-        return props.getProperty("sso.cas_url");
-    }
-
-    public static String getCasServerLoginUrl() {
-        return props.getProperty("sso.cas_url") + "/login";
-    }
-
-    public static String getServerName() {
-        return props.getProperty("sso.app_url");
-    }
-
-    public static String getFilterMapping() {
-        return props.getProperty("sso.filter_mapping");
+    public static int getPort() {
+        int port;
+        try {
+            port = Integer.parseInt(props.getProperty("cache.redis.port"));
+        } catch (NumberFormatException e) {
+            port = 6379;
+        }
+        return port;
     }
 }

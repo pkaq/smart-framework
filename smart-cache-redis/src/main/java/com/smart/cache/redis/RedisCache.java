@@ -1,4 +1,4 @@
-package com.smart.cache.ehcache;
+package com.smart.cache.redis;
 
 import com.smart.cache.ISmartCache;
 import com.smart.cache.SmartCacheException;
@@ -8,32 +8,32 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
 import org.apache.commons.collections.CollectionUtils;
+import redis.clients.jedis.Jedis;
 
-public class EhCache<K, V> implements ISmartCache<K, V> {
+public class RedisCache<K, V> implements ISmartCache<K, V> {
 
-    private Ehcache cache;
+    private Jedis jedis;
 
-    public EhCache(Ehcache cache) {
-        if (cache == null) {
-            throw new IllegalArgumentException("参数 cache 非法！");
+    public RedisCache(Jedis jedis) {
+        if (jedis == null) {
+            throw new IllegalArgumentException("参数 jedis 非法！");
         }
-        this.cache = cache;
+        this.jedis = jedis;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public V get(K key) throws SmartCacheException {
         try {
             if (key == null) {
                 return null;
             } else {
-                Element element = cache.get(key);
-                if (element == null) {
+                String str = jedis.get(key.toString());
+                if (str == null) {
                     return null;
                 } else {
-                    return (V) element.getObjectValue();
+                    return (V) str;
                 }
             }
         } catch (Throwable t) {
@@ -41,47 +41,49 @@ public class EhCache<K, V> implements ISmartCache<K, V> {
         }
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public V put(K key, V value) throws SmartCacheException {
         try {
-            V previous = get(key);
-            Element element = new Element(key, value);
-            cache.put(element);
-            return previous;
+            return (V) jedis.set(key.toString(), value.toString());
         } catch (Throwable t) {
             throw new SmartCacheException(t);
         }
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public V remove(K key) throws SmartCacheException {
         try {
-            V previous = get(key);
-            cache.remove(key);
-            return previous;
+            return (V) jedis.del(key.toString());
         } catch (Throwable t) {
             throw new SmartCacheException(t);
         }
     }
 
+    @Override
     public void clear() throws SmartCacheException {
         try {
-            cache.removeAll();
+            jedis.flushAll();
         } catch (Throwable t) {
             throw new SmartCacheException(t);
         }
     }
 
+    @Override
     public long size() {
         try {
-            return cache.getSize();
+            return jedis.dbSize();
         } catch (Throwable t) {
             throw new SmartCacheException(t);
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public Set<K> keys() {
         try {
-            List<K> keys = cache.getKeys();
+            Set<K> keys = (Set<K>) jedis.keys("*");
             if (CollectionUtils.isNotEmpty(keys)) {
                 return Collections.unmodifiableSet(new LinkedHashSet<K>(keys));
             } else {
@@ -92,10 +94,10 @@ public class EhCache<K, V> implements ISmartCache<K, V> {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     public Collection<V> values() {
         try {
-            List<K> keys = cache.getKeys();
+            Set<K> keys = keys();
             if (CollectionUtils.isNotEmpty(keys)) {
                 List<V> values = new ArrayList<V>(keys.size());
                 for (K key : keys) {
