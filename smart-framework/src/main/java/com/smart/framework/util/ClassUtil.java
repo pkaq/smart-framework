@@ -45,7 +45,7 @@ public class ClassUtil {
     }
 
     // 获取指定包名下的所有类
-    public static List<Class<?>> getClassList(String packageName, boolean isRecursive) {
+    public static List<Class<?>> getClassList(String packageName) {
         List<Class<?>> classList = new ArrayList<Class<?>>();
         try {
             Enumeration<URL> urls = getClassLoader().getResources(packageName.replace(".", "/"));
@@ -55,7 +55,7 @@ public class ClassUtil {
                     String protocol = url.getProtocol();
                     if (protocol.equals("file")) {
                         String packagePath = url.getPath();
-                        addClass(classList, packagePath, packageName, isRecursive);
+                        addClass(classList, packagePath, packageName);
                     } else if (protocol.equals("jar")) {
                         JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
                         JarFile jarFile = jarURLConnection.getJarFile();
@@ -65,7 +65,7 @@ public class ClassUtil {
                             String jarEntryName = jarEntry.getName();
                             if (jarEntryName.endsWith(".class")) {
                                 String className = jarEntryName.substring(0, jarEntryName.lastIndexOf(".")).replaceAll("/", ".");
-                                if (isRecursive || className.substring(0, className.lastIndexOf(".")).equals(packageName)) {
+                                if (className.substring(0, className.lastIndexOf(".")).equals(packageName)) {
                                     classList.add(loadClass(className, false));
                                 }
                             }
@@ -154,7 +154,7 @@ public class ClassUtil {
         return classList;
     }
 
-    private static void addClass(List<Class<?>> classList, String packagePath, String packageName, boolean isRecursive) {
+    private static void addClass(List<Class<?>> classList, String packagePath, String packageName) {
         try {
             File[] files = getClassFiles(packagePath);
             if (files != null) {
@@ -164,11 +164,9 @@ public class ClassUtil {
                         String className = getClassName(packageName, fileName);
                         classList.add(loadClass(className, false));
                     } else {
-                        if (isRecursive) {
-                            String subPackagePath = getSubPackagePath(packagePath, fileName);
-                            String subPackageName = getSubPackageName(packageName, fileName);
-                            addClass(classList, subPackagePath, subPackageName, true);
-                        }
+                        String subPackagePath = getSubPackagePath(packagePath, fileName);
+                        String subPackageName = getSubPackageName(packageName, fileName);
+                        addClass(classList, subPackagePath, subPackageName);
                     }
                 }
             }

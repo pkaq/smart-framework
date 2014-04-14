@@ -54,7 +54,7 @@ public class IocHelper {
 
     public static Class<?> findImplementClass(Class<?> interfaceClass) {
         Class<?> implementClass = interfaceClass;
-        // 判断接口上是否标注了 @Impl 注解
+        // 判断接口上是否标注了 Impl 注解
         if (interfaceClass.isAnnotationPresent(Impl.class)) {
             // 获取强制指定的实现类
             implementClass = interfaceClass.getAnnotation(Impl.class).value();

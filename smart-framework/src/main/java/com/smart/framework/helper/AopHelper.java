@@ -40,11 +40,11 @@ public class AopHelper {
                 List<Proxy> proxyList = targetEntry.getValue();
                 // 创建代理实例
                 Object proxyInstance = ProxyManager.createProxy(targetClass, proxyList);
-                // 用代理实例覆盖目标实例，并放入 IOC 容器中
+                // 用代理实例覆盖目标实例，并放入 Bean 容器中
                 BeanHelper.setBean(targetClass, proxyInstance);
             }
         } catch (Exception e) {
-            logger.error("初始化 AOPHelper 出错！", e);
+            logger.error("初始化 AopHelper 出错！", e);
         }
     }
 
@@ -139,7 +139,7 @@ public class AopHelper {
                     targetClassList.addAll(ClassUtil.getClassListByAnnotation(pkg, annotation));
                 } else {
                     // 否则添加该包名下所有类
-                    targetClassList.addAll(ClassUtil.getClassList(pkg, true));
+                    targetClassList.addAll(ClassUtil.getClassList(pkg));
                 }
             }
         } else {

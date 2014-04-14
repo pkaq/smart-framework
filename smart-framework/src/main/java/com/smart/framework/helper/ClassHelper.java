@@ -9,7 +9,7 @@ public class ClassHelper {
     private static final String packageName = ConfigHelper.getConfigString("app.package");
 
     public static List<Class<?>> getClassList() {
-        return ClassUtil.getClassList(packageName, true);
+        return ClassUtil.getClassList(packageName);
     }
 
     public static List<Class<?>> getClassListBySuper(Class<?> superClass) {
