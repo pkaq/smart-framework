@@ -1,8 +1,8 @@
-package smart.sso;
+package smart.sso.init;
 
 import javax.servlet.ServletContext;
 
-public interface WebApplicationInitializer {
+public interface ISmartInitializer {
 
     void init(ServletContext servletContext);
 }

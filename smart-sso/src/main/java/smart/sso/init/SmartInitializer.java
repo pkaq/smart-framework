@@ -1,4 +1,4 @@
-package smart.sso;
+package smart.sso.init;
 
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
@@ -8,8 +8,9 @@ import org.jasig.cas.client.session.SingleSignOutHttpSessionListener;
 import org.jasig.cas.client.util.AssertionThreadLocalFilter;
 import org.jasig.cas.client.util.HttpServletRequestWrapperFilter;
 import org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter;
+import smart.sso.tool.SmartProps;
 
-public class SmartWebApplicationInitializer implements WebApplicationInitializer {
+public class SmartInitializer implements ISmartInitializer {
 
     @Override
     public void init(ServletContext servletContext) {

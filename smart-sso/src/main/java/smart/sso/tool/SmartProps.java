@@ -1,4 +1,4 @@
-package smart.sso;
+package smart.sso.tool;
 
 import java.io.IOException;
 import java.io.InputStream;
