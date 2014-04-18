@@ -25,7 +25,7 @@ public class TransactionProxy implements Proxy {
         boolean flag = flagContainer.get();
         // 获取目标方法
         Method method = proxyChain.getTargetMethod();
-        // 若在目标方法上定义了 Transaction 注解，则说明该方法需要进行事务处理
+        // 若当前线程未进行事务处理，且在目标方法上定义了 Transaction 注解，则说明该方法需要进行事务处理
         if (!flag && method.isAnnotationPresent(Transaction.class)) {
             // 设置当前线程已进行事务处理
             flagContainer.set(true);
