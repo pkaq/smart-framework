@@ -4,11 +4,11 @@ import com.smart.framework.base.BaseBean;
 import com.smart.framework.util.CastUtil;
 import java.util.Map;
 
-public class Param extends BaseBean {
+public class Params extends BaseBean {
 
     private final Map<String, Object> fieldMap;
 
-    public Param(Map<String, Object> fieldMap) {
+    public Params(Map<String, Object> fieldMap) {
         this.fieldMap = fieldMap;
     }
 

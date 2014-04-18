@@ -3,9 +3,8 @@ package com.smart.framework.helper;
 import com.smart.framework.FrameworkConstant;
 import com.smart.framework.bean.Multipart;
 import com.smart.framework.bean.Multiparts;
-import com.smart.framework.bean.Param;
+import com.smart.framework.bean.Params;
 import com.smart.framework.exception.UploadException;
-import com.smart.framework.util.CollectionUtil;
 import com.smart.framework.util.FileUtil;
 import com.smart.framework.util.StreamUtil;
 import com.smart.framework.util.StringUtil;
@@ -89,14 +88,8 @@ public class UploadHelper {
             }
         }
         // 初始化参数列表
-        Param param = new Param(fieldMap);
-        paramList.add(param);
-        // 不管一个文件还是多个文件，都映射为 Multiparts 参数
-        if (CollectionUtil.isNotEmpty(multipartList)) {
-            paramList.add(new Multiparts(multipartList));
-        } else {
-            paramList.add(null);
-        }
+        paramList.add(new Params(fieldMap));
+        paramList.add(new Multiparts(multipartList));
         // 返回参数列表
         return paramList;
     }

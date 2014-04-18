@@ -1,6 +1,6 @@
 package com.smart.framework;
 
-import com.smart.framework.bean.Param;
+import com.smart.framework.bean.Params;
 import com.smart.framework.bean.Result;
 import com.smart.framework.bean.View;
 import com.smart.framework.exception.AccessException;
@@ -130,8 +130,7 @@ public class DispatcherServlet extends HttpServlet {
             // 添加普通请求参数列表（包括 Query String 与 Form Data）
             Map<String, Object> requestParamMap = WebUtil.getRequestParamMap(request);
             if (MapUtil.isNotEmpty(requestParamMap)) {
-                Param param = new Param(requestParamMap);
-                paramList.add(param);
+                paramList.add(new Params(requestParamMap));
             }
         }
         // 返回参数列表
