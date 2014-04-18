@@ -103,7 +103,7 @@
     <tag>
         <description>判断当前用户是否拥有其中所有的角色（逗号分隔，与的关系）</description>
         <name>hasAllRoles</name>
-        <tag-class>com.smart.security.tag.HasAllRolesTag</tag-class>
+        <tag-class>smart.security.tag.HasAllRolesTag</tag-class>
         <body-content>JSP</body-content>
         <attribute>
             <name>name</name>
@@ -141,7 +141,7 @@
     <tag>
         <description>判断当前用户是否拥有其中某一种权限（逗号分隔，或的关系）</description>
         <name>hasAnyPerms</name>
-        <tag-class>com.smart.security.tag.HasAnyPermsTag</tag-class>
+        <tag-class>smart.security.tag.HasAnyPermsTag</tag-class>
         <body-content>JSP</body-content>
         <attribute>
             <name>name</name>
@@ -153,7 +153,7 @@
     <tag>
         <description>判断当前用户是否拥有其中所有的权限（逗号分隔，与的关系）</description>
         <name>hasAllPerms</name>
-        <tag-class>com.smart.security.tag.HasAllPermsTag</tag-class>
+        <tag-class>smart.security.tag.HasAllPermsTag</tag-class>
         <body-content>JSP</body-content>
         <attribute>
             <name>name</name>

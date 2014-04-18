@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.smart</groupId>
+        <groupId>smart</groupId>
         <artifactId>smart</artifactId>
         <version>2.2-SNAPSHOT</version>
     </parent>
@@ -32,7 +32,7 @@
         </dependency>
         <!-- Smart -->
         <dependency>
-            <groupId>com.smart</groupId>
+            <groupId>smart</groupId>
             <artifactId>smart-cache</artifactId>
         </dependency>
     </dependencies>
