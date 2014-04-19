@@ -3,16 +3,13 @@ package smart.framework.helper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import smart.framework.annotation.Action;
 import smart.framework.annotation.Aspect;
 import smart.framework.annotation.Bean;
 import smart.framework.annotation.Service;
+import smart.framework.throwable.InitializationError;
 
 public class BeanHelper {
-
-    private static final Logger logger = LoggerFactory.getLogger(BeanHelper.class);
 
     private static final Map<Class<?>, Object> beanMap = new HashMap<Class<?>, Object>(); // Bean 类 => Bean 实例
 
@@ -33,7 +30,7 @@ public class BeanHelper {
                 }
             }
         } catch (Exception e) {
-            logger.error("初始化 BeanHelper 出错！", e);
+            throw new InitializationError("初始化 BeanHelper 出错！", e);
         }
     }
 

@@ -3,16 +3,13 @@ package smart.framework.helper;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import smart.framework.annotation.Impl;
 import smart.framework.annotation.Inject;
+import smart.framework.throwable.InitializationError;
 import smart.framework.util.ArrayUtil;
 import smart.framework.util.CollectionUtil;
 
 public class IocHelper {
-
-    private static final Logger logger = LoggerFactory.getLogger(IocHelper.class);
 
     static {
         try {
@@ -41,6 +38,8 @@ public class IocHelper {
                                 if (implementInstance != null) {
                                     beanField.setAccessible(true); // 将字段设置为 public
                                     beanField.set(beanInstance, implementInstance); // 设置字段初始值
+                                } else {
+                                    throw new InitializationError("依赖注入失败！类名：" + beanClass.getSimpleName() + "，字段名：" + interfaceClass.getSimpleName());
                                 }
                             }
                         }
@@ -48,7 +47,7 @@ public class IocHelper {
                 }
             }
         } catch (Exception e) {
-            logger.error("初始化 IocHelper 出错！", e);
+            throw new InitializationError("初始化 IocHelper 出错！", e);
         }
     }
 

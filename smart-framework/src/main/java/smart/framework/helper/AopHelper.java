@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import smart.framework.FrameworkConstant;
 import smart.framework.annotation.Aspect;
 import smart.framework.annotation.Order;
@@ -19,13 +17,12 @@ import smart.framework.proxy.PluginProxy;
 import smart.framework.proxy.Proxy;
 import smart.framework.proxy.ProxyManager;
 import smart.framework.proxy.TransactionProxy;
+import smart.framework.throwable.InitializationError;
 import smart.framework.util.ClassUtil;
 import smart.framework.util.CollectionUtil;
 import smart.framework.util.StringUtil;
 
 public class AopHelper {
-
-    private static final Logger logger = LoggerFactory.getLogger(AopHelper.class);
 
     static {
         try {
@@ -44,7 +41,7 @@ public class AopHelper {
                 BeanHelper.setBean(targetClass, proxyInstance);
             }
         } catch (Exception e) {
-            logger.error("初始化 AopHelper 出错！", e);
+            throw new InitializationError("初始化 AopHelper 出错！", e);
         }
     }
 

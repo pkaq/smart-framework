@@ -2,15 +2,12 @@ package smart.framework.helper;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import smart.framework.FrameworkConstant;
 import smart.framework.Plugin;
+import smart.framework.throwable.InitializationError;
 import smart.framework.util.ClassUtil;
 
 public class PluginHelper {
-
-    private static final Logger logger = LoggerFactory.getLogger(PluginHelper.class);
 
     // 创建一个 Plugin 列表（用于存放 Plugin 实例）
     private static final List<Plugin> pluginList = new ArrayList<Plugin>();
@@ -28,7 +25,7 @@ public class PluginHelper {
                 pluginList.add(plugin);
             }
         } catch (Exception e) {
-            logger.error("初始化 PluginHelper 出错！", e);
+            throw new InitializationError("初始化 PluginHelper 出错！", e);
         }
     }
 

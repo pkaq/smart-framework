@@ -1,4 +1,4 @@
-package smart.framework.exception;
+package smart.framework.throwable;
 
 public class AccessException extends RuntimeException {
 

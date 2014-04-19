@@ -22,7 +22,7 @@ import smart.framework.FrameworkConstant;
 import smart.framework.bean.Multipart;
 import smart.framework.bean.Multiparts;
 import smart.framework.bean.Params;
-import smart.framework.exception.UploadException;
+import smart.framework.throwable.UploadException;
 import smart.framework.util.FileUtil;
 import smart.framework.util.StreamUtil;
 import smart.framework.util.StringUtil;
