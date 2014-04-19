@@ -8,7 +8,7 @@ import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.message.Message;
-import smart.framework.helper.ConfigHelper;
+import smart.framework.core.ConfigHelper;
 
 public class SoapHelper {
 

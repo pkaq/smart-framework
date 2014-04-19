@@ -9,7 +9,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import smart.framework.FrameworkConstant;
+import smart.framework.core.FrameworkConstant;
 
 public class CodecUtil {
 

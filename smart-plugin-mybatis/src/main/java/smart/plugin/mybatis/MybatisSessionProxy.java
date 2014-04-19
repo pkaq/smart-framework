@@ -3,10 +3,10 @@ package smart.plugin.mybatis;
 import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import smart.framework.annotation.Aspect;
-import smart.framework.annotation.Service;
-import smart.framework.helper.ConfigHelper;
-import smart.framework.proxy.AspectProxy;
+import smart.framework.aop.AspectProxy;
+import smart.framework.aop.annotation.Aspect;
+import smart.framework.core.ConfigHelper;
+import smart.framework.tx.annotation.Service;
 
 /**
  * Mybatis - 代理类，用于自动处理SqlSession

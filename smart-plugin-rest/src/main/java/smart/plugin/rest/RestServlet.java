@@ -6,7 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
-import smart.framework.helper.ClassHelper;
+import smart.framework.core.ClassHelper;
 import smart.framework.util.CollectionUtil;
 import smart.framework.util.StringUtil;
 

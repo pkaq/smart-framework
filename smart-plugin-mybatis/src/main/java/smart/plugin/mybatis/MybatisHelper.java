@@ -21,10 +21,10 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import smart.framework.Plugin;
-import smart.framework.helper.ClassHelper;
-import smart.framework.helper.ConfigHelper;
-import smart.framework.helper.DatabaseHelper;
+import smart.framework.core.ClassHelper;
+import smart.framework.core.ConfigHelper;
+import smart.framework.dao.DatabaseHelper;
+import smart.framework.plugin.Plugin;
 import smart.framework.util.CollectionUtil;
 import smart.framework.util.StringUtil;
 

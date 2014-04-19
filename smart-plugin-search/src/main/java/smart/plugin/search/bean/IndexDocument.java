@@ -2,7 +2,7 @@ package smart.plugin.search.bean;
 
 import java.util.ArrayList;
 import java.util.List;
-import smart.framework.base.BaseBean;
+import smart.framework.core.bean.BaseBean;
 
 public class IndexDocument extends BaseBean {
 

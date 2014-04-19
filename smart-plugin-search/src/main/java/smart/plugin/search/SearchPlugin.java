@@ -1,6 +1,6 @@
 package smart.plugin.search;
 
-import smart.framework.Plugin;
+import smart.framework.plugin.Plugin;
 
 public class SearchPlugin implements Plugin {
 

@@ -6,7 +6,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.spi.JobFactory;
 import org.quartz.spi.TriggerFiredBundle;
-import smart.framework.helper.BeanHelper;
+import smart.framework.ioc.BeanHelper;
 
 public class SmartJobFactory implements JobFactory {
 

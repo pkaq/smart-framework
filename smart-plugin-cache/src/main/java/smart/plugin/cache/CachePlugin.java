@@ -1,6 +1,6 @@
 package smart.plugin.cache;
 
-import smart.framework.Plugin;
+import smart.framework.plugin.Plugin;
 
 public class CachePlugin implements Plugin {
 

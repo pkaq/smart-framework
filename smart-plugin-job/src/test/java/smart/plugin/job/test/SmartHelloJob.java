@@ -2,7 +2,7 @@ package smart.plugin.job.test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import smart.framework.annotation.Bean;
+import smart.framework.ioc.annotation.Bean;
 import smart.plugin.job.BaseJob;
 
 @Bean

@@ -8,7 +8,7 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
 import org.apache.xmlrpc.server.XmlRpcHandlerMapping;
 import org.apache.xmlrpc.webserver.XmlRpcServlet;
-import smart.framework.helper.ClassHelper;
+import smart.framework.core.ClassHelper;
 import smart.framework.util.CollectionUtil;
 
 @WebServlet(urlPatterns = XmlRpcConstant.SERVLET_URL, loadOnStartup = 0)

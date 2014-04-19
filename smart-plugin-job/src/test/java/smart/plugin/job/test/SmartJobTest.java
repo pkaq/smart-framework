@@ -1,7 +1,7 @@
 package smart.plugin.job.test;
 
 import org.junit.Test;
-import smart.framework.base.BaseTest;
+import smart.framework.test.BaseTest;
 import smart.plugin.job.JobHelper;
 
 public class SmartJobTest extends BaseTest {

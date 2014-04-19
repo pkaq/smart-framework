@@ -1,6 +1,6 @@
 package smart.plugin.search.bean;
 
-import smart.framework.base.BaseBean;
+import smart.framework.core.bean.BaseBean;
 
 public class SearchResult extends BaseBean {
 

@@ -15,8 +15,8 @@ import org.apache.cxf.jaxrs.provider.jsonp.JsonpPreStreamInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import smart.framework.helper.BeanHelper;
-import smart.framework.helper.ConfigHelper;
+import smart.framework.core.ConfigHelper;
+import smart.framework.ioc.BeanHelper;
 import smart.framework.util.StringUtil;
 
 public class RestHelper {

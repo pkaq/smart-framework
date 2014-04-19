@@ -1,6 +1,6 @@
 package smart.plugin.job;
 
-import smart.framework.Plugin;
+import smart.framework.plugin.Plugin;
 
 public class JobPlugin implements Plugin {
 

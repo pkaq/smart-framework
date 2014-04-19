@@ -1,6 +1,6 @@
 package smart.plugin.mail.fetch;
 
-import smart.framework.base.BaseBean;
+import smart.framework.core.bean.BaseBean;
 
 public class MailInfo extends BaseBean {
 

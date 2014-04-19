@@ -7,7 +7,7 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
-import smart.framework.helper.ConfigHelper;
+import smart.framework.core.ConfigHelper;
 import smart.framework.util.StringUtil;
 
 /**
