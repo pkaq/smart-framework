@@ -16,7 +16,7 @@ Smart4J 2.1 (2014-03-27)
 - 将 Page 重构为 View，由于 Page（页面对象）与 Pager（翻页对象）在拼写上比较相似【#12】
 - 改进了多文件上传方式，在 Action 方法中使用 Multiparts 参数，兼容单文件上传【#23】
 - 在 pom.xml 中增加 OSC 仓库地址【#35】
-- 从 smart4j.properties 中读取相关配置项【#49】
+- 从 smart.properties 中读取相关配置项【#49】
 - 优化了 DispatcherServlet 代码【#46】
 - 将 WebService 插件拆分为 SOAP 插件与 REST 插件【#47】
 - 对一些类名进行了重命名，保证了驼峰风格，例如，将 AOPHelper 改为 AopHelper

@@ -24,7 +24,7 @@ public class XmlRpcHelper {
         int xmlrpcReplyTimeout = ConfigHelper.getConfigNumber("xmlrpc.reply_timeout", 60 * 1000);
 
         if (StringUtil.isEmpty(xmlrpcURL)) {
-            throw new RuntimeException("错误：请在 smart4j.properties 中设置 xmlrpc.url 参数！");
+            throw new RuntimeException("错误：请在 smart.properties 中设置 xmlrpc.url 参数！");
         }
 
         URL serverURL;
