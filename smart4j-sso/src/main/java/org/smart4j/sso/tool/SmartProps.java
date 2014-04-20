@@ -15,7 +15,7 @@ public class SmartProps {
     static {
         InputStream is = null;
         try {
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream("smart4j.properties");
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream("smart.properties");
             props.load(is);
         } catch (IOException e) {
             logger.error("加载属性文件出错！", e);
