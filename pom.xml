@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.smart4j</groupId>
-    <artifactId>smart4j</artifactId>
+    <artifactId>smart</artifactId>
     <version>2.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -20,23 +20,23 @@
     </properties>
 
     <modules>
-        <module>smart4j-framework</module>
-        <module>smart4j-sso</module>
-        <module>smart4j-security</module>
-        <module>smart4j-cache</module>
-        <module>smart4j-cache-ehcache</module>
-        <module>smart4j-cache-redis</module>
-        <module>smart4j-plugin-cache</module>
-        <module>smart4j-plugin-soap</module>
-        <module>smart4j-plugin-rest</module>
-        <module>smart4j-plugin-xmlrpc</module>
-        <module>smart4j-plugin-mail</module>
-        <module>smart4j-plugin-i18n</module>
-        <module>smart4j-plugin-job</module>
-        <module>smart4j-plugin-hessian</module>
-        <module>smart4j-plugin-template</module>
-        <module>smart4j-plugin-search</module>
-        <module>smart4j-plugin-mybatis</module>
+        <module>smart-framework</module>
+        <module>smart-sso</module>
+        <module>smart-security</module>
+        <module>smart-cache</module>
+        <module>smart-cache-ehcache</module>
+        <module>smart-cache-redis</module>
+        <module>smart-plugin-cache</module>
+        <module>smart-plugin-soap</module>
+        <module>smart-plugin-rest</module>
+        <module>smart-plugin-xmlrpc</module>
+        <module>smart-plugin-mail</module>
+        <module>smart-plugin-i18n</module>
+        <module>smart-plugin-job</module>
+        <module>smart-plugin-hessian</module>
+        <module>smart-plugin-template</module>
+        <module>smart-plugin-search</module>
+        <module>smart-plugin-mybatis</module>
     </modules>
 
     <dependencyManagement>
@@ -260,15 +260,15 @@
                 <artifactId>commons-email</artifactId>
                 <version>1.3.2</version>
             </dependency>
-            <!-- Smart4J -->
+            <!-- Smart -->
             <dependency>
                 <groupId>org.smart4j</groupId>
-                <artifactId>smart4j-framework</artifactId>
+                <artifactId>smart-framework</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.smart4j</groupId>
-                <artifactId>smart4j-cache</artifactId>
+                <artifactId>smart-cache</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
