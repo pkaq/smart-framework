@@ -34,16 +34,16 @@ public class TransactionProxy implements Proxy {
             try {
                 // 开启事务
                 DatabaseHelper.beginTransaction();
-                logger.debug("[Smart] begin transaction");
+                logger.debug("[Smart4J] begin transaction");
                 // 执行目标方法
                 result = proxyChain.doProxyChain();
                 // 提交事务
                 DatabaseHelper.commitTransaction();
-                logger.debug("[Smart] commit transaction");
+                logger.debug("[Smart4J] commit transaction");
             } catch (Exception e) {
                 // 回滚事务
                 DatabaseHelper.rollbackTransaction();
-                logger.debug("[Smart] rollback transaction");
+                logger.debug("[Smart4J] rollback transaction");
                 throw e;
             } finally {
                 // 移除线程局部变量

@@ -47,7 +47,7 @@ public class DispatcherServlet extends HttpServlet {
         // 获取当前请求相关数据
         String currentRequestMethod = request.getMethod();
         String currentRequestPath = WebUtil.getRequestPath(request);
-        logger.debug("[Smart] {}:{}", currentRequestMethod, currentRequestPath);
+        logger.debug("[Smart4J] {}:{}", currentRequestMethod, currentRequestPath);
         // 将“/”请求重定向到首页
         if (currentRequestPath.equals("/")) {
             WebUtil.redirectRequest(FrameworkConstant.HOME_PAGE, request, response);

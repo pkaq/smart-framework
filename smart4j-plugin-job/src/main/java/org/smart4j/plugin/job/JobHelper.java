@@ -56,7 +56,7 @@ public class JobHelper {
             Scheduler scheduler = createScheduler(jobDetail, trigger);
             scheduler.start();
             jobMap.put(jobClass, scheduler);
-            logger.debug("[Smart] start job: " + jobClass.getName());
+            logger.debug("[Smart4J] start job: " + jobClass.getName());
         } catch (SchedulerException e) {
             logger.error("启动 Job 出错！", e);
         }
@@ -89,7 +89,7 @@ public class JobHelper {
             Scheduler scheduler = getScheduler(jobClass);
             scheduler.shutdown(true);
             jobMap.remove(jobClass); // 从 jobMap 中移除该 Job
-            logger.debug("[Smart] stop job: " + jobClass.getName());
+            logger.debug("[Smart4J] stop job: " + jobClass.getName());
         } catch (SchedulerException e) {
             logger.error("停止 Job 出错！", e);
         }
@@ -105,7 +105,7 @@ public class JobHelper {
         try {
             Scheduler scheduler = getScheduler(jobClass);
             scheduler.pauseJob(new JobKey(jobClass.getName()));
-            logger.debug("[Smart] pause job: " + jobClass.getName());
+            logger.debug("[Smart4J] pause job: " + jobClass.getName());
         } catch (SchedulerException e) {
             logger.error("暂停 Job 出错！", e);
         }
@@ -115,7 +115,7 @@ public class JobHelper {
         try {
             Scheduler scheduler = getScheduler(jobClass);
             scheduler.resumeJob(new JobKey(jobClass.getName()));
-            logger.debug("[Smart] resume job: " + jobClass.getName());
+            logger.debug("[Smart4J] resume job: " + jobClass.getName());
         } catch (SchedulerException e) {
             logger.error("恢复 Job 出错！", e);
         }
@@ -172,7 +172,7 @@ public class JobHelper {
 
     private static Scheduler createScheduler(JobDetail jobDetail, Trigger trigger) throws SchedulerException {
         Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-        scheduler.setJobFactory(jobFactory); // 从 Smart IOC 容器中获取 Job 实例
+        scheduler.setJobFactory(jobFactory); // 从 Smart4J IOC 容器中获取 Job 实例
         scheduler.scheduleJob(jobDetail, trigger);
         return scheduler;
     }

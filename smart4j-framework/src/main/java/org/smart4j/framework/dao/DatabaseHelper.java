@@ -330,6 +330,6 @@ public class DatabaseHelper {
     }
 
     private static void printSQL(String sql) {
-        logger.debug("[Smart] SQL - {}", sql);
+        logger.debug("[Smart4J] SQL - {}", sql);
     }
 }

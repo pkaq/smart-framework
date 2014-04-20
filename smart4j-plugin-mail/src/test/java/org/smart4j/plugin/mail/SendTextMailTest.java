@@ -7,7 +7,7 @@ import org.smart4j.plugin.mail.send.impl.TextMailSender;
 public class SendTextMailTest {
 
     private static final String subject = "测试";
-    private static final String content = "欢迎使用 Smart Framework！";
+    private static final String content = "欢迎使用 Smart4J Framework！";
     private static final String[] to = {"黄勇<hy_think@163.com>"};
 
     @Test

@@ -12,6 +12,6 @@ public class SmartHelloJob extends BaseJob {
 
     @Override
     public void execute() {
-        System.out.println(format.format(new Date()) + " - Hello Smart!");
+        System.out.println(format.format(new Date()) + " - Hello Smart4J!");
     }
 }

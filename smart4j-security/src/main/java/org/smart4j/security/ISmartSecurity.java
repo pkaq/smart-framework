@@ -3,7 +3,7 @@ package org.smart4j.security;
 import java.util.Set;
 
 /**
- * Smart Security 接口
+ * Smart4J Security 接口
  */
 public interface ISmartSecurity {
 
