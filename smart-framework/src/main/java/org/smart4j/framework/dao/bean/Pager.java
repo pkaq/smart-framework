@@ -10,6 +10,9 @@ public class Pager<T> extends BaseBean {
     private long totalRecord;   // 总记录数
     private List<T> recordList; // 数据列表
 
+    public Pager() {
+    }
+
     public Pager(int pageNumber, int pageSize, long totalRecord, List<T> recordList) {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
@@ -25,15 +28,31 @@ public class Pager<T> extends BaseBean {
         return pageNumber;
     }
 
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
     public int getPageSize() {
         return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 
     public long getTotalRecord() {
         return totalRecord;
     }
 
+    public void setTotalRecord(long totalRecord) {
+        this.totalRecord = totalRecord;
+    }
+
     public List<T> getRecordList() {
         return recordList;
+    }
+
+    public void setRecordList(List<T> recordList) {
+        this.recordList = recordList;
     }
 }
