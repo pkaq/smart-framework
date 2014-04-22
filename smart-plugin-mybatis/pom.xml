@@ -10,7 +10,7 @@
     <artifactId>smart-plugin-mybatis</artifactId>
     <packaging>jar</packaging>
 
-    <name>smart4j-plugin-mybatis</name>
+    <name>smart-plugin-mybatis</name>
     <url>http://maven.apache.org</url>
 
     <properties>
