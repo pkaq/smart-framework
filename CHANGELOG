@@ -1,32 +1,58 @@
+Smart 2.2 (2014-04-23)
+
+【特性】
+- 支持基本的事务传播机制（感谢 Dead_knight 提供的建议）
+- 在 Job 插件中添加支持立即运行的特性（感谢 cuser 提供的建议）
+- 提供 Smart Cache 模块，默认基于内存实现，可独立于 Smart Framework 使用
+- 提供 Smart Cache for EhCache 实现
+- 提供 Smart Cache for Redis 实现（感谢 鲁家宁 提供的实现）
+- 可通过前缀在 smart.properties 中获取相关的属性（感谢 abel533 提供的建议）
+- 将 Smart 相关构件包上传到 Maven 中央仓库
+
+【改进】
+- 在 Multipart 类中增加 fieldName 字段存储 form 中 file input 的 name 值（感谢 abel533 提供的实现）
+- 在 Aspect 注解中可根据自定义注解进行 AOP 横切（感谢 abel533 提供的建议）
+- 当依赖注入失败时会提示出错信息
+- 当在初始化出错时会停止运行应用程序，并提示相关出错信息
+- 支持没有没有 id 的实体
+- 对 Pager 类的属性增加 setter 方法与默认构造器，使用更加灵活（感谢 abel533 提供的建议）
+- 简化 Shiro Smart 的配置方式，用户可将 SQL 语句写在 ISmartSecurity 接口的实现类中
+- 将包名由 com.smart 重构为 org.smart4j
+
+【修复】
+- 解决 java.sql.SQLException: Already closed. 的问题（DBCP 连接池会自动关闭长时间没有使用的连接）
+
+----------------------------------------------------------------------------------------------------
+
 Smart 2.1 (2014-03-27)
 
 【特性】
-- 在 WebService 插件中支持 Ajax 跨域请求（可支持 JSONP 与 CORS 两种）【#20】
-- 提供 Smart SSO 模块，封装了 CAS 单点登录框架【#21】
-- 使用父子 Maven 结构【#22】
-- 提供 changelog 文档【#44】
-- 新增 XML-RPC 插件【#48】
+- 在 WebService 插件中支持 Ajax 跨域请求（可支持 JSONP 与 CORS 两种）
+- 提供 Smart SSO 模块，封装了 CAS 单点登录框架
+- 使用父子 Maven 结构
+- 提供 changelog 文档
+- 新增 XML-RPC 插件
 - 可在 web.xml 中配置错误页面
 - 提供 Smart Security 模块，封装了 Shiro 权限控制框架
 - 可配置应用首页（app.home_page），默认值为 /index.html
 
 【改进】
-- 添加了 @Request.Get、@Request.Post 等注解，简化了在 Action 方法上的请求配置【#6】
-- 在 DataSet 中增加了 insert、update、delete 面向对象的方法，可直接通过对象进行操作【#7】
-- 将 Page 重构为 View，由于 Page（页面对象）与 Pager（翻页对象）在拼写上比较相似【#12】
-- 改进了多文件上传方式，在 Action 方法中使用 Multiparts 参数，兼容单文件上传【#23】
-- 在 pom.xml 中增加 OSC 仓库地址【#35】
-- 从 smart.properties 中读取相关配置项【#49】
-- 优化了 DispatcherServlet 代码【#46】
-- 将 WebService 插件拆分为 SOAP 插件与 REST 插件【#47】
+- 添加了 @Request.Get、@Request.Post 等注解，简化了在 Action 方法上的请求配置
+- 在 DataSet 中增加了 insert、update、delete 面向对象的方法，可直接通过对象进行操作
+- 将 Page 重构为 View，由于 Page（页面对象）与 Pager（翻页对象）在拼写上比较相似
+- 改进了多文件上传方式，在 Action 方法中使用 Multiparts 参数，兼容单文件上传
+- 在 pom.xml 中增加 OSC 仓库地址
+- 从 smart.properties 中读取相关配置项
+- 优化了 DispatcherServlet 代码
+- 将 WebService 插件拆分为 SOAP 插件与 REST 插件
 - 对一些类名进行了重命名，保证了驼峰风格，例如，将 AOPHelper 改为 AopHelper
 - 将插件与模块合并到同一个 Maven 项目中
 
-【Bug 修复】
-- 修复了事务回滚时出现的问题【#14】
-- 修复了 DispatcherServlet 无法捕获在事务控制中抛出异常的问题【#15】
-- 修复了 properties 文件未找到时不抛出异常的问题【#41】
-- 修复了 i18n 插件中当缺少语言包时出现的乱码问题【#45】
+【修复】
+- 修复了事务回滚时出现的问题
+- 修复了 DispatcherServlet 无法捕获在事务控制中抛出异常的问题
+- 修复了 properties 文件未找到时不抛出异常的问题
+- 修复了 i18n 插件中当缺少语言包时出现的乱码问题
 - 修复了运行单元测试所产生的问题
 - 修复了在 IE 中下载带有中文的文件时导致的乱码问题
 
@@ -50,7 +76,7 @@ Smart 2.0 (2014-01-30)
 - 使用 HelperLoader 加载相关 Helper 类
 - 使用链式 AOP 重构了 AOP 框架
 
-【Bug 修复】
+【修复】
 - 解决了请求 URL 映射的冲突问题
 - 解决了事务回滚时导致的异常问题
 - 解决了数据库连接数耗尽的问题
