@@ -10,6 +10,7 @@ import org.smart4j.framework.core.FrameworkConstant;
 import org.smart4j.framework.core.HelperLoader;
 import org.smart4j.framework.plugin.Plugin;
 import org.smart4j.framework.plugin.PluginHelper;
+import org.smart4j.framework.plugin.WebPlugin;
 import org.smart4j.framework.util.StringUtil;
 
 @WebListener
@@ -17,10 +18,14 @@ public class ContainerListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+        // 获取 ServletContext
+        ServletContext servletContext = sce.getServletContext();
         // 初始化相关 Helper 类
         HelperLoader.init();
         // 添加 Servlet 映射
-        addServletMapping(sce.getServletContext());
+        addServletMapping(servletContext);
+        // 注册 WebPlugin
+        registerWebPlugin(servletContext);
     }
 
     @Override
@@ -52,6 +57,16 @@ public class ContainerListener implements ServletContextListener {
         String jspPath = FrameworkConstant.JSP_PATH;
         if (StringUtil.isNotEmpty(jspPath)) {
             jspServlet.addMapping(jspPath + "*");
+        }
+    }
+
+    private void registerWebPlugin(ServletContext servletContext) {
+        List<Plugin> pluginList = PluginHelper.getPluginList();
+        for (Plugin plugin : pluginList) {
+            if (plugin instanceof WebPlugin) {
+                WebPlugin webPlugin = (WebPlugin) plugin;
+                webPlugin.register(servletContext);
+            }
         }
     }
 
