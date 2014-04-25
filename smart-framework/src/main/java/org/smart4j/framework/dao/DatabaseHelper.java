@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.sql.DataSource;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.BeanProcessor;
 import org.apache.commons.dbutils.QueryRunner;
@@ -27,9 +26,12 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smart4j.framework.core.ConfigHelper;
+import org.smart4j.framework.ds.DataSourceFactory;
+import org.smart4j.framework.ds.impl.DefaultDataSourceFactory;
 import org.smart4j.framework.orm.EntityHelper;
 import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.MapUtil;
+import org.smart4j.framework.util.ObjectUtil;
 import org.smart4j.framework.util.StringUtil;
 
 public class DatabaseHelper {
@@ -56,28 +58,20 @@ public class DatabaseHelper {
     }
 
     public static DataSource getDataSource() {
-        // 从配置文件中读取 JDBC 配置项
-        String driver = ConfigHelper.getConfigString("jdbc.driver");
-        String url = ConfigHelper.getConfigString("jdbc.url");
-        String username = ConfigHelper.getConfigString("jdbc.username");
-        String password = ConfigHelper.getConfigString("jdbc.password");
-        // 创建 DBCP 数据源
-        BasicDataSource ds = new BasicDataSource();
-        if (StringUtil.isNotEmpty(driver)) {
-            ds.setDriverClassName(driver);
+        // 定义一个数据源工厂接口
+        DataSourceFactory dataSourceFactory = null;
+        // 从配置文件中获取数据源工厂实现类的配置（一个完全类名字符串）
+        String factory = ConfigHelper.getConfigString("ds.factory");
+        // 若已配置，则通过反射创建相应的数据源工厂实例
+        if (StringUtil.isNotEmpty(factory)) {
+            dataSourceFactory = ObjectUtil.newInstance(factory);
         }
-        if (StringUtil.isNotEmpty(url)) {
-            ds.setUrl(url);
+        // 若数据源工厂为空，则使用实现（基于 DBCP 的数据源）
+        if (dataSourceFactory == null) {
+            dataSourceFactory = new DefaultDataSourceFactory();
         }
-        if (StringUtil.isNotEmpty(username)) {
-            ds.setUsername(username);
-        }
-        if (StringUtil.isNotEmpty(password)) {
-            ds.setPassword(password);
-        }
-        // 解决 java.sql.SQLException: Already closed. 的问题（连接池会自动关闭长时间没有使用的连接）
-        ds.setValidationQuery("select 1 from dual");
-        return ds;
+        // 从数据源工厂中获取数据源
+        return dataSourceFactory.getDataSource();
     }
 
     public static Connection getConnection() {
