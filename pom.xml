@@ -383,6 +383,7 @@
         <module>smart-plugin-search</module>
         <module>smart-plugin-mybatis</module>
         <module>smart-plugin-c3p0</module>
+        <module>smart-plugin-druid</module>
     </modules>
 
 </project>
