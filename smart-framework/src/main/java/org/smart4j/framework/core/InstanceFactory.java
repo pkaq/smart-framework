@@ -17,6 +17,7 @@ import org.smart4j.framework.util.StringUtil;
  */
 public class InstanceFactory {
 
+    // 用于缓存对应的实例
     private static final Map<String, Object> cache = new ConcurrentHashMap<String, Object>();
 
     private static final String DS_FACTORY = "smart.ds_factory";
@@ -32,9 +33,8 @@ public class InstanceFactory {
 
     @SuppressWarnings("unchecked")
     public static <T> T createInstance(String cacheKey, Class<T> defaultImplClass) {
-        // 判断缓存中是否存在该实例
+        // 若缓存中存在对应的实例，则返回该实例
         if (cache.containsKey(cacheKey)) {
-            // 若缓存中已存在，则返回缓存中的实例
             return (T) cache.get(cacheKey);
         }
         // 从配置文件中获取相应的接口实现类配置
@@ -45,7 +45,7 @@ public class InstanceFactory {
         }
         // 通过反射创建该实现类对应的实例
         T instance = ObjectUtil.newInstance(implClassName);
-        // 若该实例不为空，则将该实例放入缓存
+        // 若该实例不为空，则将其放入缓存
         if (instance != null) {
             cache.put(cacheKey, instance);
         }

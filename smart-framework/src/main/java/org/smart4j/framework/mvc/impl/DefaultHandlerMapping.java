@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
@@ -32,8 +33,17 @@ import org.smart4j.framework.util.WebUtil;
  */
 public class DefaultHandlerMapping implements HandlerMapping {
 
+    // 用于缓存 ActionBean 实例
+    private static final Map<String, ActionBean> cache = new ConcurrentHashMap<String, ActionBean>();
+
     @Override
     public ActionBean getAction(String currentRequestMethod, String currentRequestPath) {
+        // 若缓存中存在对应的实例，则返回该实例
+        String cacheKey = currentRequestMethod + ":" + currentRequestPath;
+        if (cache.containsKey(cacheKey)) {
+            return cache.get(cacheKey);
+        }
+        // 定义一个 ActionBean
         ActionBean actionBean = null;
         // 获取并遍历 Action 映射
         Map<RequestBean, ActionBean> actionMap = ActionHelper.getActionMap();
@@ -56,6 +66,11 @@ public class DefaultHandlerMapping implements HandlerMapping {
                 break;
             }
         }
+        // 若该实例不为空，则将其放入缓存
+        if (actionBean != null) {
+            cache.put(cacheKey, actionBean);
+        }
+        // 返回该 ActionBean
         return actionBean;
     }
 
