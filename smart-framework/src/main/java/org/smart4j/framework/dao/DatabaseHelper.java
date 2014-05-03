@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smart4j.framework.core.ConfigHelper;
 import org.smart4j.framework.core.InstanceFactory;
-import org.smart4j.framework.ds.DataSourceFactory;
 import org.smart4j.framework.orm.EntityHelper;
 import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.MapUtil;
@@ -57,10 +56,7 @@ public class DatabaseHelper {
     }
 
     public static DataSource getDataSource() {
-        // 创建数据源工厂
-        DataSourceFactory dataSourceFactory = InstanceFactory.createDataSourceFactory();
-        // 从数据源工厂中获取数据源
-        return dataSourceFactory.getDataSource();
+        return InstanceFactory.createDataSourceFactory().getDataSource();
     }
 
     public static Connection getConnection() {

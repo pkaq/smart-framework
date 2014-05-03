@@ -12,14 +12,13 @@ import org.smart4j.framework.ioc.BeanHelper;
 import org.smart4j.framework.mvc.Handler;
 import org.smart4j.framework.mvc.HandlerInvoker;
 import org.smart4j.framework.mvc.UploadHelper;
-import org.smart4j.framework.mvc.ViewResolver;
 import org.smart4j.framework.mvc.bean.Params;
 import org.smart4j.framework.util.CastUtil;
 import org.smart4j.framework.util.MapUtil;
 import org.smart4j.framework.util.WebUtil;
 
 /**
- * 默认 Action 调用器
+ * 默认 Handler 调用器
  *
  * @author huangyong
  * @since 2.3
@@ -42,10 +41,8 @@ public class DefaultHandlerInvoker implements HandlerInvoker {
         // 调用 Action 方法
         actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
         Object actionMethodResult = actionMethod.invoke(actionInstance, paramList.toArray());
-        // 创建视图解析器
-        ViewResolver viewResolver = InstanceFactory.createViewResolver();
         // 解析视图
-        viewResolver.resolveView(request, response, actionMethodResult);
+        InstanceFactory.createViewResolver().resolveView(request, response, actionMethodResult);
     }
 
     private List<Object> createParamList(HttpServletRequest request, Handler handler) throws Exception {

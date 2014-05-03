@@ -4,9 +4,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.smart4j.framework.ds.DataSourceFactory;
 import org.smart4j.framework.ds.impl.DefaultDataSourceFactory;
+import org.smart4j.framework.mvc.HandlerExceptionResolver;
 import org.smart4j.framework.mvc.HandlerInvoker;
 import org.smart4j.framework.mvc.HandlerMapping;
 import org.smart4j.framework.mvc.ViewResolver;
+import org.smart4j.framework.mvc.impl.DefaultHandlerExceptionResolver;
 import org.smart4j.framework.mvc.impl.DefaultHandlerInvoker;
 import org.smart4j.framework.mvc.impl.DefaultHandlerMapping;
 import org.smart4j.framework.mvc.impl.DefaultViewResolver;
@@ -25,20 +27,25 @@ public class InstanceFactory {
     private static final Map<String, Object> cache = new ConcurrentHashMap<String, Object>();
 
     private static final String DS_FACTORY = "smart.ds_factory";
-    private static final String ACTION_HANDLER = "smart.action_handler";
+    private static final String HANDLER_MAPPING = "smart.handler_mapping";
     private static final String HANDLER_INVOKER = "smart.handler_invoker";
+    private static final String HANDLER_EXCEPTION_RESOLVER = "smart.handler_exception_resolver";
     private static final String VIEW_RESOLVER = "smart.view_resolver";
 
     public static DataSourceFactory createDataSourceFactory() {
         return createInstance(DS_FACTORY, DefaultDataSourceFactory.class);
     }
 
-    public static HandlerMapping createActionHandler() {
-        return createInstance(ACTION_HANDLER, DefaultHandlerMapping.class);
+    public static HandlerMapping createHandlerMapping() {
+        return createInstance(HANDLER_MAPPING, DefaultHandlerMapping.class);
     }
 
     public static HandlerInvoker createHandlerInvoker() {
         return createInstance(HANDLER_INVOKER, DefaultHandlerInvoker.class);
+    }
+
+    public static HandlerExceptionResolver createHandlerExceptionResolver() {
+        return createInstance(HANDLER_EXCEPTION_RESOLVER, DefaultHandlerExceptionResolver.class);
     }
 
     public static ViewResolver createViewResolver() {

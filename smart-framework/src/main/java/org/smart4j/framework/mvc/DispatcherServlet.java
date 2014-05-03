@@ -49,10 +49,8 @@ public class DispatcherServlet extends HttpServlet {
         if (currentRequestPath.endsWith("/")) {
             currentRequestPath = currentRequestPath.substring(0, currentRequestPath.length() - 1);
         }
-        // 创建 HandlerMapping
-        HandlerMapping handlerMapping = InstanceFactory.createActionHandler();
         // 获取 Handler
-        Handler handler = handlerMapping.getHandler(currentRequestMethod, currentRequestPath);
+        Handler handler = InstanceFactory.createHandlerMapping().getHandler(currentRequestMethod, currentRequestPath);
         // 若未找到 Action，则跳转到 404 页面
         if (handler == null) {
             WebUtil.sendError(HttpServletResponse.SC_NOT_FOUND, "", response);
@@ -61,13 +59,11 @@ public class DispatcherServlet extends HttpServlet {
         // 初始化 DataContext
         DataContext.init(request, response);
         try {
-            // 创建 HandlerInvoker
-            HandlerInvoker handlerInvoker = InstanceFactory.createHandlerInvoker();
             // 调用 Handler
-            handlerInvoker.invokeHandler(request, response, handler);
+            InstanceFactory.createHandlerInvoker().invokeHandler(request, response, handler);
         } catch (Exception e) {
             // 处理 Action 异常
-            handlerMapping.handleActionException(request, response, e);
+            InstanceFactory.createHandlerExceptionResolver().resolveHandlerException(request, response, e);
         } finally {
             // 销毁 DataContext
             DataContext.destroy();
