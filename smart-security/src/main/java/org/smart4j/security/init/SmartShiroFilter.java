@@ -10,7 +10,7 @@ import org.apache.shiro.realm.Realm;
 import org.apache.shiro.realm.activedirectory.ActiveDirectoryRealm;
 import org.apache.shiro.web.mgt.WebSecurityManager;
 import org.apache.shiro.web.servlet.ShiroFilter;
-import org.smart4j.security.ISmartSecurity;
+import org.smart4j.security.SmartSecurity;
 import org.smart4j.security.realm.SmartCustomRealm;
 import org.smart4j.security.realm.SmartJdbcRealm;
 import org.smart4j.security.tool.SmartProps;
@@ -61,7 +61,7 @@ public class SmartShiroFilter extends ShiroFilter {
     }
 
     private void addCustomRealm(Set<Realm> realms) {
-        ISmartSecurity smartSecurity = SmartProps.getSmartSecurity();
+        SmartSecurity smartSecurity = SmartProps.getSmartSecurity();
         SmartCustomRealm smartCustomRealm = new SmartCustomRealm(smartSecurity);
         realms.add(smartCustomRealm);
     }

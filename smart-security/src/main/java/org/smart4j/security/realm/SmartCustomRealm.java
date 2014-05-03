@@ -13,13 +13,13 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
-import org.smart4j.security.ISmartSecurity;
+import org.smart4j.security.SmartSecurity;
 
 public class SmartCustomRealm extends AuthorizingRealm {
 
-    private final ISmartSecurity smartSecurity;
+    private final SmartSecurity smartSecurity;
 
-    public SmartCustomRealm(ISmartSecurity smartSecurity) {
+    public SmartCustomRealm(SmartSecurity smartSecurity) {
         this.smartSecurity = smartSecurity;
         super.setName("custom");
         super.setCredentialsMatcher(new PasswordMatcher());

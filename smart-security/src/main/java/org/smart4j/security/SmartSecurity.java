@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * Smart Security 接口
  */
-public interface ISmartSecurity {
+public interface SmartSecurity {
 
     /**
      * 根据用户名获取密码

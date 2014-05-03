@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smart4j.security.ISmartSecurity;
+import org.smart4j.security.SmartSecurity;
 
 public class SmartProps {
 
@@ -46,7 +46,7 @@ public class SmartProps {
         return props.getProperty("security.realms");
     }
 
-    public static ISmartSecurity getSmartSecurity() {
+    public static SmartSecurity getSmartSecurity() {
         String className = props.getProperty("security.custom.class");
         Class<?> cls = null;
         try {
@@ -54,10 +54,10 @@ public class SmartProps {
         } catch (ClassNotFoundException e) {
             logger.error("无法从 security.custom.class 配置中找到对应的类", e);
         }
-        ISmartSecurity smartSecurity = null;
+        SmartSecurity smartSecurity = null;
         if (cls != null) {
             try {
-                smartSecurity = (ISmartSecurity) cls.newInstance();
+                smartSecurity = (SmartSecurity) cls.newInstance();
             } catch (Exception e) {
                 logger.error("实例化 SmartSecurity 异常", e);
             }
