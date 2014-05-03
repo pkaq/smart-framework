@@ -8,6 +8,8 @@ import java.util.Map;
 import org.smart4j.framework.core.ClassHelper;
 import org.smart4j.framework.mvc.annotation.Action;
 import org.smart4j.framework.mvc.annotation.Request;
+import org.smart4j.framework.mvc.bean.ActionBean;
+import org.smart4j.framework.mvc.bean.RequestBean;
 import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.CollectionUtil;
 import org.smart4j.framework.util.StringUtil;
@@ -82,43 +84,5 @@ public class ActionHelper {
 
     public static Map<RequestBean, ActionBean> getActionMap() {
         return actionMap;
-    }
-
-    public static class RequestBean {
-
-        private String requestMethod;
-        private String requestPath;
-
-        public RequestBean(String requestMethod, String requestPath) {
-            this.requestMethod = requestMethod;
-            this.requestPath = requestPath;
-        }
-
-        public String getRequestMethod() {
-            return requestMethod;
-        }
-
-        public String getRequestPath() {
-            return requestPath;
-        }
-    }
-
-    public static class ActionBean {
-
-        private Class<?> actionClass;
-        private Method actionMethod;
-
-        public ActionBean(Class<?> actionClass, Method actionMethod) {
-            this.actionClass = actionClass;
-            this.actionMethod = actionMethod;
-        }
-
-        public Class<?> getActionClass() {
-            return actionClass;
-        }
-
-        public Method getActionMethod() {
-            return actionMethod;
-        }
     }
 }

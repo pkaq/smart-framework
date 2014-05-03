@@ -26,12 +26,11 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smart4j.framework.core.ConfigHelper;
+import org.smart4j.framework.core.InstanceFactory;
 import org.smart4j.framework.ds.DataSourceFactory;
-import org.smart4j.framework.ds.impl.DefaultDataSourceFactory;
 import org.smart4j.framework.orm.EntityHelper;
 import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.MapUtil;
-import org.smart4j.framework.util.ObjectUtil;
 import org.smart4j.framework.util.StringUtil;
 
 public class DatabaseHelper {
@@ -58,18 +57,8 @@ public class DatabaseHelper {
     }
 
     public static DataSource getDataSource() {
-        // 定义一个数据源工厂接口
-        DataSourceFactory dataSourceFactory = null;
-        // 从配置文件中获取数据源工厂实现类的配置（一个完全类名字符串）
-        String factory = ConfigHelper.getConfigString("ds.factory");
-        // 若已配置，则通过反射创建相应的数据源工厂实例
-        if (StringUtil.isNotEmpty(factory)) {
-            dataSourceFactory = ObjectUtil.newInstance(factory);
-        }
-        // 若数据源工厂为空，则使用实现（基于 DBCP 的数据源）
-        if (dataSourceFactory == null) {
-            dataSourceFactory = new DefaultDataSourceFactory();
-        }
+        // 获取数据源工厂
+        DataSourceFactory dataSourceFactory = InstanceFactory.createDataSourceFactory();
         // 从数据源工厂中获取数据源
         return dataSourceFactory.getDataSource();
     }

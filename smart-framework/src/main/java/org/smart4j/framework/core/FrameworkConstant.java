@@ -5,7 +5,7 @@ public interface FrameworkConstant {
     String UTF_8 = "UTF-8";
 
     String CONFIG_PROPS = "smart.properties";
-    String SQL_PROPS = "smart4j-sql.properties";
+    String SQL_PROPS = "smart-sql.properties";
 
     String PLUGIN_PACKAGE = "org.smart4j.plugin";
 
