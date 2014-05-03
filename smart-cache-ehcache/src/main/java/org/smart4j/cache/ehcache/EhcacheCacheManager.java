@@ -3,11 +3,11 @@ package org.smart4j.cache.ehcache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import org.apache.commons.lang.StringUtils;
-import org.smart4j.cache.ISmartCache;
-import org.smart4j.cache.ISmartCacheManager;
+import org.smart4j.cache.SmartCache;
 import org.smart4j.cache.SmartCacheException;
+import org.smart4j.cache.SmartCacheManager;
 
-public class EhcacheCacheManager implements ISmartCacheManager {
+public class EhcacheCacheManager implements SmartCacheManager {
 
     private final CacheManager cacheManager;
 
@@ -16,7 +16,7 @@ public class EhcacheCacheManager implements ISmartCacheManager {
     }
 
     @Override
-    public final <K, V> ISmartCache<K, V> getCache(String name) throws SmartCacheException {
+    public final <K, V> SmartCache<K, V> getCache(String name) throws SmartCacheException {
         if (StringUtils.isEmpty(name)) {
             throw new IllegalArgumentException("参数 name 非法！");
         }

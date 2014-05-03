@@ -1,16 +1,16 @@
 package org.smart4j.cache.test;
 
 import org.junit.Test;
-import org.smart4j.cache.ISmartCache;
-import org.smart4j.cache.ISmartCacheManager;
+import org.smart4j.cache.SmartCache;
+import org.smart4j.cache.SmartCacheManager;
 import org.smart4j.cache.ehcache.EhcacheCacheManager;
 
 public class CacheTest {
 
     @Test
     public void test() {
-        ISmartCacheManager cacheManager = new EhcacheCacheManager();
-        ISmartCache<String, Object> cache = cacheManager.getCache("cache_name");
+        SmartCacheManager cacheManager = new EhcacheCacheManager();
+        SmartCache<String, Object> cache = cacheManager.getCache("cache_name");
 
         for (int i = 1; i <= 100; i++) {
             cache.put("key" + i, "value" + i);

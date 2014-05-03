@@ -3,7 +3,7 @@ package org.smart4j.cache;
 import java.util.Collection;
 import java.util.Set;
 
-public interface ISmartCache<K, V> {
+public interface SmartCache<K, V> {
 
     /**
      * 根据 Key 从 Cache 中获取 Value

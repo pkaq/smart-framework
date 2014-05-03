@@ -9,10 +9,10 @@ import java.util.Set;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import org.apache.commons.collections.CollectionUtils;
-import org.smart4j.cache.ISmartCache;
+import org.smart4j.cache.SmartCache;
 import org.smart4j.cache.SmartCacheException;
 
-public class EhcacheCache<K, V> implements ISmartCache<K, V> {
+public class EhcacheCache<K, V> implements SmartCache<K, V> {
 
     private Ehcache ehcache;
 

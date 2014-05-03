@@ -1,6 +1,6 @@
 package org.smart4j.cache;
 
-public interface ISmartCacheManager {
+public interface SmartCacheManager {
 
     /**
      * 根据名称获取 Cache 对象
@@ -9,5 +9,5 @@ public interface ISmartCacheManager {
      * @return Cache 对象
      * @throws SmartCacheException
      */
-    <K, V> ISmartCache<K, V> getCache(String name) throws SmartCacheException;
+    <K, V> SmartCache<K, V> getCache(String name) throws SmartCacheException;
 }

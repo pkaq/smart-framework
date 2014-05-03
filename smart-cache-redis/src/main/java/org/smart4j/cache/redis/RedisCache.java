@@ -7,11 +7,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
-import org.smart4j.cache.ISmartCache;
+import org.smart4j.cache.SmartCache;
 import org.smart4j.cache.SmartCacheException;
 import redis.clients.jedis.Jedis;
 
-public class RedisCache<K, V> implements ISmartCache<K, V> {
+public class RedisCache<K, V> implements SmartCache<K, V> {
 
     private Jedis jedis;
 

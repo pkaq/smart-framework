@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 
-public class DefalutCache<K, V> implements ISmartCache<K, V> {
+public class DefalutCache<K, V> implements SmartCache<K, V> {
 
     private final Map<K, V> map;
 
