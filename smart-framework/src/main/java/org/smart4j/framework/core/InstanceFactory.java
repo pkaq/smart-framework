@@ -5,7 +5,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.smart4j.framework.ds.DataSourceFactory;
 import org.smart4j.framework.ds.impl.DefaultDataSourceFactory;
 import org.smart4j.framework.mvc.HandlerMapping;
+import org.smart4j.framework.mvc.ViewResolver;
 import org.smart4j.framework.mvc.impl.DefaultHandlerMapping;
+import org.smart4j.framework.mvc.impl.DefaultViewResolver;
 import org.smart4j.framework.util.ObjectUtil;
 import org.smart4j.framework.util.StringUtil;
 
@@ -22,6 +24,7 @@ public class InstanceFactory {
 
     private static final String DS_FACTORY = "smart.ds_factory";
     private static final String ACTION_HANDLER = "smart.action_handler";
+    private static final String VIEW_RESOLVER = "smart.view_resolver";
 
     public static DataSourceFactory createDataSourceFactory() {
         return createInstance(DS_FACTORY, DefaultDataSourceFactory.class);
@@ -29,6 +32,10 @@ public class InstanceFactory {
 
     public static HandlerMapping createActionHandler() {
         return createInstance(ACTION_HANDLER, DefaultHandlerMapping.class);
+    }
+
+    public static ViewResolver createViewResolver() {
+        return createInstance(VIEW_RESOLVER, DefaultViewResolver.class);
     }
 
     @SuppressWarnings("unchecked")
