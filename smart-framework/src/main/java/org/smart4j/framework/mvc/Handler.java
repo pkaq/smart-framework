@@ -1,21 +1,21 @@
-package org.smart4j.framework.mvc.bean;
+package org.smart4j.framework.mvc;
 
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 
 /**
- * 用于封装 Action 相关信息
+ * 封装 Action 方法相关信息
  *
  * @author huangyong
  * @since 1.0
  */
-public class ActionBean {
+public class Handler {
 
     private Class<?> actionClass;
     private Method actionMethod;
     private Matcher requestPathMatcher;
 
-    public ActionBean(Class<?> actionClass, Method actionMethod) {
+    public Handler(Class<?> actionClass, Method actionMethod) {
         this.actionClass = actionClass;
         this.actionMethod = actionMethod;
     }

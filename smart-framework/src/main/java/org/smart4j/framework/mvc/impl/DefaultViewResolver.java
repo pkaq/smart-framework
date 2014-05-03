@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.smart4j.framework.core.FrameworkConstant;
 import org.smart4j.framework.mvc.UploadHelper;
 import org.smart4j.framework.mvc.ViewResolver;
-import org.smart4j.framework.mvc.pojo.Result;
-import org.smart4j.framework.mvc.pojo.View;
+import org.smart4j.framework.mvc.bean.Result;
+import org.smart4j.framework.mvc.bean.View;
 import org.smart4j.framework.util.MapUtil;
 import org.smart4j.framework.util.WebUtil;
 

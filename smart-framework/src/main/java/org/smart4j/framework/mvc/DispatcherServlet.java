@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smart4j.framework.core.FrameworkConstant;
 import org.smart4j.framework.core.InstanceFactory;
-import org.smart4j.framework.mvc.bean.ActionBean;
 import org.smart4j.framework.util.WebUtil;
 
 /**
@@ -50,20 +49,22 @@ public class DispatcherServlet extends HttpServlet {
         if (currentRequestPath.endsWith("/")) {
             currentRequestPath = currentRequestPath.substring(0, currentRequestPath.length() - 1);
         }
-        // 创建 ActionHandler
+        // 创建 HandlerMapping
         HandlerMapping handlerMapping = InstanceFactory.createActionHandler();
-        // 获取 Action
-        ActionBean actionBean = handlerMapping.getAction(currentRequestMethod, currentRequestPath);
+        // 获取 Handler
+        Handler handler = handlerMapping.getHandler(currentRequestMethod, currentRequestPath);
         // 若未找到 Action，则跳转到 404 页面
-        if (actionBean == null) {
+        if (handler == null) {
             WebUtil.sendError(HttpServletResponse.SC_NOT_FOUND, "", response);
             return;
         }
         // 初始化 DataContext
         DataContext.init(request, response);
         try {
-            // 调用 Action 方法
-            handlerMapping.invokeActionMethod(request, response, actionBean);
+            // 创建 HandlerInvoker
+            HandlerInvoker handlerInvoker = InstanceFactory.createHandlerInvoker();
+            // 调用 Handler
+            handlerInvoker.invokeHandler(request, response, handler);
         } catch (Exception e) {
             // 处理 Action 异常
             handlerMapping.handleActionException(request, response, e);

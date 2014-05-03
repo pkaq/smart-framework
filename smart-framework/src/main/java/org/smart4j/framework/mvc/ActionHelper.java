@@ -8,23 +8,21 @@ import java.util.Map;
 import org.smart4j.framework.core.ClassHelper;
 import org.smart4j.framework.mvc.annotation.Action;
 import org.smart4j.framework.mvc.annotation.Request;
-import org.smart4j.framework.mvc.bean.ActionBean;
-import org.smart4j.framework.mvc.bean.RequestBean;
 import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.CollectionUtil;
 import org.smart4j.framework.util.StringUtil;
 
 public class ActionHelper {
 
-    private static final Map<RequestBean, ActionBean> actionMap = new LinkedHashMap<RequestBean, ActionBean>();
+    private static final Map<Requestor, Handler> actionMap = new LinkedHashMap<Requestor, Handler>();
 
     static {
         // 获取所有 Action 类
         List<Class<?>> actionClassList = ClassHelper.getClassListByAnnotation(Action.class);
         if (CollectionUtil.isNotEmpty(actionClassList)) {
             // 定义两个 Action Map
-            Map<RequestBean, ActionBean> commonActionMap = new HashMap<RequestBean, ActionBean>(); // 存放普通 Action Map
-            Map<RequestBean, ActionBean> regexpActionMap = new HashMap<RequestBean, ActionBean>(); // 存放带有正则表达式的 Action Map
+            Map<Requestor, Handler> commonActionMap = new HashMap<Requestor, Handler>(); // 存放普通 Action Map
+            Map<Requestor, Handler> regexpActionMap = new HashMap<Requestor, Handler>(); // 存放带有正则表达式的 Action Map
             // 遍历 Action 类
             for (Class<?> actionClass : actionClassList) {
                 // 获取并遍历该 Action 类中所有的方法
@@ -42,7 +40,7 @@ public class ActionHelper {
         }
     }
 
-    private static void handleActionMethod(Class<?> actionClass, Method actionMethod, Map<RequestBean, ActionBean> commonActionMap, Map<RequestBean, ActionBean> regexpActionMap) {
+    private static void handleActionMethod(Class<?> actionClass, Method actionMethod, Map<Requestor, Handler> commonActionMap, Map<Requestor, Handler> regexpActionMap) {
         // 判断当前 Action 方法是否带有 Request 注解
         if (actionMethod.isAnnotationPresent(Request.class)) {
             // 获取 Requet 注解中的 URL 字符串
@@ -51,7 +49,7 @@ public class ActionHelper {
                 // 获取请求方法与请求路径
                 String requestMethod = urlArray[0];
                 String requestPath = urlArray[1];
-                // 将 RequestBean 与 ActionBean 放入 Action Map 中
+                // 将 Requestor 与 Handler 放入 Action Map 中
                 putActionMap(requestMethod, requestPath, actionClass, actionMethod, commonActionMap, regexpActionMap);
             }
         } else if (actionMethod.isAnnotationPresent(Request.Get.class)) {
@@ -69,20 +67,20 @@ public class ActionHelper {
         }
     }
 
-    private static void putActionMap(String requestMethod, String requestPath, Class<?> actionClass, Method actionMethod, Map<RequestBean, ActionBean> commonActionMap, Map<RequestBean, ActionBean> regexpActionMap) {
+    private static void putActionMap(String requestMethod, String requestPath, Class<?> actionClass, Method actionMethod, Map<Requestor, Handler> commonActionMap, Map<Requestor, Handler> regexpActionMap) {
         // 判断 Request Path 中是否带有占位符
         if (requestPath.matches(".+\\{\\w+\\}.*")) {
             // 将请求路径中的占位符 {\w+} 转换为正则表达式 (\\w+)
             requestPath = StringUtil.replaceAll(requestPath, "\\{\\w+\\}", "(\\\\w+)");
-            // 将 RequestBean 与 ActionBean 放入 Regexp Action Map 中
-            regexpActionMap.put(new RequestBean(requestMethod, requestPath), new ActionBean(actionClass, actionMethod));
+            // 将 Requestor 与 Handler 放入 Regexp Action Map 中
+            regexpActionMap.put(new Requestor(requestMethod, requestPath), new Handler(actionClass, actionMethod));
         } else {
-            // 将 RequestBean 与 ActionBean 放入 Common Action Map 中
-            commonActionMap.put(new RequestBean(requestMethod, requestPath), new ActionBean(actionClass, actionMethod));
+            // 将 Requestor 与 Handler 放入 Common Action Map 中
+            commonActionMap.put(new Requestor(requestMethod, requestPath), new Handler(actionClass, actionMethod));
         }
     }
 
-    public static Map<RequestBean, ActionBean> getActionMap() {
+    public static Map<Requestor, Handler> getActionMap() {
         return actionMap;
     }
 }

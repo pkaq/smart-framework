@@ -57,7 +57,7 @@ public class DatabaseHelper {
     }
 
     public static DataSource getDataSource() {
-        // 获取数据源工厂
+        // 创建数据源工厂
         DataSourceFactory dataSourceFactory = InstanceFactory.createDataSourceFactory();
         // 从数据源工厂中获取数据源
         return dataSourceFactory.getDataSource();
