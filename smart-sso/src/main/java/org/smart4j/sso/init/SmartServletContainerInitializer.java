@@ -8,7 +8,7 @@ import javax.servlet.annotation.HandlesTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@HandlesTypes(ISmartInitializer.class)
+@HandlesTypes(SmartInitializer.class)
 public class SmartServletContainerInitializer implements ServletContainerInitializer {
 
     private static final Logger logger = LoggerFactory.getLogger(SmartServletContainerInitializer.class);
@@ -17,7 +17,7 @@ public class SmartServletContainerInitializer implements ServletContainerInitial
     public void onStartup(Set<Class<?>> webApplicationInitializerClassSet, ServletContext servletContext) throws ServletException {
         try {
             for (Class<?> webApplicationInitializerClass : webApplicationInitializerClassSet) {
-                ISmartInitializer smartInitializer = (ISmartInitializer) webApplicationInitializerClass.newInstance();
+                SmartInitializer smartInitializer = (SmartInitializer) webApplicationInitializerClass.newInstance();
                 smartInitializer.init(servletContext);
             }
         } catch (Exception e) {
