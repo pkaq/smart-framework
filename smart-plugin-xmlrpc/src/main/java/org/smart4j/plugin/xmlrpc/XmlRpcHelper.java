@@ -18,10 +18,10 @@ public class XmlRpcHelper {
     private static XmlRpcClientConfigImpl config;
 
     static {
-        String xmlrpcURL = ConfigHelper.getConfigString("xmlrpc.url");
+        String xmlrpcURL = ConfigHelper.getString("xmlrpc.url");
         boolean xmlrpcExtensionsEnabled = ConfigHelper.getConfigBoolean("xmlrpc.extensions_enabled", true);
-        int xmlrpcConnectionTimeout = ConfigHelper.getConfigNumber("xmlrpc.connection_timeout", 60 * 1000);
-        int xmlrpcReplyTimeout = ConfigHelper.getConfigNumber("xmlrpc.reply_timeout", 60 * 1000);
+        int xmlrpcConnectionTimeout = ConfigHelper.getInt("xmlrpc.connection_timeout", 60 * 1000);
+        int xmlrpcReplyTimeout = ConfigHelper.getInt("xmlrpc.reply_timeout", 60 * 1000);
 
         if (StringUtil.isEmpty(xmlrpcURL)) {
             throw new RuntimeException("错误：请在 smart.properties 中设置 xmlrpc.url 参数！");

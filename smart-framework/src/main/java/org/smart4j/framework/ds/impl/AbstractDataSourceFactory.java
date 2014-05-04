@@ -6,17 +6,17 @@ import org.smart4j.framework.ds.DataSourceFactory;
 import org.smart4j.framework.util.StringUtil;
 
 /**
- * 抽象数据源工厂实现
+ * 抽象数据源工厂接口实现类
  *
- * @param <T> 数据源
+ * @author huangyong
+ * @since 2.3
  */
 public abstract class AbstractDataSourceFactory<T extends DataSource> implements DataSourceFactory {
 
-    // 从配置文件中读取 JDBC 配置项
-    protected String driver = ConfigHelper.getConfigString("jdbc.driver");
-    protected String url = ConfigHelper.getConfigString("jdbc.url");
-    protected String username = ConfigHelper.getConfigString("jdbc.username");
-    protected String password = ConfigHelper.getConfigString("jdbc.password");
+    protected String driver = ConfigHelper.getString("jdbc.driver");
+    protected String url = ConfigHelper.getString("jdbc.url");
+    protected String username = ConfigHelper.getString("jdbc.username");
+    protected String password = ConfigHelper.getString("jdbc.password");
 
     @Override
     public final T getDataSource() {

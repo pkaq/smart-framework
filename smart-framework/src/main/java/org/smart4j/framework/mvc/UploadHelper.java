@@ -27,13 +27,24 @@ import org.smart4j.framework.util.FileUtil;
 import org.smart4j.framework.util.StreamUtil;
 import org.smart4j.framework.util.StringUtil;
 
+/**
+ * 封装文件上传相关操作
+ *
+ * @author huangyong
+ * @since 2.1
+ */
 public class UploadHelper {
 
     private static final Logger logger = LoggerFactory.getLogger(UploadHelper.class);
 
-    // 定义一个 FileUpload 对象（用于解析所上传的文件）
+    /**
+     * FileUpload 对象（用于解析所上传的文件）
+     */
     private static ServletFileUpload fileUpload;
 
+    /**
+     * 初始化
+     */
     public static void init(ServletContext servletContext) {
         // 获取一个临时目录（使用 Tomcat 的 work 目录）
         File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
@@ -48,11 +59,17 @@ public class UploadHelper {
         }
     }
 
+    /**
+     * 判断请求是否为 multipart 类型
+     */
     public static boolean isMultipart(HttpServletRequest request) {
         // 判断上传文件的内容是否为 multipart 类型
         return ServletFileUpload.isMultipartContent(request);
     }
 
+    /**
+     * 创建 multipart 请求参数列表
+     */
     public static List<Object> createMultipartParamList(HttpServletRequest request) throws Exception {
         // 定义参数列表
         List<Object> paramList = new ArrayList<Object>();
@@ -78,11 +95,11 @@ public class UploadHelper {
                 // 处理文件字段
                 String fileName = FileUtil.getRealFileName(fileItem.getName());
                 if (StringUtil.isNotEmpty(fileName)) {
-                    String contentType = fileItem.getContentType();
                     long fileSize = fileItem.getSize();
+                    String contentType = fileItem.getContentType();
                     InputStream inputSteam = fileItem.getInputStream();
                     // 创建 Multipart 对象，并将其添加到 multipartList 中
-                    Multipart multipart = new Multipart(fieldName, fileName, contentType, fileSize, inputSteam);
+                    Multipart multipart = new Multipart(fieldName, fileName, fileSize, contentType, inputSteam);
                     multipartList.add(multipart);
                 }
             }
@@ -94,6 +111,9 @@ public class UploadHelper {
         return paramList;
     }
 
+    /**
+     * 上传文件
+     */
     public static void uploadFile(String basePath, Multipart multipart) {
         try {
             if (multipart != null) {
@@ -111,6 +131,9 @@ public class UploadHelper {
         }
     }
 
+    /**
+     * 批量上传文件
+     */
     public static void uploadFiles(String basePath, Multiparts multiparts) {
         for (Multipart multipart : multiparts.getAll()) {
             uploadFile(basePath, multipart);

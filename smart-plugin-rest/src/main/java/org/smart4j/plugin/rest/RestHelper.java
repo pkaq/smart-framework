@@ -41,7 +41,7 @@ public class RestHelper {
         boolean jsonp = ConfigHelper.getConfigBoolean("rest.jsonp");
         if (jsonp) {
             JsonpInInterceptor jsonpInInterceptor = new JsonpInInterceptor();
-            String jsonpFunction = ConfigHelper.getConfigString("rest.jsonp.function");
+            String jsonpFunction = ConfigHelper.getString("rest.jsonp.function");
             jsonpInInterceptor.setCallbackParam(jsonpFunction);
             inInterceptorList.add(jsonpInInterceptor);
             JsonpPreStreamInterceptor jsonpPreStreamInterceptor = new JsonpPreStreamInterceptor();
@@ -53,7 +53,7 @@ public class RestHelper {
         boolean cors = ConfigHelper.getConfigBoolean("rest.cors");
         if (cors) {
             CrossOriginResourceSharingFilter corsProvider = new CrossOriginResourceSharingFilter();
-            String corsOrigin = ConfigHelper.getConfigString("rest.cors.origin");
+            String corsOrigin = ConfigHelper.getString("rest.cors.origin");
             corsProvider.setAllowOrigins(Arrays.asList(StringUtil.splitString(corsOrigin, ",")));
             providerList.add(corsProvider);
         }

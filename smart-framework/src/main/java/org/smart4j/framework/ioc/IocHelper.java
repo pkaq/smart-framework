@@ -10,6 +10,12 @@ import org.smart4j.framework.ioc.annotation.Inject;
 import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.CollectionUtil;
 
+/**
+ * 初始化 IOC 容器
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class IocHelper {
 
     static {
@@ -52,6 +58,9 @@ public class IocHelper {
         }
     }
 
+    /**
+     * 查找实现类
+     */
     public static Class<?> findImplementClass(Class<?> interfaceClass) {
         Class<?> implementClass = interfaceClass;
         // 判断接口上是否标注了 Impl 注解

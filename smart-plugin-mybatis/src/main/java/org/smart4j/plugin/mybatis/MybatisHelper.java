@@ -64,7 +64,7 @@ public class MybatisHelper implements Plugin{
             Configuration configuration = new Configuration(environment);
 
             //Mybatis日志配置
-            String logImpl = ConfigHelper.getConfigString(MYBATIS_LOGIMPL);
+            String logImpl = ConfigHelper.getString(MYBATIS_LOGIMPL);
             if (logImpl != null && !logImpl.equals("")) {
                 configuration.setLogImpl(configuration.getTypeAliasRegistry().resolveAlias(logImpl));
             }
@@ -75,7 +75,7 @@ public class MybatisHelper implements Plugin{
 
 
             //注册xml
-            String _resource = ConfigHelper.getConfigString(MYBATIS_MAPPER_XML);
+            String _resource = ConfigHelper.getString(MYBATIS_MAPPER_XML);
             if(StringUtil.isNotEmpty(_resource)){
                 String[] resources = StringUtil.splitString(_resource,",");
                 for (String res : resources) {
@@ -88,7 +88,7 @@ public class MybatisHelper implements Plugin{
             }
 
             //注册包
-            String _package = ConfigHelper.getConfigString(MYBATIS_MAPPER_PACKAGE);
+            String _package = ConfigHelper.getString(MYBATIS_MAPPER_PACKAGE);
             if(StringUtil.isNotEmpty(_package)){
                 String[] packages = StringUtil.splitString(_package,",");
                 for (String pk : packages) {

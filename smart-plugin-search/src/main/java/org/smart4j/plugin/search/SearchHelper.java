@@ -39,7 +39,7 @@ public class SearchHelper {
     private static final Logger logger = LoggerFactory.getLogger(SearchHelper.class);
 
     private static final List<SearchEngine> searchEngineList = new ArrayList<SearchEngine>();
-    private static final String indexDir = ConfigHelper.getConfigString("search.index_dir");
+    private static final String indexDir = ConfigHelper.getString("search.index_dir");
     private static final Version luceneVersion = Version.LUCENE_46;
     private static final Analyzer luceneAnalyzer = new StandardAnalyzer(luceneVersion);
 

@@ -23,6 +23,12 @@ import org.smart4j.framework.util.ClassUtil;
 import org.smart4j.framework.util.CollectionUtil;
 import org.smart4j.framework.util.StringUtil;
 
+/**
+ * 初始化 AOP 框架
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class AopHelper {
 
     static {

@@ -27,38 +27,74 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smart4j.framework.core.ConfigHelper;
 import org.smart4j.framework.core.InstanceFactory;
+import org.smart4j.framework.ds.DataSourceFactory;
 import org.smart4j.framework.orm.EntityHelper;
 import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.MapUtil;
 import org.smart4j.framework.util.StringUtil;
 
+/**
+ * 封装数据库相关操作
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class DatabaseHelper {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseHelper.class);
 
-    // 定义一个局部线程变量（使每个线程都拥有自己的连接）
+    /**
+     * 定义一个局部线程变量（使每个线程都拥有自己的连接）
+     */
     private static final ThreadLocal<Connection> connContainer = new ThreadLocal<Connection>();
 
-    private static String databaseType;
-    private static DataSource dataSource;
-    private static QueryRunner queryRunner;
+    /**
+     * 获取数据源工厂（用于获取数据源）
+     */
+    private static final DataSourceFactory dataSourceFactory = InstanceFactory.getDataSourceFactory();
+
+    /**
+     * 数据库类型
+     */
+    private static final String databaseType = ConfigHelper.getString("jdbc.type");
+
+    /**
+     * 数据源
+     */
+    private static final DataSource dataSource;
+
+    /**
+     * Apache Commons DbUtils 的 QueryRunner
+     */
+    private static final QueryRunner queryRunner;
 
     static {
-        databaseType = ConfigHelper.getConfigString("jdbc.type");
         if (StringUtil.isNotEmpty(databaseType)) {
             dataSource = getDataSource();
             queryRunner = new QueryRunner(dataSource);
+        } else {
+            dataSource = null;
+            queryRunner = null;
         }
     }
 
+    /**
+     * 获取数据库类型
+     */
     public static String getDatabaseType() {
         return databaseType;
     }
 
+    /**
+     * 获取数据源
+     */
     public static DataSource getDataSource() {
-        return InstanceFactory.createDataSourceFactory().getDataSource();
+        return dataSourceFactory.getDataSource();
     }
 
+    /**
+     * 获取数据库连接
+     */
     public static Connection getConnection() {
         Connection conn;
         try {
@@ -79,6 +115,9 @@ public class DatabaseHelper {
         return conn;
     }
 
+    /**
+     * 开启事务
+     */
     public static void beginTransaction() {
         Connection conn = getConnection();
         if (conn != null) {
@@ -93,6 +132,9 @@ public class DatabaseHelper {
         }
     }
 
+    /**
+     * 提交事务
+     */
     public static void commitTransaction() {
         Connection conn = getConnection();
         if (conn != null) {
@@ -108,6 +150,9 @@ public class DatabaseHelper {
         }
     }
 
+    /**
+     * 回滚事务
+     */
     public static void rollbackTransaction() {
         Connection conn = getConnection();
         if (conn != null) {
@@ -123,6 +168,9 @@ public class DatabaseHelper {
         }
     }
 
+    /**
+     * 根据 SQL 语句查询 Entity
+     */
     public static <T> T queryEntity(Class<T> entityClass, String sql, Object... params) {
         T result;
         try {
@@ -140,6 +188,9 @@ public class DatabaseHelper {
         return result;
     }
 
+    /**
+     * 根据 SQL 语句查询 Entity 列表
+     */
     public static <T> List<T> queryEntityList(Class<T> entityClass, String sql, Object... params) {
         List<T> result;
         try {
@@ -157,6 +208,9 @@ public class DatabaseHelper {
         return result;
     }
 
+    /**
+     * 根据 SQL 语句查询 Entity 映射（Field Name => Field Value）
+     */
     public static <K, V> Map<K, V> queryEntityMap(Class<V> entityClass, String sql, Object... params) {
         Map<K, V> entityMap;
         try {
@@ -169,6 +223,9 @@ public class DatabaseHelper {
         return entityMap;
     }
 
+    /**
+     * 根据 SQL 语句查询 Array 格式的字段（单条记录）
+     */
     public static Object[] queryArray(String sql, Object... params) {
         Object[] array;
         try {
@@ -181,6 +238,9 @@ public class DatabaseHelper {
         return array;
     }
 
+    /**
+     * 根据 SQL 语句查询 Array 格式的字段列表（多条记录）
+     */
     public static List<Object[]> queryArrayList(String sql, Object... params) {
         List<Object[]> arrayList;
         try {
@@ -193,6 +253,9 @@ public class DatabaseHelper {
         return arrayList;
     }
 
+    /**
+     * 根据 SQL 语句查询 Map 格式的字段（单条记录）
+     */
     public static Map<String, Object> queryMap(String sql, Object... params) {
         Map<String, Object> map;
         try {
@@ -205,6 +268,9 @@ public class DatabaseHelper {
         return map;
     }
 
+    /**
+     * 根据 SQL 语句查询 Map 格式的字段列表（多条记录）
+     */
     public static List<Map<String, Object>> queryMapList(String sql, Object... params) {
         List<Map<String, Object>> fieldMapList;
         try {
@@ -217,7 +283,10 @@ public class DatabaseHelper {
         return fieldMapList;
     }
 
-    public static <T> T queryColumn(String sql, Object... params) {
+    /**
+     * 根据 SQL 语句查询指定字段（单条记录）
+     */
+    public static <T> T queryField(String sql, Object... params) {
         T entity;
         try {
             entity = queryRunner.query(sql, new ScalarHandler<T>(), params);
@@ -229,7 +298,10 @@ public class DatabaseHelper {
         return entity;
     }
 
-    public static <T> List<T> queryColumnList(String sql, Object... params) {
+    /**
+     * 根据 SQL 语句查询指定字段列表（多条记录）
+     */
+    public static <T> List<T> queryFieldList(String sql, Object... params) {
         List<T> list;
         try {
             list = queryRunner.query(sql, new ColumnListHandler<T>(), params);
@@ -241,12 +313,18 @@ public class DatabaseHelper {
         return list;
     }
 
-    public static <T> Set<T> queryColumnSet(String sql, Object... params) {
-        List<T> list = queryColumnList(sql, params);
+    /**
+     * 根据 SQL 语句查询指定字段集合（多条记录）
+     */
+    public static <T> Set<T> queryFieldSet(String sql, Object... params) {
+        List<T> list = queryFieldList(sql, params);
         return new LinkedHashSet<T>(list);
     }
 
-    public static <T> Map<T, Map<String, Object>> queryColumnMap(String column, String sql, Object... params) {
+    /**
+     * 根据 SQL 语句查询指定字段映射（多条记录）
+     */
+    public static <T> Map<T, Map<String, Object>> queryFieldMap(String column, String sql, Object... params) {
         Map<T, Map<String, Object>> map;
         try {
             map = queryRunner.query(sql, new KeyedHandler<T>(column), params);
@@ -258,6 +336,9 @@ public class DatabaseHelper {
         return map;
     }
 
+    /**
+     * 根据 SQL 语句查询记录条数
+     */
     public static long queryCount(String sql, Object... params) {
         long result;
         try {
@@ -270,6 +351,9 @@ public class DatabaseHelper {
         return result;
     }
 
+    /**
+     * 执行更新语句（包括：update、insert、delete）
+     */
     public static int update(String sql, Object... params) {
         int result;
         try {
@@ -283,6 +367,9 @@ public class DatabaseHelper {
         return result;
     }
 
+    /**
+     * 执行插入语句，返回插入后的主键
+     */
     public static Serializable insertReturnPK(String sql, Object... params) {
         Serializable key = null;
         Connection conn = getConnection();

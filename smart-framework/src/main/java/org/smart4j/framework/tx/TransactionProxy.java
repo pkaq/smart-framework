@@ -8,6 +8,12 @@ import org.smart4j.framework.aop.proxy.ProxyChain;
 import org.smart4j.framework.dao.DatabaseHelper;
 import org.smart4j.framework.tx.annotation.Transaction;
 
+/**
+ * 事务代理
+ *
+ * @author huangyong
+ * @since 2.0
+ */
 public class TransactionProxy implements Proxy {
 
     private static final Logger logger = LoggerFactory.getLogger(TransactionProxy.class);

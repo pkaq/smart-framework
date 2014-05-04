@@ -13,9 +13,18 @@ import org.smart4j.framework.plugin.PluginHelper;
 import org.smart4j.framework.plugin.WebPlugin;
 import org.smart4j.framework.util.StringUtil;
 
+/**
+ * 容器监听器
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 @WebListener
 public class ContainerListener implements ServletContextListener {
 
+    /**
+     * 当容器初始化时调用
+     */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         // 获取 ServletContext
@@ -28,6 +37,9 @@ public class ContainerListener implements ServletContextListener {
         registerWebPlugin(servletContext);
     }
 
+    /**
+     * 当容器销毁时调用
+     */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         // 销毁插件

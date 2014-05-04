@@ -22,7 +22,7 @@ public class DruidPlugin extends WebPlugin {
         // 添加 StatViewServlet
         ServletRegistration.Dynamic druidServlet = servletContext.addServlet("DruidStatView", StatViewServlet.class);
         // 从配置文件中获取该 Servlet 的 URL 路径
-        String druidStatUrl = ConfigHelper.getConfigString("druid.stat.url");
+        String druidStatUrl = ConfigHelper.getString("druid.stat.url");
         // 若该 URL 路径不存在，则使用默认值
         if (StringUtil.isEmpty(druidStatUrl)) {
             druidStatUrl = DRUID_STAT_URL;

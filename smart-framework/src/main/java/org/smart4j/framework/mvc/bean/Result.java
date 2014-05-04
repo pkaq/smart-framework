@@ -2,6 +2,12 @@ package org.smart4j.framework.mvc.bean;
 
 import org.smart4j.framework.core.bean.BaseBean;
 
+/**
+ * 封装返回数据
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class Result extends BaseBean {
 
     private boolean success; // 成功标志

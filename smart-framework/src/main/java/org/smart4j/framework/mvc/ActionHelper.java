@@ -12,8 +12,17 @@ import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.CollectionUtil;
 import org.smart4j.framework.util.StringUtil;
 
+/**
+ * 初始化 Action 配置
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class ActionHelper {
 
+    /**
+     * Action Map（HTTP 请求与 Action 方法的映射）
+     */
     private static final Map<Requestor, Handler> actionMap = new LinkedHashMap<Requestor, Handler>();
 
     static {
@@ -80,6 +89,9 @@ public class ActionHelper {
         }
     }
 
+    /**
+     * 获取 Action Map
+     */
     public static Map<Requestor, Handler> getActionMap() {
         return actionMap;
     }

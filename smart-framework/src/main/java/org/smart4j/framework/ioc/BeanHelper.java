@@ -10,9 +10,18 @@ import org.smart4j.framework.ioc.annotation.Bean;
 import org.smart4j.framework.mvc.annotation.Action;
 import org.smart4j.framework.tx.annotation.Service;
 
+/**
+ * 初始化相关 Bean 类
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class BeanHelper {
 
-    private static final Map<Class<?>, Object> beanMap = new HashMap<Class<?>, Object>(); // Bean 类 => Bean 实例
+    /**
+     * Bean Map（Bean 类 => Bean 实例）
+     */
+    private static final Map<Class<?>, Object> beanMap = new HashMap<Class<?>, Object>();
 
     static {
         try {
@@ -35,10 +44,16 @@ public class BeanHelper {
         }
     }
 
+    /**
+     * 获取 Bean Map
+     */
     public static Map<Class<?>, Object> getBeanMap() {
         return beanMap;
     }
 
+    /**
+     * 获取 Bean 实例
+     */
     @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<T> cls) {
         if (!beanMap.containsKey(cls)) {
@@ -47,6 +62,9 @@ public class BeanHelper {
         return (T) beanMap.get(cls);
     }
 
+    /**
+     * 设置 Bean 实例
+     */
     public static void setBean(Class<?> cls, Object obj) {
         beanMap.put(cls, obj);
     }

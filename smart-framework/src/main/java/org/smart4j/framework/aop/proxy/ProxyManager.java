@@ -6,6 +6,12 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
+/**
+ * 代理管理器
+ *
+ * @author huangyong
+ * @since 2.0
+ */
 public class ProxyManager {
 
     @SuppressWarnings("unchecked")

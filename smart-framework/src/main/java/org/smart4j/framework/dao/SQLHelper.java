@@ -10,28 +10,46 @@ import org.smart4j.framework.util.MapUtil;
 import org.smart4j.framework.util.PropsUtil;
 import org.smart4j.framework.util.StringUtil;
 
-public class SQLHelper {
+/**
+ * 封装 SQL 语句相关操作
+ *
+ * @author huangyong
+ * @since 1.0
+ */
+public class SqlHelper {
 
+    /**
+     * SQL 属性文件对象
+     */
     private static final Properties sqlProps = PropsUtil.loadProps(FrameworkConstant.SQL_PROPS);
 
-    public static String getSQL(String key) {
+    /**
+     * 从 SQL 属性文件中获取相应的 SQL 语句
+     */
+    public static String getSql(String key) {
         String sql;
         if (sqlProps.containsKey(key)) {
             sql = sqlProps.getProperty(key);
         } else {
-            throw new RuntimeException("无法在 " + FrameworkConstant.SQL_PROPS + " 文件中获取配置项：" + key);
+            throw new RuntimeException("无法在 " + FrameworkConstant.SQL_PROPS + " 文件中获取属性：" + key);
         }
         return sql;
     }
 
-    public static String generateSelectSQL(Class<?> entityClass, String condition, String sort) {
+    /**
+     * 生成 select 语句
+     */
+    public static String generateSelectSql(Class<?> entityClass, String condition, String sort) {
         StringBuilder sql = new StringBuilder("select * from ").append(getTable(entityClass));
         sql.append(generateWhere(condition));
         sql.append(generateOrder(sort));
         return sql.toString();
     }
 
-    public static String generateInsertSQL(Class<?> entityClass, Collection<String> fieldNames) {
+    /**
+     * 生成 insert 语句
+     */
+    public static String generateInsertSql(Class<?> entityClass, Collection<String> fieldNames) {
         StringBuilder sql = new StringBuilder("insert into ").append(getTable(entityClass));
         if (CollectionUtil.isNotEmpty(fieldNames)) {
             int i = 0;
@@ -57,13 +75,19 @@ public class SQLHelper {
         return sql.toString();
     }
 
-    public static String generateDeleteSQL(Class<?> entityClass, String condition) {
+    /**
+     * 生成 delete 语句
+     */
+    public static String generateDeleteSql(Class<?> entityClass, String condition) {
         StringBuilder sql = new StringBuilder("delete from ").append(getTable(entityClass));
         sql.append(generateWhere(condition));
         return sql.toString();
     }
 
-    public static String generateUpdateSQL(Class<?> entityClass, Map<String, Object> fieldMap, String condition) {
+    /**
+     * 生成 update 语句
+     */
+    public static String generateUpdateSql(Class<?> entityClass, Map<String, Object> fieldMap, String condition) {
         StringBuilder sql = new StringBuilder("update ").append(getTable(entityClass));
         if (MapUtil.isNotEmpty(fieldMap)) {
             sql.append(" set ");
@@ -82,13 +106,19 @@ public class SQLHelper {
         return sql.toString();
     }
 
-    public static String generateSelectSQLForCount(Class<?> entityClass, String condition) {
+    /**
+     * 生成 select count(*) 语句
+     */
+    public static String generateSelectSqlForCount(Class<?> entityClass, String condition) {
         StringBuilder sql = new StringBuilder("select count(*) from ").append(getTable(entityClass));
         sql.append(generateWhere(condition));
         return sql.toString();
     }
 
-    public static String generateSelectSQLForPager(int pageNumber, int pageSize, Class<?> entityClass, String condition, String sort) {
+    /**
+     * 生成 select 分页语句（数据库类型为：mysql、oracle、mssql）
+     */
+    public static String generateSelectSqlForPager(int pageNumber, int pageSize, Class<?> entityClass, String condition, String sort) {
         StringBuilder sql = new StringBuilder();
         String table = getTable(entityClass);
         String where = generateWhere(condition);
@@ -96,14 +126,14 @@ public class SQLHelper {
         String dbType = DatabaseHelper.getDatabaseType();
         if (dbType.equalsIgnoreCase("mysql")) {
             int pageStart = (pageNumber - 1) * pageSize;
-            appendSQLForMySQL(sql, table, where, order, pageStart, pageSize);
+            appendSqlForMySql(sql, table, where, order, pageStart, pageSize);
         } else if (dbType.equalsIgnoreCase("oracle")) {
             int pageStart = (pageNumber - 1) * pageSize + 1;
             int pageEnd = pageStart + pageSize;
-            appendSQLForOracle(sql, table, where, order, pageStart, pageEnd);
+            appendSqlForOracle(sql, table, where, order, pageStart, pageEnd);
         } else if (dbType.equalsIgnoreCase("mssql")) {
             int pageStart = (pageNumber - 1) * pageSize;
-            appendSQLForSQLServer(sql, table, where, order, pageStart, pageSize);
+            appendSqlForMsSql(sql, table, where, order, pageStart, pageSize);
         }
         return sql.toString();
     }
@@ -134,7 +164,7 @@ public class SQLHelper {
         return order;
     }
 
-    private static void appendSQLForMySQL(StringBuilder sql, String table, String where, String order, int pageStart, int pageEnd) {
+    private static void appendSqlForMySql(StringBuilder sql, String table, String where, String order, int pageStart, int pageEnd) {
         /*
             select * from 表名 where 条件 order by 排序 limit 开始位置, 结束位置
          */
@@ -144,7 +174,7 @@ public class SQLHelper {
         sql.append(" limit ").append(pageStart).append(", ").append(pageEnd);
     }
 
-    private static void appendSQLForOracle(StringBuilder sql, String table, String where, String order, int pageStart, int pageEnd) {
+    private static void appendSqlForOracle(StringBuilder sql, String table, String where, String order, int pageStart, int pageEnd) {
         /*
             select a.* from (
                 select rownum rn, t.* from 表名 t where 条件 order by 排序
@@ -157,7 +187,7 @@ public class SQLHelper {
         sql.append(") a where a.rn >= ").append(pageStart).append(" and a.rn < ").append(pageEnd);
     }
 
-    private static void appendSQLForSQLServer(StringBuilder sql, String table, String where, String order, int pageStart, int pageEnd) {
+    private static void appendSqlForMsSql(StringBuilder sql, String table, String where, String order, int pageStart, int pageEnd) {
         /*
             select top 结束位置 * from 表名 where 条件 and id not in (
                 select top 开始位置 id from 表名 where 条件 order by 排序

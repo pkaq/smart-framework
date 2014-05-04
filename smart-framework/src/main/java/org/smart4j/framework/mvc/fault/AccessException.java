@@ -1,5 +1,11 @@
 package org.smart4j.framework.mvc.fault;
 
+/**
+ * 访问异常（当非法访问时抛出）
+ *
+ * @author huangyong
+ * @since 2.1
+ */
 public class AccessException extends RuntimeException {
 
     public AccessException() {

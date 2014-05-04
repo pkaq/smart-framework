@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import net.sf.cglib.proxy.MethodProxy;
 
+/**
+ * 代理链
+ *
+ * @author huangyong
+ * @since 2.0
+ */
 public class ProxyChain {
 
     private final Class<?> targetClass;

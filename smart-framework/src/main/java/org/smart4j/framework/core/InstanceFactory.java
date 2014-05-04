@@ -23,43 +23,79 @@ import org.smart4j.framework.util.StringUtil;
  */
 public class InstanceFactory {
 
-    // 用于缓存对应的实例
+    /**
+     * 用于缓存对应的实例
+     */
     private static final Map<String, Object> cache = new ConcurrentHashMap<String, Object>();
 
+    /**
+     * DataSourceFactory
+     */
     private static final String DS_FACTORY = "smart.ds_factory";
+
+    /**
+     * HandlerMapping
+     */
     private static final String HANDLER_MAPPING = "smart.handler_mapping";
+
+    /**
+     * HandlerInvoker
+     */
     private static final String HANDLER_INVOKER = "smart.handler_invoker";
+
+    /**
+     * HandlerExceptionResolver
+     */
     private static final String HANDLER_EXCEPTION_RESOLVER = "smart.handler_exception_resolver";
+
+    /**
+     * ViewResolver
+     */
     private static final String VIEW_RESOLVER = "smart.view_resolver";
 
-    public static DataSourceFactory createDataSourceFactory() {
-        return createInstance(DS_FACTORY, DefaultDataSourceFactory.class);
+    /**
+     * 获取 DataSourceFactory
+     */
+    public static DataSourceFactory getDataSourceFactory() {
+        return getInstance(DS_FACTORY, DefaultDataSourceFactory.class);
     }
 
-    public static HandlerMapping createHandlerMapping() {
-        return createInstance(HANDLER_MAPPING, DefaultHandlerMapping.class);
+    /**
+     * 获取 HandlerMapping
+     */
+    public static HandlerMapping getHandlerMapping() {
+        return getInstance(HANDLER_MAPPING, DefaultHandlerMapping.class);
     }
 
-    public static HandlerInvoker createHandlerInvoker() {
-        return createInstance(HANDLER_INVOKER, DefaultHandlerInvoker.class);
+    /**
+     * 获取 HandlerInvoker
+     */
+    public static HandlerInvoker getHandlerInvoker() {
+        return getInstance(HANDLER_INVOKER, DefaultHandlerInvoker.class);
     }
 
-    public static HandlerExceptionResolver createHandlerExceptionResolver() {
-        return createInstance(HANDLER_EXCEPTION_RESOLVER, DefaultHandlerExceptionResolver.class);
+    /**
+     * 获取 HandlerExceptionResolver
+     */
+    public static HandlerExceptionResolver getHandlerExceptionResolver() {
+        return getInstance(HANDLER_EXCEPTION_RESOLVER, DefaultHandlerExceptionResolver.class);
     }
 
-    public static ViewResolver createViewResolver() {
-        return createInstance(VIEW_RESOLVER, DefaultViewResolver.class);
+    /**
+     * 获取 ViewResolver
+     */
+    public static ViewResolver getViewResolver() {
+        return getInstance(VIEW_RESOLVER, DefaultViewResolver.class);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T createInstance(String cacheKey, Class<T> defaultImplClass) {
+    public static <T> T getInstance(String cacheKey, Class<T> defaultImplClass) {
         // 若缓存中存在对应的实例，则返回该实例
         if (cache.containsKey(cacheKey)) {
             return (T) cache.get(cacheKey);
         }
         // 从配置文件中获取相应的接口实现类配置
-        String implClassName = ConfigHelper.getConfigString(cacheKey);
+        String implClassName = ConfigHelper.getString(cacheKey);
         // 若实现类配置不存在，则使用默认实现类
         if (StringUtil.isEmpty(implClassName)) {
             implClassName = defaultImplClass.getName();

@@ -12,6 +12,7 @@ import org.smart4j.framework.ioc.BeanHelper;
 import org.smart4j.framework.mvc.Handler;
 import org.smart4j.framework.mvc.HandlerInvoker;
 import org.smart4j.framework.mvc.UploadHelper;
+import org.smart4j.framework.mvc.ViewResolver;
 import org.smart4j.framework.mvc.bean.Params;
 import org.smart4j.framework.util.CastUtil;
 import org.smart4j.framework.util.ClassUtil;
@@ -25,6 +26,8 @@ import org.smart4j.framework.util.WebUtil;
  * @since 2.3
  */
 public class DefaultHandlerInvoker implements HandlerInvoker {
+
+    private ViewResolver viewResolver = InstanceFactory.getViewResolver();
 
     @Override
     public void invokeHandler(HttpServletRequest request, HttpServletResponse response, Handler handler) throws Exception {
@@ -43,7 +46,7 @@ public class DefaultHandlerInvoker implements HandlerInvoker {
         actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
         Object actionMethodResult = actionMethod.invoke(actionInstance, paramList.toArray());
         // 解析视图
-        InstanceFactory.createViewResolver().resolveView(request, response, actionMethodResult);
+        viewResolver.resolveView(request, response, actionMethodResult);
     }
 
     private List<Object> createParamList(HttpServletRequest request, Handler handler) throws Exception {

@@ -3,6 +3,12 @@ package org.smart4j.framework.dao.bean;
 import java.util.List;
 import org.smart4j.framework.core.bean.BaseBean;
 
+/**
+ * 分页对象
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class Pager<T> extends BaseBean {
 
     private int pageNumber;     // 页面编号

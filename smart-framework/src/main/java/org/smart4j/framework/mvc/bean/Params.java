@@ -4,6 +4,12 @@ import java.util.Map;
 import org.smart4j.framework.core.bean.BaseBean;
 import org.smart4j.framework.util.CastUtil;
 
+/**
+ * 封装请求参数
+ *
+ * @author huangyong
+ * @since 2.2
+ */
 public class Params extends BaseBean {
 
     private final Map<String, Object> fieldMap;

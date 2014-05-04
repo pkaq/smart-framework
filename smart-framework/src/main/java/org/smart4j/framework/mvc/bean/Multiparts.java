@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import org.smart4j.framework.core.bean.BaseBean;
 
+/**
+ * 封装批量文件上传对象
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class Multiparts extends BaseBean {
 
     private List<Multipart> multipartList = new ArrayList<Multipart>();

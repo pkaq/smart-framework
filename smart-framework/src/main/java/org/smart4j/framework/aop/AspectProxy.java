@@ -4,6 +4,12 @@ import java.lang.reflect.Method;
 import org.smart4j.framework.aop.proxy.Proxy;
 import org.smart4j.framework.aop.proxy.ProxyChain;
 
+/**
+ * 切面代理
+ *
+ * @author huangyong
+ * @since 2.0
+ */
 public abstract class AspectProxy implements Proxy {
 
     @Override

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Entity 类注解
+ * 定义 Entity 类
  *
  * @author huangyong
  * @since 2.3

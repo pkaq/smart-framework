@@ -1,5 +1,11 @@
 package org.smart4j.framework.core.fault;
 
+/**
+ * 初始化错误
+ *
+ * @author huangyong
+ * @since 2.2
+ */
 public class InitializationError extends Error {
 
     public InitializationError() {

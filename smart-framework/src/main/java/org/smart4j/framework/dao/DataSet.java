@@ -7,7 +7,7 @@ import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.ObjectUtil;
 
 /**
- * 数据库操作工具类
+ * 提供常用数据库操作方法
  *
  * @author huangyong
  * @since 1.0
@@ -18,7 +18,7 @@ public class DataSet {
      * 查询单条数据，并转为相应类型的对象
      */
     public static <T> T select(Class<T> entityClass, String condition, Object... params) {
-        String sql = SQLHelper.generateSelectSQL(entityClass, condition, "");
+        String sql = SqlHelper.generateSelectSql(entityClass, condition, "");
         return DatabaseHelper.queryEntity(entityClass, sql, params);
     }
 
@@ -33,7 +33,7 @@ public class DataSet {
      * 查询多条数据，并转为相应类型的列表（带有条件、排序、参数）
      */
     public static <T> List<T> selectList(Class<T> entityClass, String condition, String sort, Object... params) {
-        String sql = SQLHelper.generateSelectSQL(entityClass, condition, sort);
+        String sql = SqlHelper.generateSelectSql(entityClass, condition, sort);
         return DatabaseHelper.queryEntityList(entityClass, sql, params);
     }
 
@@ -41,7 +41,7 @@ public class DataSet {
      * 插入一条数据
      */
     public static boolean insert(Class<?> entityClass, Map<String, Object> fieldMap) {
-        String sql = SQLHelper.generateInsertSQL(entityClass, fieldMap.keySet());
+        String sql = SqlHelper.generateInsertSql(entityClass, fieldMap.keySet());
         int rows = DatabaseHelper.update(sql, fieldMap.values().toArray());
         return rows > 0;
     }
@@ -62,7 +62,7 @@ public class DataSet {
      * 更新相关数据
      */
     public static boolean update(Class<?> entityClass, Map<String, Object> fieldMap, String condition, Object... params) {
-        String sql = SQLHelper.generateUpdateSQL(entityClass, fieldMap, condition);
+        String sql = SqlHelper.generateUpdateSql(entityClass, fieldMap, condition);
         int rows = DatabaseHelper.update(sql, ArrayUtil.concat(fieldMap.values().toArray(), params));
         return rows > 0;
     }
@@ -92,7 +92,7 @@ public class DataSet {
      * 删除相关数据
      */
     public static boolean delete(Class<?> entityClass, String condition, Object... params) {
-        String sql = SQLHelper.generateDeleteSQL(entityClass, condition);
+        String sql = SqlHelper.generateDeleteSql(entityClass, condition);
         int rows = DatabaseHelper.update(sql, params);
         return rows > 0;
     }
@@ -121,7 +121,7 @@ public class DataSet {
      * 查询数据条数
      */
     public static long selectCount(Class<?> entityClass, String condition, Object... params) {
-        String sql = SQLHelper.generateSelectSQLForCount(entityClass, condition);
+        String sql = SqlHelper.generateSelectSqlForCount(entityClass, condition);
         return DatabaseHelper.queryCount(sql, params);
     }
 
@@ -129,7 +129,7 @@ public class DataSet {
      * 查询多条数据，并转为列表（分页方式）
      */
     public static <T> List<T> selectListForPager(int pageNumber, int pageSize, Class<T> entityClass, String condition, String sort, Object... params) {
-        String sql = SQLHelper.generateSelectSQLForPager(pageNumber, pageSize, entityClass, condition, sort);
+        String sql = SqlHelper.generateSelectSqlForPager(pageNumber, pageSize, entityClass, condition, sort);
         return DatabaseHelper.queryEntityList(entityClass, sql, params);
     }
 
@@ -165,15 +165,15 @@ public class DataSet {
      * 根据列名查询单条数据，并转为相应类型的对象
      */
     public static <T> T selectColumn(Class<T> entityClass, String columnName, String condition, Object... params) {
-        String sql = SQLHelper.generateSelectSQL(entityClass, condition, "");
-        return DatabaseHelper.queryColumn(columnName, sql, params);
+        String sql = SqlHelper.generateSelectSql(entityClass, condition, "");
+        return DatabaseHelper.queryField(columnName, sql, params);
     }
 
     /**
      * 根据列名查询多条数据，并转为相应类型的列表
      */
     public static <T> List<T> selectColumnList(Class<?> entityClass, String columnName, String condition, String sort, Object... params) {
-        String sql = SQLHelper.generateSelectSQL(entityClass, condition, sort);
-        return DatabaseHelper.queryColumnList(columnName, sql, params);
+        String sql = SqlHelper.generateSelectSql(entityClass, condition, sort);
+        return DatabaseHelper.queryFieldList(columnName, sql, params);
     }
 }
