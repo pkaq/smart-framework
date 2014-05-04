@@ -14,6 +14,7 @@ import org.smart4j.framework.mvc.HandlerInvoker;
 import org.smart4j.framework.mvc.UploadHelper;
 import org.smart4j.framework.mvc.bean.Params;
 import org.smart4j.framework.util.CastUtil;
+import org.smart4j.framework.util.ClassUtil;
 import org.smart4j.framework.util.MapUtil;
 import org.smart4j.framework.util.WebUtil;
 
@@ -76,13 +77,13 @@ public class DefaultHandlerInvoker implements HandlerInvoker {
             String param = requestPathMatcher.group(i);
             // 获取参数类型（支持四种类型：int/Integer、long/Long、double/Double、String）
             Class<?> paramType = actionParamTypes[i - 1];
-            if (paramType.equals(int.class) || paramType.equals(Integer.class)) {
+            if (ClassUtil.isInt(paramType)) {
                 paramList.add(CastUtil.castInt(param));
-            } else if (paramType.equals(long.class) || paramType.equals(Long.class)) {
+            } else if (ClassUtil.isLong(paramType)) {
                 paramList.add(CastUtil.castLong(param));
-            } else if (paramType.equals(double.class) || paramType.equals(Double.class)) {
+            } else if (ClassUtil.isDouble(paramType)) {
                 paramList.add(CastUtil.castDouble(param));
-            } else if (paramType.equals(String.class)) {
+            } else if (ClassUtil.isString(paramType)) {
                 paramList.add(param);
             }
         }

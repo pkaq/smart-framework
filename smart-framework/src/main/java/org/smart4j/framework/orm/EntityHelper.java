@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import org.smart4j.framework.core.ClassHelper;
 import org.smart4j.framework.orm.annotation.Column;
+import org.smart4j.framework.orm.annotation.Entity;
 import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.MapUtil;
 import org.smart4j.framework.util.StringUtil;
@@ -16,7 +17,7 @@ public class EntityHelper {
 
     static {
         // 获取并遍历所有 Entity 类
-        List<Class<?>> entityClassList = ClassHelper.getClassListBySuper(BaseEntity.class);
+        List<Class<?>> entityClassList = ClassHelper.getClassListByAnnotation(Entity.class);
         for (Class<?> entityClass : entityClassList) {
             // 获取并遍历该 Entity 类中所有的字段（不包括父类中的方法）
             Field[] fields = entityClass.getDeclaredFields();

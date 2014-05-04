@@ -2,6 +2,8 @@ package org.smart4j.framework.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,5 +66,17 @@ public class ObjectUtil {
             throw new RuntimeException(e);
         }
         return instance;
+    }
+
+    // 获取对象的字段映射（字段名 => 字段值）
+    public static Map<String, Object> getFieldMap(Object obj) {
+        Map<String, Object> fieldMap = new LinkedHashMap<String, Object>();
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            String fieldName = field.getName();
+            Object fieldValue = ObjectUtil.getFieldValue(obj, fieldName);
+            fieldMap.put(fieldName, fieldValue);
+        }
+        return fieldMap;
     }
 }
