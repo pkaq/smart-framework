@@ -1,10 +1,9 @@
 package org.smart4j.plugin.job.test;
 
 import org.junit.Test;
-import org.smart4j.framework.test.BaseTest;
 import org.smart4j.plugin.job.JobHelper;
 
-public class SmartJobTest extends BaseTest {
+public class SmartJobTest {
 
     @Test
     public void test() {

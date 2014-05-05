@@ -7,11 +7,19 @@ import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 流操作工具类
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class StreamUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(StreamUtil.class);
 
-    // 将输入流复制到输出流
+    /**
+     * 将输入流复制到输出流
+     */
     public static void copyStream(InputStream inputStream, OutputStream outputStream) {
         try {
             int length;
@@ -33,7 +41,9 @@ public class StreamUtil {
         }
     }
 
-    // 从输入流中获取字符串
+    /**
+     * 从输入流中获取字符串
+     */
     public static String getString(InputStream is) {
         StringBuilder sb = new StringBuilder();
         try {

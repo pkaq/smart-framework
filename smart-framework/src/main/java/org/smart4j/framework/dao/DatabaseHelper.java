@@ -1,5 +1,6 @@
 package org.smart4j.framework.dao;
 
+import java.io.File;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,6 +24,7 @@ import org.apache.commons.dbutils.handlers.KeyedHandler;
 import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smart4j.framework.core.ConfigHelper;
@@ -30,6 +32,7 @@ import org.smart4j.framework.core.InstanceFactory;
 import org.smart4j.framework.ds.DataSourceFactory;
 import org.smart4j.framework.orm.EntityHelper;
 import org.smart4j.framework.util.ArrayUtil;
+import org.smart4j.framework.util.ClassUtil;
 import org.smart4j.framework.util.MapUtil;
 import org.smart4j.framework.util.StringUtil;
 
@@ -393,6 +396,22 @@ public class DatabaseHelper {
         }
         printSQL(sql);
         return key;
+    }
+
+    /**
+     * 初始化 SQL 脚本
+     */
+    public static void initSQL(String sqlPath) {
+        try {
+            File sqlFile = new File(ClassUtil.getClassPath() + sqlPath);
+            List<String> sqlList = FileUtils.readLines(sqlFile);
+            for (String sql : sqlList) {
+                update(sql);
+            }
+        } catch (Exception e) {
+            logger.error("初始化 SQL 脚本出错！", e);
+            throw new RuntimeException(e);
+        }
     }
 
     private static void printSQL(String sql) {

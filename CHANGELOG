@@ -16,7 +16,7 @@ Smart 2.2 (2014-04-23)
 - 当在初始化出错时会停止运行应用程序，并提示相关出错信息
 - 支持没有没有 id 的实体
 - 对 Pager 类的属性增加 setter 方法与默认构造器，使用更加灵活（感谢 abel533 提供的建议）
-- 简化 Shiro Smart 的配置方式，用户可将 SQL 语句写在 ISmartSecurity 接口的实现类中
+- 简化 Shiro Smart 的配置方式，用户可将 SQL 语句写在 SmartSecurity 接口的实现类中
 - 将包名由 com.smart 重构为 org.smart4j
 
 【修复】

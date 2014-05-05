@@ -5,27 +5,43 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
+/**
+ * 字符串操作工具类
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class StringUtil {
 
-    // 字符串分隔符
+    /**
+     * 字符串分隔符
+     */
     public static final String SEPARATOR = String.valueOf((char) 29);
 
-    // 判断字符串是否非空
+    /**
+     * 判断字符串是否非空
+     */
     public static boolean isNotEmpty(String str) {
         return StringUtils.isNotEmpty(str);
     }
 
-    // 判断字符串是否为空
+    /**
+     * 判断字符串是否为空
+     */
     public static boolean isEmpty(String str) {
         return StringUtils.isEmpty(str);
     }
 
-    // 若字符串为空，则取默认值
+    /**
+     * 若字符串为空，则取默认值
+     */
     public static String defaultIfEmpty(String str, String defaultValue) {
         return StringUtils.defaultIfEmpty(str, defaultValue);
     }
 
-    // 替换固定格式的字符串（支持正则表达式）
+    /**
+     * 替换固定格式的字符串（支持正则表达式）
+     */
     public static String replaceAll(String str, String regex, String replacement) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(str);
@@ -37,17 +53,23 @@ public class StringUtil {
         return sb.toString();
     }
 
-    // 是否为数字（整数或小数）
+    /**
+     * 是否为数字（整数或小数）
+     */
     public static boolean isNumber(String str) {
         return NumberUtils.isNumber(str);
     }
 
-    // 是否为十进制数（整数）
+    /**
+     * 是否为十进制数（整数）
+     */
     public static boolean isDigits(String str) {
         return NumberUtils.isDigits(str);
     }
 
-    // 将驼峰风格替换为下划线风格
+    /**
+     * 将驼峰风格替换为下划线风格
+     */
     public static String camelhumpToUnderline(String str) {
         Matcher matcher = Pattern.compile("[A-Z]").matcher(str);
         StringBuilder builder = new StringBuilder(str);
@@ -60,7 +82,9 @@ public class StringUtil {
         return builder.toString();
     }
 
-    // 将下划线风格替换为驼峰风格
+    /**
+     * 将下划线风格替换为驼峰风格
+     */
     public static String underlineToCamelhump(String str) {
         Matcher matcher = Pattern.compile("_[a-z]").matcher(str);
         StringBuilder builder = new StringBuilder(str);
@@ -73,32 +97,44 @@ public class StringUtil {
         return builder.toString();
     }
 
-    // 分割固定格式的字符串
+    /**
+     * 分割固定格式的字符串
+     */
     public static String[] splitString(String str, String separator) {
         return StringUtils.splitByWholeSeparator(str, separator);
     }
 
-    // 将字符串首字母大写
+    /**
+     * 将字符串首字母大写
+     */
     public static String firstToUpper(String str) {
         return Character.toUpperCase(str.charAt(0)) + str.substring(1);
     }
 
-    // 将字符串首字母小写
+    /**
+     * 将字符串首字母小写
+     */
     public static String firstToLower(String str) {
         return Character.toLowerCase(str.charAt(0)) + str.substring(1);
     }
 
-    // 转为帕斯卡命名方式（如：FooBar）
+    /**
+     * 转为帕斯卡命名方式（如：FooBar）
+     */
     public static String toPascalStyle(String str, String seperator) {
         return StringUtil.firstToUpper(toCamelhumpStyle(str, seperator));
     }
 
-    // 转为驼峰命令方式（如：fooBar）
+    /**
+     * 转为驼峰命令方式（如：fooBar）
+     */
     public static String toCamelhumpStyle(String str, String seperator) {
         return StringUtil.underlineToCamelhump(toUnderlineStyle(str, seperator));
     }
 
-    // 转为下划线命名方式（如：foo_bar）
+    /**
+     * 转为下划线命名方式（如：foo_bar）
+     */
     public static String toUnderlineStyle(String str, String seperator) {
         str = str.trim().toLowerCase();
         if (str.contains(seperator)) {
@@ -107,7 +143,9 @@ public class StringUtil {
         return str;
     }
 
-    // 转为显示命名方式（如：Foo Bar）
+    /**
+     * 转为显示命名方式（如：Foo Bar）
+     */
     public static String toDisplayStyle(String str, String seperator) {
         String displayName = "";
         str = str.trim().toLowerCase();

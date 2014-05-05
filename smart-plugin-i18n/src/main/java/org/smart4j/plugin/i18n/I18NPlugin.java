@@ -50,7 +50,7 @@ public class I18NPlugin implements Plugin {
                         map.put(name, value);
                     }
                     // 将数据转换为 JSON 并写入 JS 文件
-                    String jsFileContent = "window.I18N = " + JsonUtil.toJson(map) + ";";
+                    String jsFileContent = "window.I18N = " + JsonUtil.toJSON(map) + ";";
                     FileUtil.writeFile(jsFilePath, jsFileContent);
                 }
             }

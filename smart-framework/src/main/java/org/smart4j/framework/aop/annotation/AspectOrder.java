@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * @author huangyong
  * @since 1.0
  */
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AspectOrder {
 

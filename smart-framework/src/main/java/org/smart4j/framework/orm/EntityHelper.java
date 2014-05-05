@@ -11,9 +11,18 @@ import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.MapUtil;
 import org.smart4j.framework.util.StringUtil;
 
+/**
+ * 初始化 Entity 结构
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class EntityHelper {
 
-    private static final Map<Class<?>, Map<String, String>> entityMap = new HashMap<Class<?>, Map<String, String>>(); // Entity 类 => (列名 => 字段名)
+    /**
+     * Entity Map（Entity 类 => (列名 => 字段名)）
+     */
+    private static final Map<Class<?>, Map<String, String>> entityMap = new HashMap<Class<?>, Map<String, String>>();
 
     static {
         // 获取并遍历所有 Entity 类

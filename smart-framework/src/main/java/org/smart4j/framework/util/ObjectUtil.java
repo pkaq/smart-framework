@@ -8,11 +8,19 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 对象操作工具类
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class ObjectUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ObjectUtil.class);
 
-    // 设置成员变量
+    /**
+     * 设置成员变量
+     */
     public static void setField(Object obj, String fieldName, Object fieldValue) {
         try {
             if (PropertyUtils.isWriteable(obj, fieldName)) {
@@ -24,7 +32,9 @@ public class ObjectUtil {
         }
     }
 
-    // 获取成员变量
+    /**
+     * 获取成员变量
+     */
     public static Object getFieldValue(Object obj, String fieldName) {
         Object propertyValue = null;
         try {
@@ -38,7 +48,9 @@ public class ObjectUtil {
         return propertyValue;
     }
 
-    // 复制所有成员变量
+    /**
+     * 复制所有成员变量
+     */
     public static void copyFields(Object source, Object target) {
         try {
             for (Field field : source.getClass().getDeclaredFields()) {
@@ -54,7 +66,9 @@ public class ObjectUtil {
         }
     }
 
-    // 通过反射创建实例
+    /**
+     * 通过反射创建实例
+     */
     @SuppressWarnings("unchecked")
     public static <T> T newInstance(String className) {
         T instance;
@@ -68,7 +82,9 @@ public class ObjectUtil {
         return instance;
     }
 
-    // 获取对象的字段映射（字段名 => 字段值）
+    /**
+     * 获取对象的字段映射（字段名 => 字段值）
+     */
     public static Map<String, Object> getFieldMap(Object obj) {
         Map<String, Object> fieldMap = new LinkedHashMap<String, Object>();
         Field[] fields = obj.getClass().getDeclaredFields();

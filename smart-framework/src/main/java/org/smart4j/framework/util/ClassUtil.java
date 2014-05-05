@@ -13,16 +13,26 @@ import java.util.jar.JarFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 类操作工具类
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class ClassUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ClassUtil.class);
 
-    // 获取类加载器
+    /**
+     * 获取类加载器
+     */
     public static ClassLoader getClassLoader() {
         return Thread.currentThread().getContextClassLoader();
     }
 
-    // 获取类路径
+    /**
+     * 获取类路径
+     */
     public static String getClassPath() {
         String classpath = "";
         URL resource = getClassLoader().getResource("");
@@ -32,7 +42,9 @@ public class ClassUtil {
         return classpath;
     }
 
-    // 加载类
+    /**
+     * 加载类
+     */
     public static Class<?> loadClass(String className, boolean isInitialized) {
         Class<?> cls;
         try {
@@ -44,7 +56,9 @@ public class ClassUtil {
         return cls;
     }
 
-    // 获取指定包名下的所有类
+    /**
+     * 获取指定包名下的所有类
+     */
     public static List<Class<?>> getClassList(String packageName) {
         List<Class<?>> classList = new ArrayList<Class<?>>();
         try {
@@ -80,7 +94,9 @@ public class ClassUtil {
         return classList;
     }
 
-    // 获取指定包名下指定注解的所有类
+    /**
+     * 获取指定包名下指定注解的所有类
+     */
     public static List<Class<?>> getClassListByAnnotation(String packageName, Class<? extends Annotation> annotationClass) {
         List<Class<?>> classList = new ArrayList<Class<?>>();
         try {
@@ -117,7 +133,9 @@ public class ClassUtil {
         return classList;
     }
 
-    // 获取指定包名下指定父类的所有类
+    /**
+     * 获取指定包名下指定父类的所有类
+     */
     public static List<Class<?>> getClassListBySuper(String packageName, Class<?> superClass) {
         List<Class<?>> classList = new ArrayList<Class<?>>();
         try {

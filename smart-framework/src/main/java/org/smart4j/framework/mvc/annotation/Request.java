@@ -15,11 +15,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Request {
 
-    @Deprecated
-    String value();
-
     /**
-     * 定义 get 请求
+     * 定义 GET 请求
      *
      * @author huangyong
      * @since 2.1
@@ -32,7 +29,7 @@ public @interface Request {
     }
 
     /**
-     * 定义 post 请求
+     * 定义 POST 请求
      *
      * @author huangyong
      * @since 2.1
@@ -45,7 +42,7 @@ public @interface Request {
     }
 
     /**
-     * 定义 put 请求
+     * 定义 PUT 请求
      *
      * @author huangyong
      * @since 2.1
@@ -58,7 +55,7 @@ public @interface Request {
     }
 
     /**
-     * 定义 delete 请求
+     * 定义 DELETE 请求
      *
      * @author huangyong
      * @since 2.1

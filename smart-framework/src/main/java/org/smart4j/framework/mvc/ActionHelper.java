@@ -51,17 +51,7 @@ public class ActionHelper {
 
     private static void handleActionMethod(Class<?> actionClass, Method actionMethod, Map<Requestor, Handler> commonActionMap, Map<Requestor, Handler> regexpActionMap) {
         // 判断当前 Action 方法是否带有 Request 注解
-        if (actionMethod.isAnnotationPresent(Request.class)) {
-            // 获取 Requet 注解中的 URL 字符串
-            String[] urlArray = StringUtil.splitString(actionMethod.getAnnotation(Request.class).value(), ":");
-            if (ArrayUtil.isNotEmpty(urlArray)) {
-                // 获取请求方法与请求路径
-                String requestMethod = urlArray[0];
-                String requestPath = urlArray[1];
-                // 将 Requestor 与 Handler 放入 Action Map 中
-                putActionMap(requestMethod, requestPath, actionClass, actionMethod, commonActionMap, regexpActionMap);
-            }
-        } else if (actionMethod.isAnnotationPresent(Request.Get.class)) {
+        if (actionMethod.isAnnotationPresent(Request.Get.class)) {
             String requestPath = actionMethod.getAnnotation(Request.Get.class).value();
             putActionMap("GET", requestPath, actionClass, actionMethod, commonActionMap, regexpActionMap);
         } else if (actionMethod.isAnnotationPresent(Request.Post.class)) {

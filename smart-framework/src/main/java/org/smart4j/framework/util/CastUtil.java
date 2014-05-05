@@ -1,23 +1,37 @@
 package org.smart4j.framework.util;
 
+/**
+ * 转型操作工具类
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class CastUtil {
 
-    // 转为 String 型
+    /**
+     * 转为 String 型
+     */
     public static String castString(Object obj) {
         return CastUtil.castString(obj, "");
     }
 
-    // 转为 String 型（提供默认值）
+    /**
+     * 转为 String 型（提供默认值）
+     */
     public static String castString(Object obj, String defaultValue) {
         return obj != null ? String.valueOf(obj) : defaultValue;
     }
 
-    // 转为 double 型
+    /**
+     * 转为 double 型
+     */
     public static double castDouble(Object obj) {
         return CastUtil.castDouble(obj, 0);
     }
 
-    // 转为 double 型（提供默认值）
+    /**
+     * 转为 double 型（提供默认值）
+     */
     public static double castDouble(Object obj, double defaultValue) {
         double doubleValue = defaultValue;
         if (obj != null) {
@@ -33,12 +47,16 @@ public class CastUtil {
         return doubleValue;
     }
 
-    // 转为 long 型
+    /**
+     * 转为 long 型
+     */
     public static long castLong(Object obj) {
         return CastUtil.castLong(obj, 0);
     }
 
-    // 转为 long 型（提供默认值）
+    /**
+     * 转为 long 型（提供默认值）
+     */
     public static long castLong(Object obj, long defaultValue) {
         long longValue = defaultValue;
         if (obj != null) {
@@ -54,12 +72,16 @@ public class CastUtil {
         return longValue;
     }
 
-    // 转为 int 型
+    /**
+     * 转为 int 型
+     */
     public static int castInt(Object obj) {
         return CastUtil.castInt(obj, 0);
     }
 
-    // 转为 int 型（提供默认值）
+    /**
+     * 转为 int 型（提供默认值）
+     */
     public static int castInt(Object obj, int defaultValue) {
         int intValue = defaultValue;
         if (obj != null) {
@@ -75,12 +97,16 @@ public class CastUtil {
         return intValue;
     }
 
-    // 转为 boolean 型
+    /**
+     * 转为 boolean 型
+     */
     public static boolean castBoolean(Object obj) {
         return CastUtil.castBoolean(obj, false);
     }
 
-    // 转为 boolean 型（提供默认值）
+    /**
+     * 转为 boolean 型（提供默认值）
+     */
     public static boolean castBoolean(Object obj, boolean defaultValue) {
         boolean booleanValue = defaultValue;
         if (obj != null) {
@@ -89,7 +115,9 @@ public class CastUtil {
         return booleanValue;
     }
 
-    // 转为 String[] 型
+    /**
+     * 转为 String[] 型
+     */
     public static String[] castStringArray(Object[] objArray) {
         if (objArray == null) {
             objArray = new Object[0];
@@ -103,7 +131,9 @@ public class CastUtil {
         return strArray;
     }
 
-    // 转为 double[] 型
+    /**
+     * 转为 double[] 型
+     */
     public static double[] castDoubleArray(Object[] objArray) {
         if (objArray == null) {
             objArray = new Object[0];
@@ -117,7 +147,9 @@ public class CastUtil {
         return doubleArray;
     }
 
-    // 转为 long[] 型
+    /**
+     * 转为 long[] 型
+     */
     public static long[] castLongArray(Object[] objArray) {
         if (objArray == null) {
             objArray = new Object[0];
@@ -131,7 +163,9 @@ public class CastUtil {
         return longArray;
     }
 
-    // 转为 int[] 型
+    /**
+     * 转为 int[] 型
+     */
     public static int[] castIntArray(Object[] objArray) {
         if (objArray == null) {
             objArray = new Object[0];
@@ -145,7 +179,9 @@ public class CastUtil {
         return intArray;
     }
 
-    // 转为 boolean[] 型
+    /**
+     * 转为 boolean[] 型
+     */
     public static boolean[] castBooleanArray(Object[] objArray) {
         if (objArray == null) {
             objArray = new Object[0];

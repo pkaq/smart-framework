@@ -12,11 +12,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smart4j.framework.core.FrameworkConstant;
 
+/**
+ * 文件操作工具类
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class FileUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
 
-    // 创建目录
+    /**
+     * 创建目录
+     */
     public static File createDir(String dirPath) {
         File dir;
         try {
@@ -31,7 +39,9 @@ public class FileUtil {
         return dir;
     }
 
-    // 创建文件
+    /**
+     * 创建文件
+     */
     public static File createFile(String filePath) {
         File file;
         try {
@@ -47,7 +57,9 @@ public class FileUtil {
         return file;
     }
 
-    // 复制目录（不会复制空目录）
+    /**
+     * 复制目录（不会复制空目录）
+     */
     public static void copyDir(String srcPath, String destPath) {
         try {
             File srcDir = new File(srcPath);
@@ -61,7 +73,9 @@ public class FileUtil {
         }
     }
 
-    // 复制文件
+    /**
+     * 复制文件
+     */
     public static void copyFile(String srcPath, String destPath) {
         try {
             File srcFile = new File(srcPath);
@@ -75,7 +89,9 @@ public class FileUtil {
         }
     }
 
-    // 删除目录
+    /**
+     * 删除目录
+     */
     public static void deleteDir(String dirPath) {
         try {
             File dir = new File(dirPath);
@@ -88,7 +104,9 @@ public class FileUtil {
         }
     }
 
-    // 删除文件
+    /**
+     * 删除文件
+     */
     public static void deleteFile(String filePath) {
         try {
             File file = new File(filePath);
@@ -101,7 +119,9 @@ public class FileUtil {
         }
     }
 
-    // 重命名文件
+    /**
+     * 重命名文件
+     */
     public static void renameFile(String srcPath, String destPath) {
         File srcFile = new File(srcPath);
         if (srcFile.exists()) {
@@ -113,7 +133,9 @@ public class FileUtil {
         }
     }
 
-    // 将字符串写入文件
+    /**
+     * 将字符串写入文件
+     */
     public static void writeFile(String filePath, String fileContent) {
         OutputStream os = null;
         Writer w = null;
@@ -140,12 +162,16 @@ public class FileUtil {
         }
     }
 
-    // 获取真实文件名（去掉文件路径）
+    /**
+     * 获取真实文件名（去掉文件路径）
+     */
     public static String getRealFileName(String fileName) {
         return FilenameUtils.getName(fileName);
     }
 
-    // 判断文件是否存在
+    /**
+     * 判断文件是否存在
+     */
     public static boolean checkFileExists(String filePath) {
         return new File(filePath).exists();
     }

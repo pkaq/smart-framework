@@ -18,7 +18,9 @@ public class TransactionProxy implements Proxy {
 
     private static final Logger logger = LoggerFactory.getLogger(TransactionProxy.class);
 
-    // 定义一个线程局部变量，用于保存当前线程中是否进行了事务处理，默认为 false（未处理）
+    /**
+     * 定义一个线程局部变量，用于保存当前线程中是否进行了事务处理，默认为 false（未处理）
+     */
     private static final ThreadLocal<Boolean> flagContainer = new ThreadLocal<Boolean>() {
         @Override
         protected Boolean initialValue() {

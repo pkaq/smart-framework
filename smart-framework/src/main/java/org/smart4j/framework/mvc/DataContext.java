@@ -208,7 +208,7 @@ public class DataContext {
          * 将数据放入 Cookie 中
          */
         public static void put(String key, Object value) {
-            String strValue = CodecUtil.urlEncode(CastUtil.castString(value));
+            String strValue = CodecUtil.encodeURL(CastUtil.castString(value));
             javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie(key, strValue);
             getResponse().addCookie(cookie);
         }
@@ -223,7 +223,7 @@ public class DataContext {
             if (ArrayUtil.isNotEmpty(cookieArray)) {
                 for (javax.servlet.http.Cookie cookie : cookieArray) {
                     if (key.equals(cookie.getName())) {
-                        value = (T) CodecUtil.urlDecode(cookie.getValue());
+                        value = (T) CodecUtil.decodeURL(cookie.getValue());
                         break;
                     }
                 }

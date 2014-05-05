@@ -10,11 +10,19 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 属性文件操作工具类
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class PropsUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(PropsUtil.class);
 
-    // 加载属性文件
+    /**
+     * 加载属性文件
+     */
     public static Properties loadProps(String propsPath) {
         Properties props = new Properties();
         InputStream is = null;
@@ -45,7 +53,9 @@ public class PropsUtil {
         return props;
     }
 
-    // 加载属性文件，并转为 Map
+    /**
+     * 加载属性文件，并转为 Map
+     */
     public static Map<String, String> loadPropsToMap(String propsPath) {
         Map<String, String> map = new HashMap<String, String>();
         Properties props = loadProps(propsPath);
@@ -55,7 +65,9 @@ public class PropsUtil {
         return map;
     }
 
-    // 获取字符型属性
+    /**
+     * 获取字符型属性
+     */
     public static String getString(Properties props, String key) {
         String value = "";
         if (props.containsKey(key)) {
@@ -64,7 +76,9 @@ public class PropsUtil {
         return value;
     }
 
-    // 获取字符型属性（带有默认值）
+    /**
+     * 获取字符型属性（带有默认值）
+     */
     public static String getString(Properties props, String key, String defalutValue) {
         String value = defalutValue;
         if (props.containsKey(key)) {
@@ -73,7 +87,9 @@ public class PropsUtil {
         return value;
     }
 
-    // 获取数值型属性
+    /**
+     * 获取数值型属性
+     */
     public static int getNumber(Properties props, String key) {
         int value = 0;
         if (props.containsKey(key)) {
@@ -91,12 +107,16 @@ public class PropsUtil {
         return value;
     }
 
-    // 获取布尔型属性
+    /**
+     * 获取布尔型属性
+     */
     public static boolean getBoolean(Properties props, String key) {
         return getBoolean(props, key, false);
     }
 
-    // 获取布尔型属性（带有默认值）
+    /**
+     * 获取布尔型属性（带有默认值）
+     */
     public static boolean getBoolean(Properties props, String key, boolean defalutValue) {
         boolean value = defalutValue;
         if (props.containsKey(key)) {
@@ -105,7 +125,9 @@ public class PropsUtil {
         return value;
     }
 
-    // 获取指定前缀的相关属性
+    /**
+     * 获取指定前缀的相关属性
+     */
     public static Map<String, Object> getMap(Properties props, String prefix) {
         Map<String, Object> kvMap = new LinkedHashMap<String, Object>();
         Set<String> keySet = props.stringPropertyNames();

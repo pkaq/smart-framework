@@ -6,6 +6,12 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 日期操作工具类
+ *
+ * @author huangyong
+ * @since 1.0
+ */
 public class DateUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(DateUtil.class);
@@ -14,37 +20,51 @@ public class DateUtil {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
-    // 格式化日期与时间
+    /**
+     * 格式化日期与时间
+     */
     public static String formatDatetime(long timestamp) {
         return datetimeFormat.format(new Date(timestamp));
     }
 
-    // 格式化日期
+    /**
+     * 格式化日期
+     */
     public static String formatDate(long timestamp) {
         return dateFormat.format(new Date(timestamp));
     }
 
-    // 格式化时间
+    /**
+     * 格式化时间
+     */
     public static String formatTime(long timestamp) {
         return timeFormat.format(new Date(timestamp));
     }
 
-    // 获取当前日期与时间
+    /**
+     * 获取当前日期与时间
+     */
     public static String getCurrentDatetime() {
         return datetimeFormat.format(new Date());
     }
 
-    // 获取当前日期
+    /**
+     * 获取当前日期
+     */
     public static String getCurrentDate() {
         return dateFormat.format(new Date());
     }
 
-    // 获取当前时间
+    /**
+     * 获取当前时间
+     */
     public static String getCurrentTime() {
         return timeFormat.format(new Date());
     }
 
-    // 解析日期与时间
+    /**
+     * 解析日期与时间
+     */
     public static Date parseDatetime(String str) {
         Date date = null;
         try {
@@ -55,7 +75,9 @@ public class DateUtil {
         return date;
     }
 
-    // 解析日期
+    /**
+     * 解析日期
+     */
     public static Date parseDate(String str) {
         Date date = null;
         try {
@@ -66,7 +88,9 @@ public class DateUtil {
         return date;
     }
 
-    // 解析时间
+    /**
+     * 解析时间
+     */
     public static Date parseTime(String str) {
         Date date = null;
         try {
