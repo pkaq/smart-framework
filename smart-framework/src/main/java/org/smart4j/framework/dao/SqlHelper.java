@@ -16,7 +16,7 @@ import org.smart4j.framework.util.StringUtil;
  * @author huangyong
  * @since 1.0
  */
-public class SqlHelper_ {
+public class SqlHelper {
 
     /**
      * SQL 属性文件对象
