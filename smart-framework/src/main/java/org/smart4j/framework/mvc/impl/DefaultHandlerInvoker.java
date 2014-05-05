@@ -1,5 +1,6 @@
 package org.smart4j.framework.mvc.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,20 +37,17 @@ public class DefaultHandlerInvoker implements HandlerInvoker {
         Method actionMethod = handler.getActionMethod();
         // 从 BeanHelper 中创建 Action 实例
         Object actionInstance = BeanHelper.getBean(actionClass);
-        // 获取 Action 方法参数
-        List<Object> paramList = createParamList(request, handler);
-        Class<?>[] paramTypes = actionMethod.getParameterTypes();
-        if (paramTypes.length != paramList.size()) {
-            throw new RuntimeException("由于参数不匹配，无法调用 Action 方法！");
-        }
+        // 创建 Action 方法的参数列表
+        List<Object> actionMethodParamList = createActionMethodParamList(request, handler);
+        // 检查参数列表是否合法
+        checkParamList(actionMethod, actionMethodParamList);
         // 调用 Action 方法
-        actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
-        Object actionMethodResult = actionMethod.invoke(actionInstance, paramList.toArray());
+        Object actionMethodResult = invokeActionMethod(actionMethod, actionInstance, actionMethodParamList);
         // 解析视图
         viewResolver.resolveView(request, response, actionMethodResult);
     }
 
-    private List<Object> createParamList(HttpServletRequest request, Handler handler) throws Exception {
+    public List<Object> createActionMethodParamList(HttpServletRequest request, Handler handler) throws Exception {
         // 定义参数列表
         List<Object> paramList = new ArrayList<Object>();
         // 获取 Action 方法参数类型
@@ -92,5 +90,19 @@ public class DefaultHandlerInvoker implements HandlerInvoker {
         }
         // 返回参数列表
         return paramList;
+    }
+
+    private Object invokeActionMethod(Method actionMethod, Object actionInstance, List<Object> actionMethodParamList) throws IllegalAccessException, InvocationTargetException {
+        // 通过反射调用 Action 方法
+        actionMethod.setAccessible(true); // 取消类型安全检测（可提高反射性能）
+        return actionMethod.invoke(actionInstance, actionMethodParamList.toArray());
+    }
+
+    private void checkParamList(Method actionMethod, List<Object> actionMethodResult) {
+        // 判断 Action 方法参数的个数是否匹配
+        Class<?>[] actionMethodParameterTypes = actionMethod.getParameterTypes();
+        if (actionMethodParameterTypes.length != actionMethodResult.size()) {
+            throw new RuntimeException("由于参数不匹配，无法调用 Action 方法！");
+        }
     }
 }

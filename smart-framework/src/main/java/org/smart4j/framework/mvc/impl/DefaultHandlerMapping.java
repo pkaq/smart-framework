@@ -17,7 +17,9 @@ import org.smart4j.framework.mvc.Requestor;
  */
 public class DefaultHandlerMapping implements HandlerMapping {
 
-    // 用于缓存 Handler 实例
+    /**
+     * 用于缓存 Handler 实例
+     */
     private static final Map<String, Handler> cache = new ConcurrentHashMap<String, Handler>();
 
     @Override
