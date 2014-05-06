@@ -1,5 +1,6 @@
 package org.smart4j.security.realm;
 
+import java.util.HashSet;
 import java.util.Set;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -50,7 +51,14 @@ public class SmartCustomRealm extends AuthorizingRealm {
         String username = (String) super.getAvailablePrincipal(principals);
 
         Set<String> roleNameSet = smartSecurity.getRoleNameSet(username);
-        Set<String> permNameSet = smartSecurity.getPermNameSet(username);
+
+        Set<String> permNameSet = new HashSet<String>();
+        if (roleNameSet != null && roleNameSet.size() > 0) {
+            for (String roleName : roleNameSet) {
+                Set<String> currentPermNameSet = smartSecurity.getPermNameSet(roleName);
+                permNameSet.addAll(currentPermNameSet);
+            }
+        }
 
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         authorizationInfo.setRoles(roleNameSet);
