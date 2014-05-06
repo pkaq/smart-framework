@@ -83,12 +83,22 @@ public class ObjectUtil {
     }
 
     /**
-     * 获取对象的字段映射（字段名 => 字段值）
+     * 获取对象的字段映射（字段名 => 字段值），忽略 static 字段
      */
     public static Map<String, Object> getFieldMap(Object obj) {
+        return getFieldMap(obj, true);
+    }
+
+    /**
+     * 获取对象的字段映射（字段名 => 字段值）
+     */
+    public static Map<String, Object> getFieldMap(Object obj, boolean isStaticIgnored) {
         Map<String, Object> fieldMap = new LinkedHashMap<String, Object>();
         Field[] fields = obj.getClass().getDeclaredFields();
         for (Field field : fields) {
+            if (isStaticIgnored && Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
             String fieldName = field.getName();
             Object fieldValue = ObjectUtil.getFieldValue(obj, fieldName);
             fieldMap.put(fieldName, fieldValue);
