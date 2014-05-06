@@ -30,7 +30,7 @@ public final class HelperLoader {
         };
         // 按照顺序加载类
         for (Class<?> cls : classList) {
-            ClassUtil.loadClass(cls.getName(), true);
+            ClassUtil.loadClass(cls.getName());
         }
     }
 }
