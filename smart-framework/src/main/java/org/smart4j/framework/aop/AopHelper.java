@@ -13,7 +13,9 @@ import org.smart4j.framework.aop.annotation.AspectOrder;
 import org.smart4j.framework.aop.proxy.Proxy;
 import org.smart4j.framework.aop.proxy.ProxyManager;
 import org.smart4j.framework.core.ClassHelper;
+import org.smart4j.framework.core.ClassScanner;
 import org.smart4j.framework.core.FrameworkConstant;
+import org.smart4j.framework.core.InstanceFactory;
 import org.smart4j.framework.core.fault.InitializationError;
 import org.smart4j.framework.ioc.BeanHelper;
 import org.smart4j.framework.plugin.PluginProxy;
@@ -30,6 +32,11 @@ import org.smart4j.framework.util.StringUtil;
  * @since 1.0
  */
 public class AopHelper {
+
+    /**
+     * 获取 ClassScanner
+     */
+    private static final ClassScanner classScanner = InstanceFactory.getClassScanner();
 
     static {
         try {
@@ -63,7 +70,7 @@ public class AopHelper {
 
     private static void addPluginProxy(Map<Class<?>, List<Class<?>>> proxyMap) throws Exception {
         // 获取插件包名下父类为 PluginProxy 的所有类（插件代理类）
-        List<Class<?>> pluginProxyClassList = ClassUtil.getClassListBySuper(FrameworkConstant.PLUGIN_PACKAGE, PluginProxy.class);
+        List<Class<?>> pluginProxyClassList = classScanner.getClassListBySuper(FrameworkConstant.PLUGIN_PACKAGE, PluginProxy.class);
         if (CollectionUtil.isNotEmpty(pluginProxyClassList)) {
             // 遍历所有插件代理类
             for (Class<?> pluginProxyClass : pluginProxyClassList) {
@@ -79,7 +86,7 @@ public class AopHelper {
         // 获取切面类（所有继承于 BaseAspect 的类）
         List<Class<?>> aspectProxyClassList = ClassHelper.getClassListBySuper(AspectProxy.class);
         // 添加插件包下所有的切面类
-        aspectProxyClassList.addAll(ClassUtil.getClassListBySuper(FrameworkConstant.PLUGIN_PACKAGE, AspectProxy.class));
+        aspectProxyClassList.addAll(classScanner.getClassListBySuper(FrameworkConstant.PLUGIN_PACKAGE, AspectProxy.class));
         // 排序切面类
         sortAspectProxyClassList(aspectProxyClassList);
         // 遍历切面类
@@ -140,10 +147,10 @@ public class AopHelper {
             } else {
                 // 若注解不为空且不是 Aspect 注解，则添加指定包名下带有该注解的所有类
                 if (annotation != null && !annotation.equals(Aspect.class)) {
-                    targetClassList.addAll(ClassUtil.getClassListByAnnotation(pkg, annotation));
+                    targetClassList.addAll(classScanner.getClassListByAnnotation(pkg, annotation));
                 } else {
                     // 否则添加该包名下所有类
-                    targetClassList.addAll(ClassUtil.getClassList(pkg));
+                    targetClassList.addAll(classScanner.getClassList(pkg));
                 }
             }
         } else {

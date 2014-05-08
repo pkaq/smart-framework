@@ -2,6 +2,7 @@ package org.smart4j.framework.core;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.smart4j.framework.core.impl.DefaultClassScanner;
 import org.smart4j.framework.ds.DataSourceFactory;
 import org.smart4j.framework.ds.impl.DefaultDataSourceFactory;
 import org.smart4j.framework.mvc.HandlerExceptionResolver;
@@ -29,6 +30,11 @@ public class InstanceFactory {
     private static final Map<String, Object> cache = new ConcurrentHashMap<String, Object>();
 
     /**
+     * ClassScanner
+     */
+    private static final String CLASS_SCANNER = "smart.class_scanner";
+
+    /**
      * DataSourceFactory
      */
     private static final String DS_FACTORY = "smart.ds_factory";
@@ -52,6 +58,13 @@ public class InstanceFactory {
      * ViewResolver
      */
     private static final String VIEW_RESOLVER = "smart.view_resolver";
+
+    /**
+     * 获取 ClassScanner
+     */
+    public static ClassScanner getClassScanner() {
+        return getInstance(CLASS_SCANNER, DefaultClassScanner.class);
+    }
 
     /**
      * 获取 DataSourceFactory

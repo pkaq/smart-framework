@@ -2,9 +2,10 @@ package org.smart4j.framework.plugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.smart4j.framework.core.ClassScanner;
 import org.smart4j.framework.core.FrameworkConstant;
+import org.smart4j.framework.core.InstanceFactory;
 import org.smart4j.framework.core.fault.InitializationError;
-import org.smart4j.framework.util.ClassUtil;
 
 /**
  * 初始化插件
@@ -19,10 +20,15 @@ public class PluginHelper {
      */
     private static final List<Plugin> pluginList = new ArrayList<Plugin>();
 
+    /**
+     * 获取 ClassScanner
+     */
+    private static final ClassScanner classScanner = InstanceFactory.getClassScanner();
+
     static {
         try {
             // 获取并遍历所有的插件类（实现了 Plugin 接口的类）
-            List<Class<?>> pluginClassList = ClassUtil.getClassListBySuper(FrameworkConstant.PLUGIN_PACKAGE, Plugin.class);
+            List<Class<?>> pluginClassList = classScanner.getClassListBySuper(FrameworkConstant.PLUGIN_PACKAGE, Plugin.class);
             for (Class<?> pluginClass : pluginClassList) {
                 // 创建插件实例
                 Plugin plugin = (Plugin) pluginClass.newInstance();
