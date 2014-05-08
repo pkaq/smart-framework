@@ -24,7 +24,7 @@ public class RestServlet extends CXFNonSpringServlet {
     }
 
     private void publishRESTService() {
-        // 遍历所有标注了 @Rest 注解的类
+        // 遍历所有标注了 Rest 注解的类
         List<Class<?>> classList = ClassHelper.getClassListByAnnotation(Rest.class);
         if (CollectionUtil.isNotEmpty(classList)) {
             for (Class<?> cls : classList) {
@@ -38,7 +38,7 @@ public class RestServlet extends CXFNonSpringServlet {
 
     private String getAddress(Class<?> class_) {
         String address;
-        // 若 @Rest 注解的 value 属性不为空，则获取当前值，否则获取类名
+        // 若 Rest 注解的 value 属性不为空，则获取当前值，否则获取类名
         String value = class_.getAnnotation(Rest.class).value();
         if (StringUtil.isNotEmpty(value)) {
             address = value;

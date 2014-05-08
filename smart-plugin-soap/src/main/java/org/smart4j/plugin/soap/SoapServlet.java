@@ -26,7 +26,7 @@ public class SoapServlet extends CXFNonSpringServlet {
     }
 
     private void publishSOAPService() {
-        // 遍历所有标注了 @Soap 注解的接口
+        // 遍历所有标注了 Soap 注解的接口
         List<Class<?>> interfaceClassList = ClassHelper.getClassListByAnnotation(Soap.class);
         if (CollectionUtil.isNotEmpty(interfaceClassList)) {
             for (Class<?> interfaceClass : interfaceClassList) {
@@ -44,7 +44,7 @@ public class SoapServlet extends CXFNonSpringServlet {
 
     private String getAddress(Class<?> interfaceClass) {
         String address;
-        // 若 @Soap 注解的 value 属性不为空，则获取当前值，否则获取类名
+        // 若 Soap 注解的 value 属性不为空，则获取当前值，否则获取类名
         String soapValue = interfaceClass.getAnnotation(Soap.class).value();
         if (StringUtil.isNotEmpty(soapValue)) {
             address = soapValue;
