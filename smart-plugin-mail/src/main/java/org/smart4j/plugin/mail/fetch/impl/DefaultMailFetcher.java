@@ -134,7 +134,7 @@ public class DefaultMailFetcher implements MailFetcher {
                 list.add(MailUtil.decodeAddress(address.toString()));
             }
         }
-        return list.toArray(new String[0]);
+        return list.toArray(new String[list.size()]);
     }
 
     private MailInfo createMailInfo(MimeMessage message) throws Exception {

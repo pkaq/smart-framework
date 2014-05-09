@@ -13,10 +13,10 @@ import org.smart4j.framework.util.StringUtil;
  */
 public abstract class AbstractDataSourceFactory<T extends DataSource> implements DataSourceFactory {
 
-    protected String driver = ConfigHelper.getString("jdbc.driver");
-    protected String url = ConfigHelper.getString("jdbc.url");
-    protected String username = ConfigHelper.getString("jdbc.username");
-    protected String password = ConfigHelper.getString("jdbc.password");
+    protected final String driver = ConfigHelper.getString("smart.framework.jdbc.driver");
+    protected final String url = ConfigHelper.getString("smart.framework.jdbc.url");
+    protected final String username = ConfigHelper.getString("smart.framework.jdbc.username");
+    protected final String password = ConfigHelper.getString("smart.framework.jdbc.password");
 
     @Override
     public final T getDataSource() {

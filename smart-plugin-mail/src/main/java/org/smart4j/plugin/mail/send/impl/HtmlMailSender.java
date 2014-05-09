@@ -15,12 +15,12 @@ public class HtmlMailSender extends AbstractMailSender {
     }
 
     @Override
-    protected Email createEmail() {
+    public Email createEmail() {
         return new ImageHtmlEmail();
     }
 
     @Override
-    protected void setContent(Email email, String content) throws MalformedURLException, EmailException {
+    public void setContent(Email email, String content) throws MalformedURLException, EmailException {
         ImageHtmlEmail imageHtmlEmail = (ImageHtmlEmail) email;
         imageHtmlEmail.setDataSourceResolver(new DataSourceUrlResolver(new URL("http://"), true));
         imageHtmlEmail.setHtmlMsg(content);

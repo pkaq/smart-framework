@@ -32,32 +32,32 @@ public class InstanceFactory {
     /**
      * ClassScanner
      */
-    private static final String CLASS_SCANNER = "smart.class_scanner";
+    private static final String CLASS_SCANNER = "smart.framework.custom.class_scanner";
 
     /**
      * DataSourceFactory
      */
-    private static final String DS_FACTORY = "smart.ds_factory";
+    private static final String DS_FACTORY = "smart.framework.custom.ds_factory";
 
     /**
      * HandlerMapping
      */
-    private static final String HANDLER_MAPPING = "smart.handler_mapping";
+    private static final String HANDLER_MAPPING = "smart.framework.custom.handler_mapping";
 
     /**
      * HandlerInvoker
      */
-    private static final String HANDLER_INVOKER = "smart.handler_invoker";
+    private static final String HANDLER_INVOKER = "smart.framework.custom.handler_invoker";
 
     /**
      * HandlerExceptionResolver
      */
-    private static final String HANDLER_EXCEPTION_RESOLVER = "smart.handler_exception_resolver";
+    private static final String HANDLER_EXCEPTION_RESOLVER = "smart.framework.custom.handler_exception_resolver";
 
     /**
      * ViewResolver
      */
-    private static final String VIEW_RESOLVER = "smart.view_resolver";
+    private static final String VIEW_RESOLVER = "smart.framework.custom.view_resolver";
 
     /**
      * 获取 ClassScanner

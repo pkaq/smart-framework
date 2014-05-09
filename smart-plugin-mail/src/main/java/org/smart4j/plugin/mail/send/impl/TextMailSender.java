@@ -13,12 +13,12 @@ public class TextMailSender extends AbstractMailSender {
     }
 
     @Override
-    protected Email createEmail() {
+    public Email createEmail() {
         return new MultiPartEmail();
     }
 
     @Override
-    protected void setContent(Email email, String content) throws MalformedURLException, EmailException {
+    public void setContent(Email email, String content) throws MalformedURLException, EmailException {
         email.setMsg(content);
     }
 }

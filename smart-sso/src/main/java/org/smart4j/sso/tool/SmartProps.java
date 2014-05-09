@@ -31,22 +31,22 @@ public class SmartProps {
     }
 
     public static boolean isSSO() {
-        return Boolean.parseBoolean(props.getProperty("sso"));
+        return Boolean.parseBoolean(props.getProperty("smart.sso"));
     }
 
     public static String getCasServerUrlPrefix() {
-        return props.getProperty("sso.cas_url");
+        return props.getProperty("smart.sso.cas_url");
     }
 
     public static String getCasServerLoginUrl() {
-        return props.getProperty("sso.cas_url") + "/login";
+        return props.getProperty("smart.sso.cas_url") + "/login";
     }
 
     public static String getServerName() {
-        return props.getProperty("sso.app_url");
+        return props.getProperty("smart.sso.app_url");
     }
 
     public static String getFilterMapping() {
-        return props.getProperty("sso.filter_mapping");
+        return props.getProperty("smart.sso.filter_mapping");
     }
 }

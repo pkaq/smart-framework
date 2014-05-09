@@ -116,7 +116,7 @@ public abstract class AbstractMailSender implements MailSender {
         }
     }
 
-    protected abstract Email createEmail();
+    public abstract Email createEmail();
 
-    protected abstract void setContent(Email email, String content) throws MalformedURLException, EmailException;
+    public abstract void setContent(Email email, String content) throws MalformedURLException, EmailException;
 }

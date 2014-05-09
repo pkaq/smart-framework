@@ -59,7 +59,7 @@ public class DatabaseHelper {
     /**
      * 数据库类型
      */
-    private static final String databaseType = ConfigHelper.getString("jdbc.type");
+    private static final String databaseType = ConfigHelper.getString("smart.framework.jdbc.type");
 
     /**
      * 数据源

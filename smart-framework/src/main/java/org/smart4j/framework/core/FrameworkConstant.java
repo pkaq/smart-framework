@@ -9,8 +9,8 @@ public interface FrameworkConstant {
 
     String PLUGIN_PACKAGE = "org.smart4j.plugin";
 
-    String JSP_PATH = ConfigHelper.getString("app.jsp_path", "/WEB-INF/jsp/");
-    String WWW_PATH = ConfigHelper.getString("app.www_path", "/www/");
-    String HOME_PAGE = ConfigHelper.getString("app.home_page", "/index.html");
-    int UPLOAD_LIMIT = ConfigHelper.getInt("app.upload_limit", 10);
+    String JSP_PATH = ConfigHelper.getString("smart.framework.app.jsp_path", "/WEB-INF/jsp/");
+    String WWW_PATH = ConfigHelper.getString("smart.framework.app.www_path", "/www/");
+    String HOME_PAGE = ConfigHelper.getString("smart.framework.app.home_page", "/index.html");
+    int UPLOAD_LIMIT = ConfigHelper.getInt("smart.framework.app.upload_limit", 10);
 }
