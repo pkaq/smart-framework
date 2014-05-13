@@ -1,13 +1,15 @@
-package org.smart4j.framework.dao;
+package org.smart4j.framework.orm;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.smart4j.framework.dao.DatabaseHelper;
+import org.smart4j.framework.dao.SqlHelper;
 import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.ObjectUtil;
 
 /**
- * 提供常用数据库操作方法
+ * 提供与实体相关的数据库操作
  *
  * @author huangyong
  * @since 1.0
