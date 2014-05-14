@@ -68,7 +68,7 @@ public interface DataAccessor {
     long queryCount(String sql, Object... params);
 
     /**
-     * 执行更新操作（包括：update、insert、delete）
+     * 执行更新操作（包括：update、insert、delete），返回所更新的记录数
      */
     int update(String sql, Object... params);
 
