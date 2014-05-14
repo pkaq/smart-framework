@@ -3,7 +3,7 @@ package org.smart4j.framework.ds.impl;
 import org.apache.commons.dbcp.BasicDataSource;
 
 /**
- * 默认数据源工厂接口实现类
+ * 默认数据源工厂
  *
  * @author huangyong
  * @since 2.3

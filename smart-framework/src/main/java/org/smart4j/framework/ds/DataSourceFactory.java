@@ -3,7 +3,7 @@ package org.smart4j.framework.ds;
 import javax.sql.DataSource;
 
 /**
- * 数据源工厂接口
+ * 数据源工厂
  *
  * @author huangyong
  * @since 2.3

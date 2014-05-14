@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.smart4j.framework.ds.impl.AbstractDataSourceFactory;
 
 /**
- * 基于 C3P0 的数据源工厂接口实现类
+ * 基于 C3P0 的数据源工厂
  *
  * @author huangyong
  * @since 2.3
