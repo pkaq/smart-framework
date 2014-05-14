@@ -3,7 +3,7 @@ package org.smart4j.framework.dao;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
-import org.smart4j.framework.core.FrameworkConstant;
+import org.smart4j.framework.FrameworkConstant;
 import org.smart4j.framework.orm.annotation.Table;
 import org.smart4j.framework.util.CollectionUtil;
 import org.smart4j.framework.util.MapUtil;

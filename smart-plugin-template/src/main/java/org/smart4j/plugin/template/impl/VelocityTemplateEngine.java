@@ -12,7 +12,7 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.log.NullLogChute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smart4j.framework.core.FrameworkConstant;
+import org.smart4j.framework.FrameworkConstant;
 import org.smart4j.framework.util.ClassUtil;
 import org.smart4j.framework.util.FileUtil;
 import org.smart4j.plugin.template.TemplateEngine;

@@ -1,4 +1,4 @@
-package org.smart4j.framework.core;
+package org.smart4j.framework;
 
 import org.smart4j.framework.aop.AopHelper;
 import org.smart4j.framework.dao.DatabaseHelper;

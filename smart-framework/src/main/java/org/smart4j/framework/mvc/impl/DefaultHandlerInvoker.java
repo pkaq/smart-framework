@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.smart4j.framework.core.InstanceFactory;
+import org.smart4j.framework.InstanceFactory;
 import org.smart4j.framework.ioc.BeanHelper;
 import org.smart4j.framework.mvc.Handler;
 import org.smart4j.framework.mvc.HandlerInvoker;

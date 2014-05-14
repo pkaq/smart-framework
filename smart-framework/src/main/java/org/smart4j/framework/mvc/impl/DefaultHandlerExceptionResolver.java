@@ -2,7 +2,7 @@ package org.smart4j.framework.mvc.impl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.smart4j.framework.core.FrameworkConstant;
+import org.smart4j.framework.FrameworkConstant;
 import org.smart4j.framework.mvc.HandlerExceptionResolver;
 import org.smart4j.framework.mvc.fault.AccessException;
 import org.smart4j.framework.mvc.fault.PermissionException;

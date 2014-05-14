@@ -1,8 +1,12 @@
-package org.smart4j.framework.core;
+package org.smart4j.framework;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.smart4j.framework.core.ClassScanner;
+import org.smart4j.framework.core.ConfigHelper;
 import org.smart4j.framework.core.impl.DefaultClassScanner;
+import org.smart4j.framework.dao.DataAccessor;
+import org.smart4j.framework.dao.impl.DefaultDataAccessor;
 import org.smart4j.framework.ds.DataSourceFactory;
 import org.smart4j.framework.ds.impl.DefaultDataSourceFactory;
 import org.smart4j.framework.mvc.HandlerExceptionResolver;
@@ -40,6 +44,11 @@ public class InstanceFactory {
     private static final String DS_FACTORY = "smart.framework.custom.ds_factory";
 
     /**
+     * DataAccessor
+     */
+    private static final String DATA_ACCESSOR = "smart.framework.custom.data_accessor";
+
+    /**
      * HandlerMapping
      */
     private static final String HANDLER_MAPPING = "smart.framework.custom.handler_mapping";
@@ -71,6 +80,13 @@ public class InstanceFactory {
      */
     public static DataSourceFactory getDataSourceFactory() {
         return getInstance(DS_FACTORY, DefaultDataSourceFactory.class);
+    }
+
+    /**
+     * 获取 DataAccessor
+     */
+    public static DataAccessor getDataAccessor() {
+        return getInstance(DATA_ACCESSOR, DefaultDataAccessor.class);
     }
 
     /**

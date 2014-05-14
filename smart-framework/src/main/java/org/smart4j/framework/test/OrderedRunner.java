@@ -6,7 +6,7 @@ import java.util.List;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
-import org.smart4j.framework.core.HelperLoader;
+import org.smart4j.framework.HelperLoader;
 import org.smart4j.framework.test.annotation.TestOrder;
 
 /**

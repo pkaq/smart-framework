@@ -2,9 +2,9 @@ package org.smart4j.framework.plugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.smart4j.framework.FrameworkConstant;
+import org.smart4j.framework.InstanceFactory;
 import org.smart4j.framework.core.ClassScanner;
-import org.smart4j.framework.core.FrameworkConstant;
-import org.smart4j.framework.core.InstanceFactory;
 import org.smart4j.framework.core.fault.InitializationError;
 
 /**

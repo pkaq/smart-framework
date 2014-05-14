@@ -1,4 +1,6 @@
-package org.smart4j.framework.core;
+package org.smart4j.framework;
+
+import org.smart4j.framework.core.ConfigHelper;
 
 public interface FrameworkConstant {
 

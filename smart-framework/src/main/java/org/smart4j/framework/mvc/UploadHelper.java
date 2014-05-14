@@ -18,7 +18,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smart4j.framework.core.FrameworkConstant;
+import org.smart4j.framework.FrameworkConstant;
 import org.smart4j.framework.mvc.bean.Multipart;
 import org.smart4j.framework.mvc.bean.Multiparts;
 import org.smart4j.framework.mvc.bean.Params;

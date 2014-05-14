@@ -9,7 +9,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smart4j.framework.core.FrameworkConstant;
+import org.smart4j.framework.FrameworkConstant;
 
 /**
  * 编码与解码操作工具类

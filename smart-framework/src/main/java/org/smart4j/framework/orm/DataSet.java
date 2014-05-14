@@ -168,7 +168,7 @@ public class DataSet {
      */
     public static <T> T selectColumn(Class<T> entityClass, String columnName, String condition, Object... params) {
         String sql = SqlHelper.generateSelectSql(entityClass, condition, "");
-        return DatabaseHelper.queryField(columnName, sql, params);
+        return DatabaseHelper.queryColumn(columnName, sql, params);
     }
 
     /**
@@ -176,6 +176,6 @@ public class DataSet {
      */
     public static <T> List<T> selectColumnList(Class<?> entityClass, String columnName, String condition, String sort, Object... params) {
         String sql = SqlHelper.generateSelectSql(entityClass, condition, sort);
-        return DatabaseHelper.queryFieldList(columnName, sql, params);
+        return DatabaseHelper.queryColumnList(columnName, sql, params);
     }
 }

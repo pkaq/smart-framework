@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smart4j.framework.core.FrameworkConstant;
-import org.smart4j.framework.core.InstanceFactory;
+import org.smart4j.framework.FrameworkConstant;
+import org.smart4j.framework.InstanceFactory;
 import org.smart4j.framework.util.WebUtil;
 
 /**

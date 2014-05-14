@@ -2,6 +2,7 @@ package org.smart4j.framework.core;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import org.smart4j.framework.InstanceFactory;
 
 /**
  * 根据条件获取相关类

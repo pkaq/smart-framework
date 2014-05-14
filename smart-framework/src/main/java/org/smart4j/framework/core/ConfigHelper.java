@@ -2,6 +2,7 @@ package org.smart4j.framework.core;
 
 import java.util.Map;
 import java.util.Properties;
+import org.smart4j.framework.FrameworkConstant;
 import org.smart4j.framework.util.PropsUtil;
 
 /**
