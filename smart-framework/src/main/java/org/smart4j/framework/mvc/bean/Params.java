@@ -22,20 +22,20 @@ public class Params extends BaseBean {
         return fieldMap;
     }
 
-    public int getInt(String name) {
-        return CastUtil.castInt(get(name));
-    }
-
-    public long getLong(String name) {
-        return CastUtil.castLong(get(name));
+    public String getString(String name) {
+        return CastUtil.castString(get(name));
     }
 
     public double getDouble(String name) {
         return CastUtil.castDouble(get(name));
     }
 
-    public String getString(String name) {
-        return CastUtil.castString(get(name));
+    public long getLong(String name) {
+        return CastUtil.castLong(get(name));
+    }
+
+    public int getInt(String name) {
+        return CastUtil.castInt(get(name));
     }
 
     private Object get(String name) {
