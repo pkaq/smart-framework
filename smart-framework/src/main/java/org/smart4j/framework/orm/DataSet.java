@@ -3,10 +3,13 @@ package org.smart4j.framework.orm;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.smart4j.framework.dao.DatabaseHelper;
 import org.smart4j.framework.dao.SqlHelper;
 import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.ObjectUtil;
+import org.smart4j.framework.util.StringUtil;
 
 /**
  * 提供与实体相关的数据库操作
@@ -19,9 +22,9 @@ public class DataSet {
     /**
      * 查询单条数据，并转为相应类型的对象
      */
-    public static <T> T select(Class<T> entityClass, Conditions conditions, Object... params) {
-        String conditionStr = getConditionStr(conditions);
-        String sql = SqlHelper.generateSelectSql(entityClass, conditionStr, "");
+    public static <T> T select(Class<T> entityClass, String condition, Object... params) {
+        condition = transfer(condition);
+        String sql = SqlHelper.generateSelectSql(entityClass, condition, "");
         return DatabaseHelper.queryEntity(entityClass, sql, params);
     }
 
@@ -29,16 +32,16 @@ public class DataSet {
      * 查询多条数据，并转为相应类型的列表
      */
     public static <T> List<T> selectList(Class<T> entityClass) {
-        return selectList(entityClass, null, null);
+        return selectList(entityClass, "", "");
     }
 
     /**
      * 查询多条数据，并转为相应类型的列表（带有条件、排序、参数）
      */
-    public static <T> List<T> selectList(Class<T> entityClass, Conditions conditions, Sorts sorts, Object... params) {
-        String conditionStr = getConditionStr(conditions);
-        String sortStr = getSortStr(sorts);
-        String sql = SqlHelper.generateSelectSql(entityClass, conditionStr, sortStr);
+    public static <T> List<T> selectList(Class<T> entityClass, String condition, String sort, Object... params) {
+        condition = transfer(condition);
+        sort = transfer(sort);
+        String sql = SqlHelper.generateSelectSql(entityClass, condition, sort);
         return DatabaseHelper.queryEntityList(entityClass, sql, params);
     }
 
@@ -66,9 +69,9 @@ public class DataSet {
     /**
      * 更新相关数据
      */
-    public static boolean update(Class<?> entityClass, Map<String, Object> fieldMap, Conditions conditions, Object... params) {
-        String conditionStr = getConditionStr(conditions);
-        String sql = SqlHelper.generateUpdateSql(entityClass, fieldMap, conditionStr);
+    public static boolean update(Class<?> entityClass, Map<String, Object> fieldMap, String condition, Object... params) {
+        condition = transfer(condition);
+        String sql = SqlHelper.generateUpdateSql(entityClass, fieldMap, condition);
         int rows = DatabaseHelper.update(sql, ArrayUtil.concat(fieldMap.values().toArray(), params));
         return rows > 0;
     }
@@ -89,17 +92,17 @@ public class DataSet {
         }
         Class<?> entityClass = entityObject.getClass();
         Map<String, Object> fieldMap = ObjectUtil.getFieldMap(entityObject);
-        Conditions conditions = new Conditions().condition(pkName, "=", "?");
+        String condition = pkName + " = ?";
         Object[] params = {ObjectUtil.getFieldValue(entityObject, pkName)};
-        return update(entityClass, fieldMap, conditions, params);
+        return update(entityClass, fieldMap, condition, params);
     }
 
     /**
      * 删除相关数据
      */
-    public static boolean delete(Class<?> entityClass, Conditions conditions, Object... params) {
-        String conditionStr = getConditionStr(conditions);
-        String sql = SqlHelper.generateDeleteSql(entityClass, conditionStr);
+    public static boolean delete(Class<?> entityClass, String condition, Object... params) {
+        condition = transfer(condition);
+        String sql = SqlHelper.generateDeleteSql(entityClass, condition);
         int rows = DatabaseHelper.update(sql, params);
         return rows > 0;
     }
@@ -119,27 +122,27 @@ public class DataSet {
             throw new IllegalArgumentException();
         }
         Class<?> entityClass = entityObject.getClass();
-        Conditions conditions = new Conditions().condition(pkName, "=", "?");
+        String condition = pkName + " = ?";
         Object[] params = {ObjectUtil.getFieldValue(entityObject, pkName)};
-        return delete(entityClass, conditions, params);
+        return delete(entityClass, condition, params);
     }
 
     /**
      * 查询数据条数
      */
-    public static long selectCount(Class<?> entityClass, Conditions conditions, Object... params) {
-        String conditionStr = getConditionStr(conditions);
-        String sql = SqlHelper.generateSelectSqlForCount(entityClass, conditionStr);
+    public static long selectCount(Class<?> entityClass, String condition, Object... params) {
+        condition = transfer(condition);
+        String sql = SqlHelper.generateSelectSqlForCount(entityClass, condition);
         return DatabaseHelper.queryCount(sql, params);
     }
 
     /**
      * 查询多条数据，并转为列表（分页方式）
      */
-    public static <T> List<T> selectListForPager(int pageNumber, int pageSize, Class<T> entityClass, Conditions conditions, Sorts sorts, Object... params) {
-        String conditionStr = getConditionStr(conditions);
-        String sortStr = getSortStr(sorts);
-        String sql = SqlHelper.generateSelectSqlForPager(pageNumber, pageSize, entityClass, conditionStr, sortStr);
+    public static <T> List<T> selectListForPager(int pageNumber, int pageSize, Class<T> entityClass, String condition, String sort, Object... params) {
+        condition = transfer(condition);
+        sort = transfer(sort);
+        String sql = SqlHelper.generateSelectSqlForPager(pageNumber, pageSize, entityClass, condition, sort);
         return DatabaseHelper.queryEntityList(entityClass, sql, params);
     }
 
@@ -147,23 +150,23 @@ public class DataSet {
      * 查询多条数据，并转为映射
      */
     public static <T> Map<Long, T> selectMap(Class<T> entityClass) {
-        return selectMap(entityClass, "id", null);
+        return selectMap(entityClass, "id", "");
     }
 
     /**
      * 查询多条数据，并转为映射（带有条件、参数）
      */
-    public static <T> Map<Long, T> selectMap(Class<T> entityClass, Conditions conditions, Object... params) {
-        return selectMap(entityClass, "id", conditions, params);
+    public static <T> Map<Long, T> selectMap(Class<T> entityClass, String condition, Object... params) {
+        return selectMap(entityClass, "id", condition, params);
     }
 
     /**
      * 查询多条数据，并转为映射（可指定主键字段名）
      */
     @SuppressWarnings("unchecked")
-    public static <PK, T> Map<PK, T> selectMap(Class<T> entityClass, String pkName, Conditions conditions, Object... params) {
+    public static <PK, T> Map<PK, T> selectMap(Class<T> entityClass, String pkName, String condition, Object... params) {
         Map<PK, T> map = new HashMap<PK, T>();
-        List<T> list = selectList(entityClass, conditions, null, params);
+        List<T> list = selectList(entityClass, condition, "", params);
         for (T obj : list) {
             PK pk = (PK) ObjectUtil.getFieldValue(obj, pkName);
             map.put(pk, obj);
@@ -174,27 +177,31 @@ public class DataSet {
     /**
      * 根据列名查询单条数据，并转为相应类型的对象
      */
-    public static <T> T selectColumn(Class<T> entityClass, String columnName, Conditions conditions, Object... params) {
-        String conditionStr = getConditionStr(conditions);
-        String sql = SqlHelper.generateSelectSql(entityClass, conditionStr, "");
+    public static <T> T selectColumn(Class<T> entityClass, String columnName, String condition, Object... params) {
+        condition = transfer(condition);
+        String sql = SqlHelper.generateSelectSql(entityClass, condition, "");
         return DatabaseHelper.queryColumn(columnName, sql, params);
     }
 
     /**
      * 根据列名查询多条数据，并转为相应类型的列表
      */
-    public static <T> List<T> selectColumnList(Class<?> entityClass, String columnName, Conditions conditions, Sorts sorts, Object... params) {
-        String conditionStr = getConditionStr(conditions);
-        String sortStr = getSortStr(sorts);
-        String sql = SqlHelper.generateSelectSql(entityClass, conditionStr, sortStr);
+    public static <T> List<T> selectColumnList(Class<?> entityClass, String columnName, String condition, String sort, Object... params) {
+        condition = transfer(condition);
+        sort = transfer(sort);
+        String sql = SqlHelper.generateSelectSql(entityClass, condition, sort);
         return DatabaseHelper.queryColumnList(columnName, sql, params);
     }
 
-    private static String getConditionStr(Conditions conditions) {
-        return (conditions != null) ? conditions.toString() : "";
-    }
-
-    private static String getSortStr(Sorts sorts) {
-        return (sorts != null) ? sorts.toString() : "";
+    private static String transfer(String expression) {
+        StringBuffer builder = new StringBuffer();
+        if (StringUtil.isNotEmpty(expression)) {
+            Matcher matcher = Pattern.compile("#(\\w+)").matcher(expression.trim());
+            while (matcher.find()) {
+                matcher.appendReplacement(builder, StringUtil.camelhumpToUnderline(matcher.group(1)));
+            }
+            matcher.appendTail(builder);
+        }
+        return builder.toString();
     }
 }
