@@ -39,10 +39,10 @@ public class SqlHelper {
     /**
      * 生成 select 语句
      */
-    public static String generateSelectSql(Class<?> entityClass, String condition, String sort) {
+    public static String generateSelectSql(Class<?> entityClass, String conditionStr, String sortStr) {
         StringBuilder sql = new StringBuilder("select * from ").append(getTable(entityClass));
-        sql.append(generateWhere(condition));
-        sql.append(generateOrder(sort));
+        sql.append(generateWhere(conditionStr));
+        sql.append(generateOrder(sortStr));
         return sql.toString();
     }
 
@@ -78,16 +78,16 @@ public class SqlHelper {
     /**
      * 生成 delete 语句
      */
-    public static String generateDeleteSql(Class<?> entityClass, String condition) {
+    public static String generateDeleteSql(Class<?> entityClass, String conditionStr) {
         StringBuilder sql = new StringBuilder("delete from ").append(getTable(entityClass));
-        sql.append(generateWhere(condition));
+        sql.append(generateWhere(conditionStr));
         return sql.toString();
     }
 
     /**
      * 生成 update 语句
      */
-    public static String generateUpdateSql(Class<?> entityClass, Map<String, Object> fieldMap, String condition) {
+    public static String generateUpdateSql(Class<?> entityClass, Map<String, Object> fieldMap, String conditionStr) {
         StringBuilder sql = new StringBuilder("update ").append(getTable(entityClass));
         if (MapUtil.isNotEmpty(fieldMap)) {
             sql.append(" set ");
@@ -102,27 +102,27 @@ public class SqlHelper {
                 i++;
             }
         }
-        sql.append(generateWhere(condition));
+        sql.append(generateWhere(conditionStr));
         return sql.toString();
     }
 
     /**
      * 生成 select count(*) 语句
      */
-    public static String generateSelectSqlForCount(Class<?> entityClass, String condition) {
+    public static String generateSelectSqlForCount(Class<?> entityClass, String conditionStr) {
         StringBuilder sql = new StringBuilder("select count(*) from ").append(getTable(entityClass));
-        sql.append(generateWhere(condition));
+        sql.append(generateWhere(conditionStr));
         return sql.toString();
     }
 
     /**
      * 生成 select 分页语句（数据库类型为：mysql、oracle、mssql）
      */
-    public static String generateSelectSqlForPager(int pageNumber, int pageSize, Class<?> entityClass, String condition, String sort) {
+    public static String generateSelectSqlForPager(int pageNumber, int pageSize, Class<?> entityClass, String conditionStr, String sortStr) {
         StringBuilder sql = new StringBuilder();
         String table = getTable(entityClass);
-        String where = generateWhere(condition);
-        String order = generateOrder(sort);
+        String where = generateWhere(conditionStr);
+        String order = generateOrder(sortStr);
         String dbType = DatabaseHelper.getDatabaseType();
         if (dbType.equalsIgnoreCase("mysql")) {
             int pageStart = (pageNumber - 1) * pageSize;
@@ -148,18 +148,18 @@ public class SqlHelper {
         return tableName;
     }
 
-    private static String generateWhere(String condition) {
+    private static String generateWhere(String conditionStr) {
         String where = "";
-        if (StringUtil.isNotEmpty(condition)) {
-            where += " where " + condition;
+        if (StringUtil.isNotEmpty(conditionStr)) {
+            where += " where " + conditionStr;
         }
         return where;
     }
 
-    private static String generateOrder(String sort) {
+    private static String generateOrder(String sortStr) {
         String order = "";
-        if (StringUtil.isNotEmpty(sort)) {
-            order += " order by " + sort;
+        if (StringUtil.isNotEmpty(sortStr)) {
+            order += " order by " + sortStr;
         }
         return order;
     }
