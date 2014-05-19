@@ -23,7 +23,7 @@ public class DataSet {
      * 查询单条数据，并转为相应类型的实体
      */
     public static <T> T select(Class<T> entityClass, String condition, Object... params) {
-        condition = transfer(condition);
+        condition = transferCondition(condition);
         String sql = SqlHelper.generateSelectSql(entityClass, condition, "");
         return DatabaseHelper.queryEntity(entityClass, sql, params);
     }
@@ -53,8 +53,8 @@ public class DataSet {
      * 查询多条数据，并转为相应类型的实体列表（带有查询条件、排序方式与查询参数）
      */
     public static <T> List<T> selectListWithConditionAndSort(Class<T> entityClass, String condition, String sort, Object... params) {
-        condition = transfer(condition);
-        sort = transfer(sort);
+        condition = transferCondition(condition);
+        sort = transferSort(sort);
         String sql = SqlHelper.generateSelectSql(entityClass, condition, sort);
         return DatabaseHelper.queryEntityList(entityClass, sql, params);
     }
@@ -63,7 +63,7 @@ public class DataSet {
      * 查询数据条数
      */
     public static long selectCount(Class<?> entityClass, String condition, Object... params) {
-        condition = transfer(condition);
+        condition = transferCondition(condition);
         String sql = SqlHelper.generateSelectSqlForCount(entityClass, condition);
         return DatabaseHelper.queryCount(sql, params);
     }
@@ -72,8 +72,8 @@ public class DataSet {
      * 查询多条数据，并转为列表（分页方式）
      */
     public static <T> List<T> selectListForPager(int pageNumber, int pageSize, Class<T> entityClass, String condition, String sort, Object... params) {
-        condition = transfer(condition);
-        sort = transfer(sort);
+        condition = transferCondition(condition);
+        sort = transferCondition(sort);
         String sql = SqlHelper.generateSelectSqlForPager(pageNumber, pageSize, entityClass, condition, sort);
         return DatabaseHelper.queryEntityList(entityClass, sql, params);
     }
@@ -117,7 +117,7 @@ public class DataSet {
      * 根据列名查询单条数据，并转为相应类型的实体
      */
     public static <T> T selectColumn(Class<T> entityClass, String columnName, String condition, Object... params) {
-        condition = transfer(condition);
+        condition = transferCondition(condition);
         String sql = SqlHelper.generateSelectSql(entityClass, condition, "");
         return DatabaseHelper.queryColumn(columnName, sql, params);
     }
@@ -126,8 +126,8 @@ public class DataSet {
      * 根据列名查询多条数据，并转为相应类型的实体列表
      */
     public static <T> List<T> selectColumnList(Class<?> entityClass, String columnName, String condition, String sort, Object... params) {
-        condition = transfer(condition);
-        sort = transfer(sort);
+        condition = transferCondition(condition);
+        sort = transferCondition(sort);
         String sql = SqlHelper.generateSelectSql(entityClass, condition, sort);
         return DatabaseHelper.queryColumnList(columnName, sql, params);
     }
@@ -157,7 +157,7 @@ public class DataSet {
      * 更新相关数据
      */
     public static boolean update(Class<?> entityClass, Map<String, Object> fieldMap, String condition, Object... params) {
-        condition = transfer(condition);
+        condition = transferCondition(condition);
         String sql = SqlHelper.generateUpdateSql(entityClass, fieldMap, condition);
         int rows = DatabaseHelper.update(sql, ArrayUtil.concat(fieldMap.values().toArray(), params));
         return rows > 0;
@@ -188,7 +188,7 @@ public class DataSet {
      * 删除相关数据
      */
     public static boolean delete(Class<?> entityClass, String condition, Object... params) {
-        condition = transfer(condition);
+        condition = transferCondition(condition);
         String sql = SqlHelper.generateDeleteSql(entityClass, condition);
         int rows = DatabaseHelper.update(sql, params);
         return rows > 0;
@@ -214,15 +214,33 @@ public class DataSet {
         return delete(entityClass, condition, params);
     }
 
-    private static String transfer(String expression) {
-        StringBuffer builder = new StringBuffer();
-        if (StringUtil.isNotEmpty(expression)) {
-            Matcher matcher = Pattern.compile("#(\\w+)").matcher(expression.trim());
+    private static String transferCondition(String condition) {
+        StringBuffer buffer = new StringBuffer();
+        if (StringUtil.isNotEmpty(condition)) {
+            String regex = "([a-z_]+([A-Z]+[a-z|0-9|_]+)+)\\s+(=|!=|<>|>|>=|<|<=|like)\\s+";
+            Matcher matcher = Pattern.compile(regex).matcher(condition.trim());
             while (matcher.find()) {
-                matcher.appendReplacement(builder, StringUtil.camelhumpToUnderline(matcher.group(1)));
+                String column = StringUtil.camelhumpToUnderline(matcher.group(1));
+                String operator = matcher.group(3);
+                matcher.appendReplacement(buffer, column);
+                buffer.append(" ").append(operator).append(" ");
             }
-            matcher.appendTail(builder);
+            matcher.appendTail(buffer);
         }
-        return builder.toString();
+        return buffer.toString();
+    }
+
+    private static String transferSort(String sort) {
+        StringBuffer buffer = new StringBuffer();
+        if (StringUtil.isNotEmpty(sort)) {
+            String regex = "([a-z_]+([A-Z]+[a-z|0-9|_]+)+)";
+            Matcher matcher = Pattern.compile(regex).matcher(sort.trim());
+            while (matcher.find()) {
+                String column = StringUtil.camelhumpToUnderline(matcher.group(1));
+                matcher.appendReplacement(buffer, column);
+            }
+            matcher.appendTail(buffer);
+        }
+        return buffer.toString();
     }
 }
