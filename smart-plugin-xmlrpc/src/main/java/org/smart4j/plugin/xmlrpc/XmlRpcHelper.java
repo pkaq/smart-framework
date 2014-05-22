@@ -19,7 +19,7 @@ public class XmlRpcHelper {
 
     static {
         String xmlrpcURL = ConfigHelper.getString("smart.plugin.xmlrpc.url");
-        boolean xmlrpcExtensionsEnabled = ConfigHelper.getConfigBoolean("smart.plugin.xmlrpc.extensions_enabled", true);
+        boolean xmlrpcExtensionsEnabled = ConfigHelper.getBoolean("smart.plugin.xmlrpc.extensions_enabled", true);
         int xmlrpcConnectionTimeout = ConfigHelper.getInt("smart.plugin.xmlrpc.connection_timeout", 60 * 1000);
         int xmlrpcReplyTimeout = ConfigHelper.getInt("smart.plugin.xmlrpc.reply_timeout", 60 * 1000);
 

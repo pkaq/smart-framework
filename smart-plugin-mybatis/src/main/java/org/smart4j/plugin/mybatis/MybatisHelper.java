@@ -70,7 +70,7 @@ public class MybatisHelper implements Plugin{
             }
 
             //Aliases别名
-            Map<String,Object> aliases = ConfigHelper.getConfigMap(MYBATIS_ALIASES);
+            Map<String,Object> aliases = ConfigHelper.getMap(MYBATIS_ALIASES);
             registerAliases(aliases,configuration);
 
 

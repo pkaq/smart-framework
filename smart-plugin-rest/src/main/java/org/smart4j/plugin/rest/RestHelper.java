@@ -30,7 +30,7 @@ public class RestHelper {
         JacksonJsonProvider jsonProvider = new JacksonJsonProvider();
         providerList.add(jsonProvider);
         // 添加 Logging Interceptor
-        boolean log = ConfigHelper.getConfigBoolean("smart.plugin.rest.log");
+        boolean log = ConfigHelper.getBoolean("smart.plugin.rest.log");
         if (log) {
             LoggingInInterceptor loggingInInterceptor = new LoggingInInterceptor();
             inInterceptorList.add(loggingInInterceptor);
@@ -38,7 +38,7 @@ public class RestHelper {
             outInterceptorList.add(loggingOutInterceptor);
         }
         // 添加 JSONP Interceptor
-        boolean jsonp = ConfigHelper.getConfigBoolean("smart.plugin.rest.jsonp");
+        boolean jsonp = ConfigHelper.getBoolean("smart.plugin.rest.jsonp");
         if (jsonp) {
             JsonpInInterceptor jsonpInInterceptor = new JsonpInInterceptor();
             String jsonpFunction = ConfigHelper.getString("smart.plugin.rest.jsonp.function");
@@ -50,7 +50,7 @@ public class RestHelper {
             outInterceptorList.add(jsonpPostStreamInterceptor);
         }
         // 添加 CORS Provider
-        boolean cors = ConfigHelper.getConfigBoolean("smart.plugin.rest.cors");
+        boolean cors = ConfigHelper.getBoolean("smart.plugin.rest.cors");
         if (cors) {
             CrossOriginResourceSharingFilter corsProvider = new CrossOriginResourceSharingFilter();
             String corsOrigin = ConfigHelper.getString("smart.plugin.rest.cors.origin");

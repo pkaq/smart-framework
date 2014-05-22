@@ -42,7 +42,7 @@ public class MybatisSessionProxy extends AspectProxy {
     static {
         Boolean _auto = false;
         try {
-            _auto = ConfigHelper.getConfigBoolean(MYBATIS_SESSION);
+            _auto = ConfigHelper.getBoolean(MYBATIS_SESSION);
         }
         catch (Exception ex){
             _auto = false;

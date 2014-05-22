@@ -17,7 +17,7 @@ public class SoapHelper {
 
     static {
         // 添加 Logging Interceptor
-        boolean log = ConfigHelper.getConfigBoolean("smart.plugin.soap.log");
+        boolean log = ConfigHelper.getBoolean("smart.plugin.soap.log");
         if (log) {
             LoggingInInterceptor loggingInInterceptor = new LoggingInInterceptor();
             inInterceptorList.add(loggingInInterceptor);

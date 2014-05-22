@@ -35,7 +35,7 @@ public class I18NFilter implements Filter {
             String systemLanguage = getSystemLanguage((HttpServletRequest) request);
             request.setAttribute(I18NConstant.SYSTEM_LANGUAGE, systemLanguage);
             // 判断是否重新
-            boolean reloadable = ConfigHelper.getConfigBoolean("smart.plugin.i18n.reloadable");
+            boolean reloadable = ConfigHelper.getBoolean("smart.plugin.i18n.reloadable");
             if (reloadable) {
                 // 清理 ResourceBundle 缓存
                 ResourceBundle.clearCache();

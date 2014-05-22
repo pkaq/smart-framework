@@ -49,14 +49,14 @@ public class ConfigHelper {
     /**
      * 获取 boolean 类型的属性值
      */
-    public static boolean getConfigBoolean(String key) {
+    public static boolean getBoolean(String key) {
         return PropsUtil.getBoolean(configProps, key);
     }
 
     /**
      * 获取 int 类型的属性值（可指定默认值）
      */
-    public static boolean getConfigBoolean(String key, boolean defaultValue) {
+    public static boolean getBoolean(String key, boolean defaultValue) {
         return PropsUtil.getBoolean(configProps, key, defaultValue);
     }
 
@@ -65,7 +65,7 @@ public class ConfigHelper {
      *
      * @since 2.2
      */
-    public static Map<String, Object> getConfigMap(String prefix) {
+    public static Map<String, Object> getMap(String prefix) {
         return PropsUtil.getMap(configProps, prefix);
     }
 }
