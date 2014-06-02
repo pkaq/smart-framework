@@ -4,8 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.smart4j.framework.FrameworkConstant;
 import org.smart4j.framework.mvc.HandlerExceptionResolver;
-import org.smart4j.framework.mvc.fault.AccessException;
-import org.smart4j.framework.mvc.fault.PermissionException;
+import org.smart4j.framework.mvc.fault.AuthcException;
+import org.smart4j.framework.mvc.fault.AuthzException;
 import org.smart4j.framework.util.WebUtil;
 
 /**
@@ -20,7 +20,7 @@ public class DefaultHandlerExceptionResolver implements HandlerExceptionResolver
     public void resolveHandlerException(HttpServletRequest request, HttpServletResponse response, Exception e) {
         // 判断异常原因
         Throwable cause = e.getCause();
-        if (cause instanceof AccessException) {
+        if (cause instanceof AuthcException) {
             // 分两种情况进行处理
             if (WebUtil.isAJAX(request)) {
                 // 跳转到 403 页面
@@ -29,7 +29,7 @@ public class DefaultHandlerExceptionResolver implements HandlerExceptionResolver
                 // 重定向到首页
                 WebUtil.redirectRequest(FrameworkConstant.HOME_PAGE, request, response);
             }
-        } else if (cause instanceof PermissionException) {
+        } else if (cause instanceof AuthzException) {
             // 跳转到 403 页面
             WebUtil.sendError(HttpServletResponse.SC_FORBIDDEN, "", response);
         } else {

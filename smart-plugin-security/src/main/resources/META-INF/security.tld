@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+        http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+
+    <description>Security JSP Tag</description>
+    <tlib-version>1.1</tlib-version>
+    <short-name>security</short-name>
+    <uri>/security</uri>
+
+    <!-- ================================================== 用户 ================================================== -->
+
+    <tag>
+        <description>判断当前用户是否已登录（包括：已认证 与 已记住）</description>
+        <name>user</name>
+        <tag-class>org.apache.shiro.web.tags.UserTag</tag-class>
+        <body-content>JSP</body-content>
+    </tag>
+
+    <tag>
+        <description>判断当前用户是否未登录（包括：未认证 或 未记住，即“访客”身份）</description>
+        <name>guest</name>
+        <tag-class>org.apache.shiro.web.tags.GuestTag</tag-class>
+        <body-content>JSP</body-content>
+    </tag>
+
+    <tag>
+        <description>判断当前用户是否已认证</description>
+        <name>authenticated</name>
+        <tag-class>org.apache.shiro.web.tags.AuthenticatedTag</tag-class>
+        <body-content>JSP</body-content>
+    </tag>
+
+    <tag>
+        <description>判断当前用户是否未认证</description>
+        <name>notAuthenticated</name>
+        <tag-class>org.apache.shiro.web.tags.NotAuthenticatedTag</tag-class>
+        <body-content>JSP</body-content>
+    </tag>
+
+    <tag>
+        <description>显示当前用户的相关属性</description>
+        <name>principal</name>
+        <tag-class>org.apache.shiro.web.tags.PrincipalTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>type</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>property</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>defaultValue</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <!-- ================================================== 角色 ================================================== -->
+
+    <tag>
+        <description>判断当前用户是否拥有某种角色</description>
+        <name>hasRole</name>
+        <tag-class>org.apache.shiro.web.tags.HasRoleTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>判断当前用户是否缺少某种角色</description>
+        <name>lacksRole</name>
+        <tag-class>org.apache.shiro.web.tags.LacksRoleTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>判断当前用户是否拥有其中某一种角色（逗号分隔，表示“或”的关系）</description>
+        <name>hasAnyRoles</name>
+        <tag-class>org.apache.shiro.web.tags.HasAnyRolesTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>判断当前用户是否拥有其中所有的角色（逗号分隔，表示“与”的关系）</description>
+        <name>hasAllRoles</name>
+        <tag-class>org.smart4j.plugin.security.tag.HasAllRolesTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <!-- ================================================== 权限 ================================================== -->
+
+    <tag>
+        <description>判断当前用户是否拥有某种权限</description>
+        <name>hasPermission</name>
+        <tag-class>org.apache.shiro.web.tags.HasPermissionTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>判断当前用户是否缺少某种权限</description>
+        <name>lacksPermission</name>
+        <tag-class>org.apache.shiro.web.tags.LacksPermissionTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>判断当前用户是否拥有其中某一种权限（逗号分隔，表示“或”的关系）</description>
+        <name>hasAnyPermissions</name>
+        <tag-class>org.smart4j.plugin.security.tag.HasAnyPermissionsTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>判断当前用户是否拥有其中所有的权限（逗号分隔，表示“与”的关系）</description>
+        <name>hasAllPermissions</name>
+        <tag-class>org.smart4j.plugin.security.tag.HasAllPermissionsTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+</taglib>

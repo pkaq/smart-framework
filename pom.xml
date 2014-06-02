@@ -367,7 +367,6 @@
     <modules>
         <module>smart-framework</module>
         <module>smart-sso</module>
-        <module>smart-security</module>
         <module>smart-cache</module>
         <module>smart-cache-ehcache</module>
         <module>smart-cache-redis</module>
@@ -384,6 +383,7 @@
         <module>smart-plugin-mybatis</module>
         <module>smart-plugin-c3p0</module>
         <module>smart-plugin-druid</module>
+        <module>smart-plugin-security</module>
     </modules>
 
 </project>
