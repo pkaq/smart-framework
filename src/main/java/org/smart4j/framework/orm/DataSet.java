@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.smart4j.framework.dao.DatabaseHelper;
 import org.smart4j.framework.dao.SqlHelper;
 import org.smart4j.framework.util.ArrayUtil;
+import org.smart4j.framework.util.MapUtil;
 import org.smart4j.framework.util.ObjectUtil;
 import org.smart4j.framework.util.StringUtil;
 
@@ -136,6 +137,9 @@ public class DataSet {
      * 插入一条数据
      */
     public static boolean insert(Class<?> entityClass, Map<String, Object> fieldMap) {
+        if (MapUtil.isEmpty(fieldMap)) {
+            return true;
+        }
         String sql = SqlHelper.generateInsertSql(entityClass, fieldMap.keySet());
         int rows = DatabaseHelper.update(sql, fieldMap.values().toArray());
         return rows > 0;
@@ -157,6 +161,9 @@ public class DataSet {
      * 更新相关数据
      */
     public static boolean update(Class<?> entityClass, Map<String, Object> fieldMap, String condition, Object... params) {
+        if (MapUtil.isEmpty(fieldMap)) {
+            return true;
+        }
         condition = transferCondition(condition);
         String sql = SqlHelper.generateUpdateSql(entityClass, fieldMap, condition);
         int rows = DatabaseHelper.update(sql, ArrayUtil.concat(fieldMap.values().toArray(), params));
