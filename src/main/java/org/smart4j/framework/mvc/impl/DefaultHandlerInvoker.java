@@ -98,11 +98,12 @@ public class DefaultHandlerInvoker implements HandlerInvoker {
         return actionMethod.invoke(actionInstance, actionMethodParamList.toArray());
     }
 
-    private void checkParamList(Method actionMethod, List<Object> actionMethodResult) {
+    private void checkParamList(Method actionMethod, List<Object> actionMethodParamList) {
         // 判断 Action 方法参数的个数是否匹配
         Class<?>[] actionMethodParameterTypes = actionMethod.getParameterTypes();
-        if (actionMethodParameterTypes.length != actionMethodResult.size()) {
-            throw new RuntimeException("由于参数不匹配，无法调用 Action 方法！");
+        if (actionMethodParameterTypes.length != actionMethodParamList.size()) {
+            String message = String.format("因为参数个数不匹配，所以无法调用 Action 方法！原始参数个数：%d，实际参数个数：%d", actionMethodParameterTypes.length, actionMethodParamList.size());
+            throw new RuntimeException(message);
         }
     }
 }
