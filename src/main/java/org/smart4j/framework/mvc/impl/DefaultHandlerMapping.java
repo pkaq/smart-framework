@@ -1,7 +1,6 @@
 package org.smart4j.framework.mvc.impl;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.smart4j.framework.mvc.ActionHelper;
@@ -17,18 +16,8 @@ import org.smart4j.framework.mvc.Requestor;
  */
 public class DefaultHandlerMapping implements HandlerMapping {
 
-    /**
-     * 用于缓存 Handler 实例
-     */
-    private static final Map<String, Handler> cache = new ConcurrentHashMap<String, Handler>();
-
     @Override
     public Handler getHandler(String currentRequestMethod, String currentRequestPath) {
-        // 若缓存中存在对应的实例，则返回该实例
-        String cacheKey = currentRequestMethod + ":" + currentRequestPath;
-        if (cache.containsKey(cacheKey)) {
-            return cache.get(cacheKey);
-        }
         // 定义一个 Handler
         Handler handler = null;
         // 获取并遍历 Action 映射
@@ -51,10 +40,6 @@ public class DefaultHandlerMapping implements HandlerMapping {
                 // 若成功匹配，则终止循环
                 break;
             }
-        }
-        // 若该实例不为空，则将其放入缓存
-        if (handler != null) {
-            cache.put(cacheKey, handler);
         }
         // 返回该 Handler
         return handler;
