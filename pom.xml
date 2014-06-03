@@ -14,7 +14,7 @@
     </parent>
 
     <artifactId>smart-framework</artifactId>
-    <version>2.3-SNAPSHOT</version>
+    <version>2.3</version>
 
     <name>smart-framework</name>
     <description>Smart Framework is a lightweight Java Web Framework</description>
