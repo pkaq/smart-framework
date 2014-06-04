@@ -90,6 +90,9 @@ public class WebUtil {
                                 String paramName = array[0];
                                 String paramValue = array[1];
                                 if (checkParamName(paramName)) {
+                                    if (paramMap.containsKey(paramName)) {
+                                        paramValue = paramMap.get(paramName) + StringUtil.SEPARATOR + paramValue;
+                                    }
                                     paramMap.put(paramName, paramValue);
                                 }
                             }
