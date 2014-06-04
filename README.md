@@ -11,7 +11,7 @@
 ### 2. 它使应用充分做到“前后端分离”
 
 - 客户端可使用 HTML 或 JSP 作为视图模板
-- 服务端可发布 REST 服务
+- 服务端可发布 REST 服务（使用 REST 插件）
 - 客户端通过 AJAX 获取服务端数据并进行界面渲染
 
 ### 3. 它可提高应用程序的开发效率
@@ -71,7 +71,7 @@ org/
 
 ```
 smart.framework.app.base_package=org.smart4j.sample
-smart.framework.app.home_page=/login
+smart.framework.app.home_page=/users
 
 smart.framework.jdbc.driver=com.mysql.jdbc.Driver
 smart.framework.jdbc.url=jdbc:mysql://localhost:3306/smart-sample
@@ -81,7 +81,7 @@ smart.framework.jdbc.password=root
 
 > 提示：需根据实际情况修改以上配置。
 
-### 4. 编写一个 Entity 类
+### 4. 编写 Entity 类
 
 ```java
 package org.smart4j.sample.entity;
@@ -101,7 +101,7 @@ public class User {
 }
 ```
 
-### 5. 编写一个 Service 接口及其实现
+### 5. 编写 Service 接口及其实现
 
 Service 接口
 
