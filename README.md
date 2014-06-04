@@ -30,23 +30,23 @@
 
 ```
 smart-sample/
-　　|- src/
-　　　　|- main/
-　　　　　　|- java/
-　　　　　　|- resources/
-　　　　　　|- webapp/
-　　|- pom.xml
+　　┗ src/
+　　　　┗ main/
+　　　　　　┗ java/
+　　　　　　┗ resources/
+　　　　　　┗ webapp/
+　　┗ pom.xml
 ```
 
 在 `java` 目录下，创建以下包名目录结构：
 
 ```
 org/
-　　|- smart4j/
-　　　　|- sample/
-　　　　　　|- action/
-　　　　　　|- entity/
-　　　　　　|- service/
+　　┗ smart4j/
+　　　　┗ sample/
+　　　　　　┗ action/
+　　　　　　┗ entity/
+　　　　　　┗ service/
 ```
 
 可见，基础包名为：org.smart4j.sample，下面的配置中会用到它。
