@@ -253,7 +253,7 @@ public class UserAction {
 - user_create.jsp
 - user_edit.jsp
 
-> 提示：更多相关细节，请参考 Smart Sample 示例。
+> 提示：更多相关细节，请参考 [Smart Sample](http://git.oschina.net/huangyong/smart-sample) 示例。
 
 ## 示例
 
