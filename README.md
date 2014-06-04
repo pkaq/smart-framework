@@ -202,14 +202,6 @@ public class UserAction {
         return new View("user.jsp");
     }
 
-    @Request.Post("/users")
-    public View search(Params params) {
-        String username = params.getString("username");
-        List<User> userList = userService.findUserListByUsername(username);
-        DataContext.Request.put("userList", userList);
-        return new View("user_list.jsp");
-    }
-
     @Request.Get("/user")
     public View create() {
         return new View("user_create.jsp");
