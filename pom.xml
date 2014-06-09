@@ -10,7 +10,6 @@
         <groupId>org.smart4j</groupId>
         <artifactId>smart-root</artifactId>
         <version>1.0</version>
-        <relativePath>../smart-root</relativePath>
     </parent>
 
     <artifactId>smart-framework</artifactId>
