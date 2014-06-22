@@ -52,9 +52,9 @@ public class DefaultDataAccessor implements DataAccessor {
     public <T> T queryEntity(Class<T> entityClass, String sql, Object... params) {
         T result;
         try {
-            Map<String, String> fieldMap = EntityHelper.getEntityMap().get(entityClass);
-            if (MapUtil.isNotEmpty(fieldMap)) {
-                result = queryRunner.query(sql, new BeanHandler<T>(entityClass, new BasicRowProcessor(new BeanProcessor(fieldMap))), params);
+            Map<String, String> columnMap = EntityHelper.getColumnMap(entityClass);
+            if (MapUtil.isNotEmpty(columnMap)) {
+                result = queryRunner.query(sql, new BeanHandler<T>(entityClass, new BasicRowProcessor(new BeanProcessor(columnMap))), params);
             } else {
                 result = queryRunner.query(sql, new BeanHandler<T>(entityClass), params);
             }
@@ -70,9 +70,9 @@ public class DefaultDataAccessor implements DataAccessor {
     public <T> List<T> queryEntityList(Class<T> entityClass, String sql, Object... params) {
         List<T> result;
         try {
-            Map<String, String> fieldMap = EntityHelper.getEntityMap().get(entityClass);
-            if (MapUtil.isNotEmpty(fieldMap)) {
-                result = queryRunner.query(sql, new BeanListHandler<T>(entityClass, new BasicRowProcessor(new BeanProcessor(fieldMap))), params);
+            Map<String, String> columnMap = EntityHelper.getColumnMap(entityClass);
+            if (MapUtil.isNotEmpty(columnMap)) {
+                result = queryRunner.query(sql, new BeanListHandler<T>(entityClass, new BasicRowProcessor(new BeanProcessor(columnMap))), params);
             } else {
                 result = queryRunner.query(sql, new BeanListHandler<T>(entityClass), params);
             }

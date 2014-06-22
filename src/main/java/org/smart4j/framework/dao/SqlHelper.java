@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
 import org.smart4j.framework.FrameworkConstant;
-import org.smart4j.framework.orm.annotation.Table;
+import org.smart4j.framework.orm.EntityHelper;
 import org.smart4j.framework.util.CollectionUtil;
 import org.smart4j.framework.util.MapUtil;
 import org.smart4j.framework.util.PropsUtil;
@@ -56,7 +56,7 @@ public class SqlHelper {
             StringBuilder columns = new StringBuilder(" ");
             StringBuilder values = new StringBuilder(" values ");
             for (String fieldName : fieldNames) {
-                String columnName = StringUtil.camelhumpToUnderline(fieldName);
+                String columnName = EntityHelper.getColumnName(entityClass, fieldName);
                 if (i == 0) {
                     columns.append("(").append(columnName);
                     values.append("(?");
@@ -93,7 +93,8 @@ public class SqlHelper {
             sql.append(" set ");
             int i = 0;
             for (Map.Entry<String, Object> fieldEntry : fieldMap.entrySet()) {
-                String columnName = StringUtil.camelhumpToUnderline(fieldEntry.getKey());
+                String fieldName = fieldEntry.getKey();
+                String columnName = EntityHelper.getColumnName(entityClass, fieldName);
                 if (i == 0) {
                     sql.append(columnName).append(" = ?");
                 } else {
@@ -139,13 +140,7 @@ public class SqlHelper {
     }
 
     private static String getTable(Class<?> entityClass) {
-        String tableName;
-        if (entityClass.isAnnotationPresent(Table.class)) {
-            tableName = entityClass.getAnnotation(Table.class).value();
-        } else {
-            tableName = StringUtil.camelhumpToUnderline(entityClass.getSimpleName());
-        }
-        return tableName;
+        return EntityHelper.getTableName(entityClass);
     }
 
     private static String generateWhere(String condition) {

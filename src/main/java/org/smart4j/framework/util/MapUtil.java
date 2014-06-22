@@ -30,9 +30,12 @@ public class MapUtil {
      * 转置 Map
      */
     public static <K, V> Map<V, K> invert(Map<K, V> source) {
-        Map<V, K> target = new LinkedHashMap<V, K>(source.size());
-        for (Map.Entry<K, V> entry : source.entrySet()) {
-            target.put(entry.getValue(), entry.getKey());
+        Map<V, K> target = null;
+        if (isNotEmpty(source)) {
+            target = new LinkedHashMap<V, K>(source.size());
+            for (Map.Entry<K, V> entry : source.entrySet()) {
+                target.put(entry.getValue(), entry.getKey());
+            }
         }
         return target;
     }
