@@ -88,6 +88,7 @@ public class EntityHelper {
     }
 
     public static String getColumnName(Class<?> entityClass, String fieldName) {
-        return getFieldMap(entityClass).get(fieldName);
+        String columnName = getFieldMap(entityClass).get(fieldName);
+        return StringUtil.isNotEmpty(columnName) ? columnName : fieldName;
     }
 }
