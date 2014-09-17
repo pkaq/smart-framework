@@ -74,7 +74,7 @@ public class DataSet {
      */
     public static <T> List<T> selectListForPager(int pageNumber, int pageSize, Class<T> entityClass, String condition, String sort, Object... params) {
         condition = transferCondition(entityClass, condition);
-        sort = transferCondition(entityClass, sort);
+        sort = transferSort(entityClass, sort);
         String sql = SqlHelper.generateSelectSqlForPager(pageNumber, pageSize, entityClass, condition, sort);
         return DatabaseHelper.queryEntityList(entityClass, sql, params);
     }
@@ -128,7 +128,7 @@ public class DataSet {
      */
     public static <T> List<T> selectColumnList(Class<?> entityClass, String columnName, String condition, String sort, Object... params) {
         condition = transferCondition(entityClass, condition);
-        sort = transferCondition(entityClass, sort);
+        sort = transferSort(entityClass, sort);
         String sql = SqlHelper.generateSelectSql(entityClass, condition, sort);
         return DatabaseHelper.queryColumnList(columnName, sql, params);
     }
@@ -224,7 +224,7 @@ public class DataSet {
     private static String transferCondition(Class<?> entityClass, String condition) {
         if (StringUtil.isNotEmpty(condition)) {
             StringBuffer buffer = new StringBuffer();
-            String regex = "([a-z_]+([a-z|A-Z|0-9|_]*)+)\\s*(=|!=|<>|>|>=|<|<=|like)\\s*";
+            String regex = "([a-z_]+([a-z|A-Z|0-9|_]*)+)\\s*(=|!=|<>|>=|>|<=|<|like)\\s*";
             Matcher matcher = Pattern.compile(regex).matcher(condition.trim());
             while (matcher.find()) {
                 String fieldName = matcher.group(1);
