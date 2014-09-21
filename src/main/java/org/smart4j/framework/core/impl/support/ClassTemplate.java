@@ -43,7 +43,7 @@ public abstract class ClassTemplate {
                     String protocol = url.getProtocol();
                     if (protocol.equals("file")) {
                         // 若在 class 目录中，则执行添加类操作
-                        String packagePath = url.getPath();
+                        String packagePath = url.getPath().replaceAll("%20", " ");
                         addClass(classList, packagePath, packageName);
                     } else if (protocol.equals("jar")) {
                         // 若在 jar 包中，则解析 jar 包中的 entry
