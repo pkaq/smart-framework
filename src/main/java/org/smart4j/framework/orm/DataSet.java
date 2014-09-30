@@ -1,10 +1,11 @@
 package org.smart4j.framework.orm;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.smart4j.framework.FrameworkConstant;
 import org.smart4j.framework.dao.DatabaseHelper;
 import org.smart4j.framework.dao.SqlHelper;
 import org.smart4j.framework.util.ArrayUtil;
@@ -83,21 +84,30 @@ public class DataSet {
      * 查询多条数据，并转为映射
      */
     public static <T> Map<Long, T> selectMap(Class<T> entityClass) {
-        return selectMapWithPK(entityClass, "id", "", "");
+        return selectMapWithPK(entityClass, FrameworkConstant.PK_NAME, "", "");
     }
 
     /**
      * 查询多条数据，并转为映射（带有查询条件与查询参数）
      */
     public static <T> Map<Long, T> selectMapWithCondition(Class<T> entityClass, String condition, Object... params) {
-        return selectMapWithPK(entityClass, "id", condition, "", params);
+        return selectMapWithPK(entityClass, FrameworkConstant.PK_NAME, condition, "", params);
+    }
+
+    /**
+     * 查询多条数据，并转为映射（带有排序方式与查询参数）
+     *
+     * @since 2.3.3
+     */
+    public static <T> Map<Long, T> selectMapWithSort(Class<T> entityClass, String sort) {
+        return selectMapWithPK(entityClass, FrameworkConstant.PK_NAME, "", sort);
     }
 
     /**
      * 查询多条数据，并转为映射（带有查询条件、排序方式与查询参数）
      */
     public static <T> Map<Long, T> selectMapWithConditionAndSort(Class<T> entityClass, String condition, String sort, Object... params) {
-        return selectMapWithPK(entityClass, "id", condition, sort, params);
+        return selectMapWithPK(entityClass, FrameworkConstant.PK_NAME, condition, sort, params);
     }
 
     /**
@@ -105,7 +115,7 @@ public class DataSet {
      */
     @SuppressWarnings("unchecked")
     public static <PK, T> Map<PK, T> selectMapWithPK(Class<T> entityClass, String pkName, String condition, String sort, Object... params) {
-        Map<PK, T> map = new HashMap<PK, T>();
+        Map<PK, T> map = new LinkedHashMap<PK, T>();
         List<T> list = selectListWithConditionAndSort(entityClass, condition, sort, params);
         for (T obj : list) {
             PK pk = (PK) ObjectUtil.getFieldValue(obj, pkName);
@@ -117,10 +127,11 @@ public class DataSet {
     /**
      * 根据列名查询单条数据，并转为相应类型的实体
      */
-    public static <T> T selectColumn(Class<T> entityClass, String columnName, String condition, Object... params) {
+    public static <T> T selectColumn(Class<?> entityClass, String columnName, String condition, Object... params) {
         condition = transferCondition(entityClass, condition);
         String sql = SqlHelper.generateSelectSql(entityClass, condition, "");
-        return DatabaseHelper.queryColumn(columnName, sql, params);
+        sql = sql.replace("*", columnName);
+        return DatabaseHelper.queryColumn(sql, params);
     }
 
     /**
@@ -130,7 +141,8 @@ public class DataSet {
         condition = transferCondition(entityClass, condition);
         sort = transferSort(entityClass, sort);
         String sql = SqlHelper.generateSelectSql(entityClass, condition, sort);
-        return DatabaseHelper.queryColumnList(columnName, sql, params);
+        sql = sql.replace("*", columnName);
+        return DatabaseHelper.queryColumnList(sql, params);
     }
 
     /**
@@ -174,7 +186,7 @@ public class DataSet {
      * 更新一个实体
      */
     public static boolean update(Object entity) {
-        return update(entity, "id");
+        return update(entity, FrameworkConstant.PK_NAME);
     }
 
     /**
@@ -205,7 +217,7 @@ public class DataSet {
      * 删除一个实体
      */
     public static boolean delete(Object entityObject) {
-        return delete(entityObject, "id");
+        return delete(entityObject, FrameworkConstant.PK_NAME);
     }
 
     /**
