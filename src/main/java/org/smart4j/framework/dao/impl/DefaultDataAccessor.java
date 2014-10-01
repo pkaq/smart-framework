@@ -151,15 +151,15 @@ public class DefaultDataAccessor implements DataAccessor {
 
     @Override
     public <T> T queryColumn(String sql, Object... params) {
-        T entity;
+        T obj;
         try {
-            entity = queryRunner.query(sql, new ScalarHandler<T>(), params);
+            obj = queryRunner.query(sql, new ScalarHandler<T>(), params);
         } catch (SQLException e) {
             logger.error("查询出错！", e);
             throw new RuntimeException(e);
         }
         printSQL(sql);
-        return entity;
+        return obj;
     }
 
     @Override
