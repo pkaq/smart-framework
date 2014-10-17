@@ -6,12 +6,12 @@ package org.smart4j.framework.mvc;
  * @author huangyong
  * @since 1.0
  */
-public class Requestor {
+public class Requester {
 
     private String requestMethod;
     private String requestPath;
 
-    public Requestor(String requestMethod, String requestPath) {
+    public Requester(String requestMethod, String requestPath) {
         this.requestMethod = requestMethod;
         this.requestPath = requestPath;
     }
