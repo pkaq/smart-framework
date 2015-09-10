@@ -1,4 +1,4 @@
-apply plugin: 'java'
+apply plugin: 'war'
 
 group = 'org.smart4j'
 version = '2.3.3-SNAPSHOT'
